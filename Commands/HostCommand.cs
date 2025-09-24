@@ -5,6 +5,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Hardware.Info;
+using System.Text.RegularExpressions;
 
 namespace TerryDavis.Commands {
   public class HostCommand : ModuleBase<SocketCommandContext> {
@@ -88,10 +89,16 @@ namespace TerryDavis.Commands {
 
         foreach (ManagementObject os in results) {
           if (os["Caption"] is string caption && !string.IsNullOrWhiteSpace(caption)) {
-            return caption;
+            if (caption is not null)
+            {
+              var match = Regex.Match(caption, @"Windows\s+\d+");
+              if (match.Success)
+              {
+                return match.Value;
+              }
+            }
           }
         }
-
         return "Unknown Windows";
       }
 
