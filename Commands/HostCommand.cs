@@ -91,10 +91,11 @@ namespace TerryDavis.Commands {
           if (os["Caption"] is string caption && !string.IsNullOrWhiteSpace(caption)) {
             if (caption is not null)
             {
-              var match = Regex.Match(caption, @"Windows\s+[A-Za-z]*\s*\d+(\.\d+)?");
+              var match = Regex.Match(caption, @"Windows\s+(?:[A-Za-z]+)?\s*\d*(\.\d+)?", RegexOptions.IgnoreCase);
               if (match.Success)
               {
-                  return match.Value.Trim();
+                  string result = match.Value.Trim();
+                  return Regex.Replace(result, @"\s+", " ");
               }
             }
           }
