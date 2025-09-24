@@ -192,6 +192,7 @@ namespace TerryDavis.Commands {
           .AddField("RAM", $"{usedRamStr} / {totalRamStr}", true)
           .AddField("OS", OsName(), true)
           .AddField("64-bit Process", Environment.Is64BitProcess, true)
+          .AddField("Elevated Proc", Environment.IsPrivilegedProcess ? "True :warning:" : "False", true)
           .WithFooter(f => f.Text = $"Requested by {Context.User.Username}")
           .WithCurrentTimestamp()
           .Build();
