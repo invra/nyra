@@ -17,11 +17,7 @@ namespace TerryDavis.Commands {
     public static int GetPhysicalCores() {
       try {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-          var hw = new HardwareInfo();
-          hw.RefreshAll();
-          return hw.CpuList.FirstOrDefault()?.NumberOfCores is uint cores
-              ? (int)cores
-              : Environment.ProcessorCount;
+            return Environment.ProcessorCount;
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
           var cpuInfo = System.IO.File.ReadAllText("/proc/cpuinfo");
           return cpuInfo.Split(new[] { "physical id" }, StringSplitOptions.None).Distinct().Count();
