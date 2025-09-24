@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="3.14.1" />
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="Hardware.Info" Version="101.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
   </ItemGroup>
