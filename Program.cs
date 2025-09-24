@@ -8,9 +8,7 @@ namespace TerryDavis {
       // Print non-intrusive warning. As running this as admin
       // in the future is a really dumb idea.
       if (Environment.IsPrivilegedProcess) {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("WARNING: This process is running with elevated privileges. Running as an elevated user is not recommended and may pose security risks.");
-        Console.ResetColor();
+        Console.WriteLine("\x1b[0;33mWARNING: This process is running with elevated privileges. Running as an elevated user is not recommended and may pose security risks.\x1b[0;0m");
       }
 
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Creating instance");
@@ -19,13 +17,16 @@ namespace TerryDavis {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0m No DISCORD_TOKEN variable found in the ENV");
         ErrState = true;
       }
-      ;
 
       if (Environment.GetEnvironmentVariable("BOT_PREFIX") == null) {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0m No BOT_PREFIX variable found in the ENV");
         ErrState = true;
+      } else {
+        if (Environment.GetEnvironmentVariable("BOT_PREFIX")?.Length > 2 ) {
+          Console.WriteLine("\x1b[0;33mWARNING: The bot prefix is longer than 2 characters! This will cause impaired usage.\x1b[0;0m");
+        }
+        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m \"{Environment.GetEnvironmentVariable("BOT_PREFIX")}\" has been accepted as the bot prefix");
       }
-      ;
 
       if (ErrState) {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0;31m There have been runtime errors. Please solve them to be able to continue\x1b[0m");
