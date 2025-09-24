@@ -51,7 +51,7 @@ namespace TerryDavis.Commands {
       if (OperatingSystem.IsLinux()) {
         string prettyName = string.Empty;
         foreach (var line in File.ReadAllText("/etc/os-release").Split("\n")) {
-          if(line.StartsWith("PRETTY_NAME")) {
+          if (line.StartsWith("PRETTY_NAME")) {
             prettyName = line.Split("=")[1].Replace("\"", "");
           }
         }
