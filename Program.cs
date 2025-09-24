@@ -22,7 +22,7 @@ namespace TerryDavis {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0m No BOT_PREFIX variable found in the ENV");
         ErrState = true;
       } else {
-        if (Environment.GetEnvironmentVariable("BOT_PREFIX")?.Length > 2 ) {
+        if (Environment.GetEnvironmentVariable("BOT_PREFIX")?.Length > 2) {
           Console.WriteLine("\x1b[0;33mWARNING: The bot prefix is longer than 2 characters! This will cause impaired usage.\x1b[0;0m");
         }
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m \"{Environment.GetEnvironmentVariable("BOT_PREFIX")}\" has been accepted as the bot prefix");
