@@ -108,6 +108,58 @@ namespace TerryDavis.Commands {
       return "Unknown";
     }
 
+    private static (ulong totalRam, ulong usedRam) GetMemoryInfoMacOS() {
+      try {
+        using var proc = new Process {
+          StartInfo = new ProcessStartInfo {
+            FileName = "/usr/bin/vm_stat",
+            RedirectStandardOutput = true,
+            UseShellExecute = false
+          }
+        };
+        proc.Start();
+        string output = proc.StandardOutput.ReadToEnd();
+        proc.WaitForExit();
+
+        var lines = output.Split('\n');
+        ulong pagesFree = 0, pagesActive = 0, pagesInactive = 0, pagesWired = 0, pagesCompressed = 0;
+        foreach (var line in lines) {
+          if (line.StartsWith("Pages free:"))
+            pagesFree = ulong.Parse(Regex.Match(line, @"\d+").Value);
+          else if (line.StartsWith("Pages active:"))
+            pagesActive = ulong.Parse(Regex.Match(line, @"\d+").Value);
+          else if (line.StartsWith("Pages inactive:"))
+            pagesInactive = ulong.Parse(Regex.Match(line, @"\d+").Value);
+          else if (line.StartsWith("Pages wired down:"))
+            pagesWired = ulong.Parse(Regex.Match(line, @"\d+").Value);
+          else if (line.StartsWith("Pages occupied by compressor:"))
+            pagesCompressed = ulong.Parse(Regex.Match(line, @"\d+").Value);
+        }
+
+        using var sysctlProc = new Process {
+          StartInfo = new ProcessStartInfo {
+            FileName = "/usr/sbin/sysctl",
+            Arguments = "-n hw.memsize",
+            RedirectStandardOutput = true,
+            UseShellExecute = false
+          }
+        };
+        sysctlProc.Start();
+        string memSizeOutput = sysctlProc.StandardOutput.ReadLine() ?? "0";
+        sysctlProc.WaitForExit();
+        ulong totalMemoryBytes = ulong.Parse(memSizeOutput);
+        const ulong pageSize = 4096;
+        ulong usedMemoryPages = pagesActive + pagesWired + pagesCompressed;
+        ulong usedMemoryBytes = usedMemoryPages * pageSize;
+        ulong totalMemoryMB = totalMemoryBytes / (1024 * 1024);
+        ulong usedMemoryMB = usedMemoryBytes / (1024 * 1024);
+
+        return (totalMemoryMB, usedMemoryMB);
+      } catch {
+        return (0, 0);
+      }
+    }
+
     [Command("host")]
     [Summary("Replies with system information.")]
     public async Task HostAsync() {
@@ -119,12 +171,18 @@ namespace TerryDavis.Commands {
       var cpu = hardwareInfo.CpuList.FirstOrDefault();
       string cpuName = cpu?.Name ?? "Unknown";
 
-      ulong totalRam = hardwareInfo.MemoryStatus.TotalPhysical;
-      ulong availableRam = hardwareInfo.MemoryStatus.AvailablePhysical;
-      ulong usedRam = totalRam - availableRam;
-
-      string totalRamStr = totalRam > 0 ? $"{totalRam / (1024 * 1024)} MB" : "Unknown";
-      string usedRamStr = totalRam > 0 ? $"{usedRam / (1024 * 1024)} MB" : "Unknown";
+      string totalRamStr, usedRamStr;
+      if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+        var (totalRam, usedRam) = GetMemoryInfoMacOS();
+        totalRamStr = totalRam > 0 ? $"{totalRam} MB" : "Unknown";
+        usedRamStr = totalRam > 0 ? $"{usedRam} MB" : "Unknown";
+      } else {
+        ulong totalRam = hardwareInfo.MemoryStatus.TotalPhysical;
+        ulong availableRam = hardwareInfo.MemoryStatus.AvailablePhysical;
+        ulong usedRam = totalRam - availableRam;
+        totalRamStr = totalRam > 0 ? $"{totalRam / (1024 * 1024)} MB" : "Unknown";
+        usedRamStr = totalRam > 0 ? $"{usedRam / (1024 * 1024)} MB" : "Unknown";
+      }
 
       var embed = new EmbedBuilder()
           .WithTitle("Host System Information")
