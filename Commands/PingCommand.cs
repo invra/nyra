@@ -4,16 +4,16 @@ using Discord.WebSocket;
 
 namespace TerryDavis.Commands {
   public class PingCommand : ModuleBase<SocketCommandContext> {
-    private readonly DiscordSocketClient _client;
+    private readonly DiscordSocketClient client;
 
     public PingCommand(DiscordSocketClient client) {
-      _client = client;
+      this.client = client;
     }
 
     [Command("ping")]
     [Summary("Replies with pong and latency stats in an embed.")]
     public async Task PingAsync() {
-      int gatewayLatency = _client.Latency;
+      int gatewayLatency = client.Latency;
 
       var stopwatch = System.Diagnostics.Stopwatch.StartNew();
       var msg = await ReplyAsync("Probing the Gateway...");

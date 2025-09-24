@@ -9,10 +9,10 @@ using Hardware.Info;
 
 namespace TerryDavis.Commands {
   public class HostCommand : ModuleBase<SocketCommandContext> {
-    private readonly DiscordSocketClient _client;
+    private readonly DiscordSocketClient client;
 
     public HostCommand(DiscordSocketClient client) {
-      _client = client;
+      this.client = client;
     }
 
     public static int GetPhysicalCores() {
@@ -43,7 +43,13 @@ namespace TerryDavis.Commands {
 
     public static string OsName() {
       if (OperatingSystem.IsLinux()) {
-        return "Linux (Distro detection TBI)";
+        string prettyName = string.Empty;
+        foreach (var line in File.ReadAllText("/etc/os-release").Split("\n")) {
+          if(line.StartsWith("PRETTY_NAME")) {
+            prettyName = line.Split("=")[1].Replace("\"", "");
+          }
+        }
+        return prettyName;
       }
 
       if (OperatingSystem.IsMacOS()) {
