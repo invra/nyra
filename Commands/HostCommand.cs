@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Management;
 using System.Runtime.InteropServices;
 using Discord;
 using Discord.Commands;
@@ -13,7 +14,6 @@ namespace TerryDavis.Commands {
       _client = client;
     }
 
-    public static int GetLogicalCores() => Environment.ProcessorCount;
     public static int GetPhysicalCores() {
       try {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
@@ -81,8 +81,14 @@ namespace TerryDavis.Commands {
       }
 
       if (OperatingSystem.IsWindows()) {
-        var ver = Environment.OSVersion.Version;
-        return $"Windows (Build {ver.Build})";
+          string result = string.Empty;
+          ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
+          foreach (ManagementObject os in searcher.Get())
+          {
+              result = os["Caption"].ToString();
+              break;
+          }
+          return result;
       }
 
       if (OperatingSystem.IsFreeBSD()) {
@@ -114,7 +120,7 @@ namespace TerryDavis.Commands {
           .WithTitle("Host System Information")
           .WithColor(Color.Purple)
           .AddField("CPU", cpuName, true)
-          .AddField("Cores (P / L)", $"{GetPhysicalCores()} / {GetLogicalCores()}", true)
+          .AddField("Processors (P Cores)", $"{GetPhysicalCores()}", true)
           .AddField("RAM", $"{usedRamStr} / {totalRamStr}", true)
           .AddField("OS", OsName(), true)
           .AddField("64-bit Process", Environment.Is64BitProcess, true)
