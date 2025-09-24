@@ -7,26 +7,26 @@ using TerryDavis.Config;
 
 namespace TerryDavis.Commands {
   public class CommandHandler {
-    private readonly DiscordSocketClient _client;
-    private readonly CommandService _commands;
-    private readonly BotConfig _config;
-    private readonly IServiceProvider _services;
+    private readonly DiscordSocketClient client;
+    private readonly CommandService commands;
+    private readonly BotConfig config;
+    private readonly IServiceProvider services;
 
     public CommandHandler(DiscordSocketClient client, BotConfig config) {
-      _client = client;
-      _commands = new CommandService();
-      _config = config;
+      this.client = client;
+      commands = new CommandService();
+      this.config = config;
 
       var collection = new ServiceCollection();
-      collection.AddSingleton(_client);
-      collection.AddSingleton(_config);
-      _services = collection.BuildServiceProvider();
+      collection.AddSingleton(this.client);
+      collection.AddSingleton(this.config);
+      services = collection.BuildServiceProvider();
     }
 
     public async Task InitializeAsync() {
-      await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+      await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
-      _client.MessageReceived += HandleCommandAsync;
+      client.MessageReceived += HandleCommandAsync;
     }
 
     private async Task HandleCommandAsync(SocketMessage rawMessage) {
@@ -36,11 +36,11 @@ namespace TerryDavis.Commands {
         return;
 
       int argPos = 0;
-      if (!message.HasStringPrefix(_config.Prefix, ref argPos))
+      if (!message.HasStringPrefix(config.Prefix, ref argPos))
         return;
 
-      var context = new SocketCommandContext(_client, message);
-      var result = await _commands.ExecuteAsync(context, argPos, _services);
+      var context = new SocketCommandContext(client, message);
+      var result = await commands.ExecuteAsync(context, argPos, services);
 
       if (!result.IsSuccess) {
         if (result.Error == CommandError.UnknownCommand)

@@ -5,10 +5,10 @@ using Discord.WebSocket;
 
 namespace TerryDavis.Commands {
   public class UnbanCommand : ModuleBase<SocketCommandContext> {
-    private readonly DiscordSocketClient _client;
+    private readonly DiscordSocketClient client;
 
     public UnbanCommand(DiscordSocketClient client) {
-      _client = client;
+      this.client = client;
     }
 
     [Command("unban")]

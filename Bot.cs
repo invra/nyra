@@ -5,15 +5,15 @@ using TerryDavis.Config;
 
 namespace TerryDavis {
   public class Bot {
-    private readonly DiscordSocketClient _client;
-    private readonly CommandHandler _commandHandler;
-    private readonly BotConfig _config;
+    private readonly DiscordSocketClient client;
+    private readonly CommandHandler commandHandler;
+    private readonly BotConfig config;
 
 
     public Bot() {
-      _config = new BotConfig();
+      config = new BotConfig();
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Initialising the Discord bot");
-      _client = new DiscordSocketClient(
+      client = new DiscordSocketClient(
         new DiscordSocketConfig {
           AlwaysDownloadUsers = true,
           MessageCacheSize = 100,
@@ -26,9 +26,9 @@ namespace TerryDavis {
         }
       );
 
-      _commandHandler = new CommandHandler(_client, _config);
+      commandHandler = new CommandHandler(client, config);
 
-      _client.Ready += () => {
+      client.Ready += () => {
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot is online");
         return Task.CompletedTask;
       };
@@ -36,11 +36,11 @@ namespace TerryDavis {
 
     public async Task RunAsync() {
       string token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!;
-      _client.Log += LogAsync;
-      await _client.LoginAsync(TokenType.Bot, token);
-      await _client.StartAsync();
+      client.Log += LogAsync;
+      await client.LoginAsync(TokenType.Bot, token);
+      await client.StartAsync();
 
-      await _commandHandler.InitializeAsync();
+      await commandHandler.InitializeAsync();
 
       await Task.Delay(-1);
     }

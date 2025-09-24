@@ -4,10 +4,10 @@ using Discord.WebSocket;
 
 namespace TerryDavis.Commands {
   public class KickCommand : ModuleBase<SocketCommandContext> {
-    private readonly DiscordSocketClient _client;
+    private readonly DiscordSocketClient client;
 
     public KickCommand(DiscordSocketClient client) {
-      _client = client;
+      this.client = client;
     }
 
     [Command("kick")]
