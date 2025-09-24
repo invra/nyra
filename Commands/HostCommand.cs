@@ -82,29 +82,20 @@ namespace TerryDavis.Commands {
       }
 
       if (OperatingSystem.IsWindows()) {
-        using var searcher = new ManagementObjectSearcher(
-          "SELECT Caption FROM Win32_OperatingSystem");
-
+        using var searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
         using var results = searcher.Get();
 
         foreach (ManagementObject os in results) {
           if (os["Caption"] is string caption && !string.IsNullOrWhiteSpace(caption)) {
-            if (caption is not null) {
-              var match = Regex.Match(caption, @"Windows\s+(?:[A-Za-z]+)?\s*\d*(\.\d+)?", RegexOptions.IgnoreCase);
-              if (match.Success) {
-                string result = match.Value.Trim();
-                return Regex.Replace(result, @"\s+", " ");
-              }
-            }
+            var match = Regex.Match(caption, @"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?", RegexOptions.IgnoreCase);
+            if (match.Success) return match.Value;
           }
         }
         return "Windows";
       }
-
       if (OperatingSystem.IsFreeBSD()) {
         return "FreeBSD";
       }
-
       return "Unknown";
     }
 
@@ -124,16 +115,17 @@ namespace TerryDavis.Commands {
         var lines = output.Split('\n');
         ulong pagesFree = 0, pagesActive = 0, pagesInactive = 0, pagesWired = 0, pagesCompressed = 0;
         foreach (var line in lines) {
-          if (line.StartsWith("Pages free:"))
+          if (line.StartsWith("Pages free:")) {
             pagesFree = ulong.Parse(Regex.Match(line, @"\d+").Value);
-          else if (line.StartsWith("Pages active:"))
+          } else if (line.StartsWith("Pages active:")) {
             pagesActive = ulong.Parse(Regex.Match(line, @"\d+").Value);
-          else if (line.StartsWith("Pages inactive:"))
+          } else if (line.StartsWith("Pages inactive:")) {
             pagesInactive = ulong.Parse(Regex.Match(line, @"\d+").Value);
-          else if (line.StartsWith("Pages wired down:"))
+          } else if (line.StartsWith("Pages wired down:")) {
             pagesWired = ulong.Parse(Regex.Match(line, @"\d+").Value);
-          else if (line.StartsWith("Pages occupied by compressor:"))
+          } else if (line.StartsWith("Pages occupied by compressor:")) {
             pagesCompressed = ulong.Parse(Regex.Match(line, @"\d+").Value);
+          }
         }
 
         using var sysctlProc = new Process {
@@ -144,6 +136,7 @@ namespace TerryDavis.Commands {
             UseShellExecute = false
           }
         };
+
         sysctlProc.Start();
         string memSizeOutput = sysctlProc.StandardOutput.ReadLine() ?? "0";
         sysctlProc.WaitForExit();
@@ -153,7 +146,6 @@ namespace TerryDavis.Commands {
         ulong usedMemoryBytes = usedMemoryPages * pageSize;
         ulong totalMemoryMB = totalMemoryBytes / (1024 * 1024);
         ulong usedMemoryMB = usedMemoryBytes / (1024 * 1024);
-
         return (totalMemoryMB, usedMemoryMB);
       } catch {
         return (0, 0);
