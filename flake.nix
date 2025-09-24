@@ -17,14 +17,13 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = import nixpkgs { inherit system; };
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
             projectRootFile = ".git/config";
             programs = {
               nixfmt.enable = true;
               nixf-diagnose.enable = true;
-              csharpier.enable = true;
             };
           })).config.build;
       in
@@ -37,6 +36,26 @@
             dotnetCorePackages.sdk_9_0-bin
             omnisharp-roslyn
           ];
+
+          shellHook =
+            if !pkgs.stdenv.isDarwin then
+              ''
+                #!/bin/bash
+                COMMAND=$(awk -F: -v user=$USER 'user == $1 {print $NF}' /etc/passwd)
+                if [ "$COMMAND" != *bash* ]; then
+                  $COMMAND
+                  exit
+                fi
+              ''
+            else
+              ''
+                #!/bin/bash
+                COMMAND=$(dscl . -read $HOME 'UserShell' | grep --only-matching '/.*')
+                if [ "$COMMAND" != *bash* ]; then
+                  $COMMAND
+                  exit
+                fi
+              '';
         };
 
         packages.default = pkgs.buildDotnetModule {
