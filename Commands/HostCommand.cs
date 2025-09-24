@@ -25,7 +25,7 @@ namespace TerryDavis.Commands {
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
           using var proc = new Process {
             StartInfo = new ProcessStartInfo {
-              FileName = "sysctl",
+              FileName = "/usr/sbin/sysctl",
               Arguments = "-n hw.physicalcpu",
               RedirectStandardOutput = true,
               UseShellExecute = false
@@ -130,7 +130,7 @@ namespace TerryDavis.Commands {
           .WithTitle("Host System Information")
           .WithColor(Color.Purple)
           .AddField("CPU", cpuName, true)
-          .AddField("Processors (P Cores)", $"{GetPhysicalCores()}", true)
+          .AddField("Processors", $"{GetPhysicalCores()}", true)
           .AddField("RAM", $"{usedRamStr} / {totalRamStr}", true)
           .AddField("OS", OsName(), true)
           .AddField("64-bit Process", Environment.Is64BitProcess, true)
