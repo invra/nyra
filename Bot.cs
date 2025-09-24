@@ -18,7 +18,15 @@ namespace TerryDavis
             _client = new DiscordSocketClient(
                 new DiscordSocketConfig
                 {
-                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent,
+                    AlwaysDownloadUsers = true,
+                    MessageCacheSize = 100,
+                    GatewayIntents =
+                        GatewayIntents.Guilds |
+                        GatewayIntents.GuildMembers |
+                        GatewayIntents.GuildMessageReactions |
+                        GatewayIntents.GuildMessages |
+                        GatewayIntents.MessageContent |
+                        GatewayIntents.GuildVoiceStates
                 }
             );
 
