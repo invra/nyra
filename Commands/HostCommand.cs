@@ -20,8 +20,14 @@ namespace TerryDavis.Commands {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
           return Environment.ProcessorCount;
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-          var cpuInfo = System.IO.File.ReadAllText("/proc/cpuinfo");
-          return cpuInfo.Split(new[] { "physical id" }, StringSplitOptions.None).Distinct().Count();
+          int procCount = 0;
+          foreach(var line in File.ReadAllText("/proc/cpuinfo").Split("\n")) {
+            if (line.StartsWith("cpu cores")) {
+              procCount = int.Parse(line.Split(":")[1].Trim());
+              break;
+            }
+          }
+          return procCount;
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
           using var proc = new Process {
             StartInfo = new ProcessStartInfo {
