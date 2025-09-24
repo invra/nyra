@@ -17,7 +17,7 @@ namespace TerryDavis.Commands {
     public static int GetPhysicalCores() {
       try {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
-            return Environment.ProcessorCount;
+          return Environment.ProcessorCount;
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
           var cpuInfo = System.IO.File.ReadAllText("/proc/cpuinfo");
           return cpuInfo.Split(new[] { "physical id" }, StringSplitOptions.None).Distinct().Count();
@@ -81,14 +81,18 @@ namespace TerryDavis.Commands {
       }
 
       if (OperatingSystem.IsWindows()) {
-          string result = string.Empty;
-          ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem");
-          foreach (ManagementObject os in searcher.Get())
-          {
-              result = os["Caption"].ToString();
-              break;
+        using var searcher = new ManagementObjectSearcher(
+          "SELECT Caption FROM Win32_OperatingSystem");
+
+        using var results = searcher.Get();
+
+        foreach (ManagementObject os in results) {
+          if (os["Caption"] is string caption && !string.IsNullOrWhiteSpace(caption)) {
+            return caption;
           }
-          return result;
+        }
+
+        return "Unknown Windows";
       }
 
       if (OperatingSystem.IsFreeBSD()) {
