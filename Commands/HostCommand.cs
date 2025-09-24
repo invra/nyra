@@ -100,7 +100,7 @@ namespace TerryDavis.Commands {
             }
           }
         }
-        return "Unknown Windows";
+        return "Windows";
       }
 
       if (OperatingSystem.IsFreeBSD()) {
