@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Hardware.Info;
-using System.Text.RegularExpressions;
 
 namespace TerryDavis.Commands {
   public class HostCommand : ModuleBase<SocketCommandContext> {
@@ -89,13 +89,11 @@ namespace TerryDavis.Commands {
 
         foreach (ManagementObject os in results) {
           if (os["Caption"] is string caption && !string.IsNullOrWhiteSpace(caption)) {
-            if (caption is not null)
-            {
+            if (caption is not null) {
               var match = Regex.Match(caption, @"Windows\s+(?:[A-Za-z]+)?\s*\d*(\.\d+)?", RegexOptions.IgnoreCase);
-              if (match.Success)
-              {
-                  string result = match.Value.Trim();
-                  return Regex.Replace(result, @"\s+", " ");
+              if (match.Success) {
+                string result = match.Value.Trim();
+                return Regex.Replace(result, @"\s+", " ");
               }
             }
           }
