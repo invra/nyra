@@ -30,6 +30,9 @@ namespace TerryDavis {
 
       client.Ready += () => {
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot is online");
+        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot username is: {client.CurrentUser.Username}");
+        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot Id: {client.CurrentUser.Id}");
+        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Is a Bot: {client.CurrentUser.IsBot}");
         return Task.CompletedTask;
       };
     }
