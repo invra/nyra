@@ -21,13 +21,13 @@ namespace TerryDavis.Commands {
       long roundTrip = stopwatch.ElapsedMilliseconds;
 
       var embed = new EmbedBuilder()
-          .WithTitle("Gateway latency")
-          .WithColor(Color.Purple)
-          .AddField("Gateway Latency", $"{gatewayLatency} ms", true)
-          .AddField("Message Round-Trip", $"{roundTrip} ms", true)
-          .WithFooter(footer => footer.Text = $"Test co-ordinated by {Context.User.Username}")
-          .WithCurrentTimestamp()
-          .Build();
+        .WithTitle("Gateway latency")
+        .WithColor(Color.Purple)
+        .AddField("Gateway Latency", $"{gatewayLatency} ms", true)
+        .AddField("Message Round-Trip", $"{roundTrip} ms", true)
+        .WithFooter(footer => footer.Text = $"Test co-ordinated by {Context.User.Username}")
+        .WithCurrentTimestamp()
+        .Build();
 
       await msg.ModifyAsync(m => {
         m.Content = string.Empty;
