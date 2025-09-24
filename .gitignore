@@ -1,0 +1,7 @@
+bin
+obj
+out
+.env
+*.out
+result
+.DS_Store
