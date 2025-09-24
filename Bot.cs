@@ -23,12 +23,12 @@ namespace TerryDavis {
             | GatewayIntents.GuildMessages
             | GatewayIntents.MessageContent
             | GatewayIntents.GuildVoiceStates,
-          }
+        }
       );
 
       _commandHandler = new CommandHandler(_client, _config);
 
-       _client.Ready += () =>  {
+      _client.Ready += () => {
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot is online");
         return Task.CompletedTask;
       };

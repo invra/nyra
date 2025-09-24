@@ -18,12 +18,14 @@ namespace TerryDavis {
       if (Environment.GetEnvironmentVariable("DISCORD_TOKEN") == null) {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0m No DISCORD_TOKEN variable found in the ENV");
         ErrState = true;
-      };
+      }
+      ;
 
       if (Environment.GetEnvironmentVariable("BOT_PREFIX") == null) {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0m No BOT_PREFIX variable found in the ENV");
         ErrState = true;
-      };
+      }
+      ;
 
       if (ErrState) {
         Console.WriteLine($"\x1b[1;31m[STDOUT/critical]:\x1b[0;31m There have been runtime errors. Please solve them to be able to continue\x1b[0m");
