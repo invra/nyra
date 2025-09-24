@@ -34,7 +34,7 @@ namespace TerryDavis.Commands
                 .WithCurrentTimestamp()
                 .Build();
 
-            await msg.ModifyAsync(m => 
+            await msg.ModifyAsync(m =>
             {
                 m.Content = string.Empty;
                 m.Embed = embed;

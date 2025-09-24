@@ -37,11 +37,14 @@ namespace TerryDavis.Commands
 
         private async Task HandleCommandAsync(SocketMessage rawMessage)
         {
-            if (rawMessage is not SocketUserMessage message) return;
-            if (message.Source != MessageSource.User) return;
+            if (rawMessage is not SocketUserMessage message)
+                return;
+            if (message.Source != MessageSource.User)
+                return;
 
             int argPos = 0;
-            if (!message.HasStringPrefix(_config.Prefix, ref argPos)) return;
+            if (!message.HasStringPrefix(_config.Prefix, ref argPos))
+                return;
 
             var context = new SocketCommandContext(_client, message);
             var result = await _commands.ExecuteAsync(context, argPos, _services);

@@ -15,10 +15,12 @@ namespace TerryDavis
 
         public Bot()
         {
-            _client = new DiscordSocketClient(new DiscordSocketConfig
-            {
-                GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
-            });
+            _client = new DiscordSocketClient(
+                new DiscordSocketConfig
+                {
+                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent,
+                }
+            );
 
             _config = new BotConfig();
             _commandHandler = new CommandHandler(_client, _config);
@@ -26,8 +28,9 @@ namespace TerryDavis
 
         public async Task RunAsync()
         {
-            string token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")
-                           ?? throw new InvalidOperationException("Missing DISCORD_TOKEN in .env");
+            string token =
+                Environment.GetEnvironmentVariable("DISCORD_TOKEN")
+                ?? throw new InvalidOperationException("Missing DISCORD_TOKEN in .env");
 
             _client.Log += LogAsync;
             await _client.LoginAsync(TokenType.Bot, token);

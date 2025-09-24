@@ -24,7 +24,7 @@
             programs = {
               nixfmt.enable = true;
               nixf-diagnose.enable = true;
-              gofmt.enable = true;
+              csharpier.enable = true;
             };
           })).config.build;
       in

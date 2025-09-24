@@ -10,7 +10,7 @@ namespace TerryDavis.Config
         public BotConfig()
         {
             Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX") ?? "!";
-            Token  = Environment.GetEnvironmentVariable("BOT_TOKEN") ?? "";
+            Token = Environment.GetEnvironmentVariable("BOT_TOKEN") ?? "";
         }
     }
 }
