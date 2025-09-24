@@ -1,10 +1,7 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using Discord.Rest;
+using Discord.WebSocket;
 
 namespace TerryDavis.Commands
 {
@@ -27,7 +24,12 @@ namespace TerryDavis.Commands
                 return;
             }
 
-            if (!ulong.TryParse(userIdInput.Replace("<@!", "").Replace("<@", "").Replace(">", ""), out ulong userId))
+            if (
+                !ulong.TryParse(
+                    userIdInput.Replace("<@!", "").Replace("<@", "").Replace(">", ""),
+                    out ulong userId
+                )
+            )
             {
                 await ReplyAsync("Invalid user ID.");
                 return;
@@ -42,7 +44,7 @@ namespace TerryDavis.Commands
 
             try
             {
-                RestBan banInfo = null;
+                RestBan? banInfo = null;
                 await foreach (var batch in Context.Guild.GetBansAsync())
                 {
                     banInfo = batch.FirstOrDefault(b => b.User.Id == userId);
@@ -61,7 +63,11 @@ namespace TerryDavis.Commands
                 var embed = new EmbedBuilder()
                     .WithTitle("User Unbanned")
                     .WithColor(Color.Orange)
-                    .AddField("Unbanned User", $"{banInfo.User.Username}#{banInfo.User.Discriminator}", true)
+                    .AddField(
+                        "Unbanned User",
+                        $"{banInfo.User.Username}#{banInfo.User.Discriminator}",
+                        true
+                    )
                     .AddField("Moderator", Context.User.Username, true)
                     .WithCurrentTimestamp()
                     .Build();

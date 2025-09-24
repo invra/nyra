@@ -1,5 +1,3 @@
-using System;
-
 namespace TerryDavis.Config
 {
     public class BotConfig

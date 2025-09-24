@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using TerryDavis.Commands;
@@ -21,12 +19,12 @@ namespace TerryDavis
                     AlwaysDownloadUsers = true,
                     MessageCacheSize = 100,
                     GatewayIntents =
-                        GatewayIntents.Guilds |
-                        GatewayIntents.GuildMembers |
-                        GatewayIntents.GuildMessageReactions |
-                        GatewayIntents.GuildMessages |
-                        GatewayIntents.MessageContent |
-                        GatewayIntents.GuildVoiceStates
+                        GatewayIntents.Guilds
+                        | GatewayIntents.GuildMembers
+                        | GatewayIntents.GuildMessageReactions
+                        | GatewayIntents.GuildMessages
+                        | GatewayIntents.MessageContent
+                        | GatewayIntents.GuildVoiceStates,
                 }
             );
 

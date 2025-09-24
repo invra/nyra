@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -17,7 +15,10 @@ namespace TerryDavis.Commands
 
         [Command("ban")]
         [Summary("Bans a user by mention or ID.")]
-        public async Task BanAsync(string userInput, [Remainder] string reason = "No reason provided")
+        public async Task BanAsync(
+            string userInput,
+            [Remainder] string reason = "No reason provided"
+        )
         {
             if (Context.Guild == null)
             {
@@ -60,7 +61,11 @@ namespace TerryDavis.Commands
                 var embed = new EmbedBuilder()
                     .WithTitle("User Banned")
                     .WithColor(Color.Green)
-                    .AddField("Banned User", $"{guildUser.Username}#{guildUser.Discriminator}", true)
+                    .AddField(
+                        "Banned User",
+                        $"{guildUser.Username}#{guildUser.Discriminator}",
+                        true
+                    )
                     .AddField("Moderator", Context.User.Username, true)
                     .AddField("Reason", reason)
                     .WithCurrentTimestamp()

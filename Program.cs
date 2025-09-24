@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace TerryDavis
+﻿namespace TerryDavis
 {
     class Program
     {
