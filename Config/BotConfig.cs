@@ -12,7 +12,7 @@ namespace TerryDavis.Config {
 
       try {
         Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX")!;
-        if(Prefix.Length > 2) {
+        if (Prefix.Length > 2) {
           Console.WriteLine("\x1b[0;33m[STDOUT/WARNING]: The bot prefix is longer than 2 characters! This will cause impaired usage.\x1b[0;0m");
         }
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m \"{Prefix}\" has been accepted as the bot prefix");

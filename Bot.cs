@@ -6,7 +6,7 @@ namespace TerryDavis {
     private readonly DiscordSocketClient client;
     private readonly CommandHandler commandHandler;
     private static readonly Lazy<Bot> instance = new Lazy<Bot>(() => new Bot());
-    public static Bot TerryDavis { get {return instance.Value; } }
+    public static Bot TerryDavis { get { return instance.Value; } }
 
     private Bot() {
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Initialising the Discord bot");

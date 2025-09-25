@@ -1,6 +1,6 @@
 global using Discord;
-global using Discord.Rest;
 global using Discord.Commands;
+global using Discord.Rest;
 global using Discord.WebSocket;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
