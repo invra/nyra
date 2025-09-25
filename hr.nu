@@ -1,7 +1,15 @@
 #! /usr/bin/env nu
 use std/log;
 
-let jid = (job spawn {|| dotnet run o+e> /tmp/discord-cs.log});
+let isWindows = (not (which uname | is-empty))
+
+let log_p = if $isWindows {
+q  $"($env.TEMP)\\discord-cs.log"
+} else {
+  "/tmp/discord-cs.log"
+}
+
+let jid = (job spawn {|| dotnet run o+e> $log_p});
 job tag $jid "Discord-C#";
 log debug "Started"
 
