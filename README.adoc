@@ -38,7 +38,7 @@ Nyra has been tested on the following platforms:
 
 == Compilation & Running
 
-Nyra targets the `net9.0` runtime as a minimum requirement.
+Nyra targets the `net10.0` runtime as a minimum requirement.
 
 To build and run:
 
