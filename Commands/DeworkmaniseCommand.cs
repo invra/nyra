@@ -9,21 +9,64 @@ namespace TerryDavis.Commands {
     }
 
     private static readonly Dictionary<char, char> translationBooklet = new Dictionary<char, char> {
-      ['q'] = 'q', ['w'] = 'd', ['e'] = 'r', ['r'] = 'w', ['t'] = 'b',
-      ['y'] = 'j', ['u'] = 'f', ['i'] = 'u', ['o'] = 'p', ['p'] = ';',
-      ['['] = '[', [']'] = ']', ['\\'] = '\\',
-      ['a'] = 'a', ['s'] = 's', ['d'] = 'h', ['f'] = 't', ['g'] = 'g',
-      ['h'] = 'y', ['j'] = 'n', ['k'] = 'e', ['l'] = 'o', [';'] = 'i',
-      ['\''] = '\'', ['z'] = 'z', ['x'] = 'x', ['c'] = 'm', ['v'] = 'c',
-      ['b'] = 'v', ['n'] = 'k', ['m'] = 'l',
-      [','] = ',', ['.'] = '.', ['/'] = '/'
+      ['q'] = 'q',
+      ['w'] = 'd',
+      ['e'] = 'r',
+      ['r'] = 'w',
+      ['t'] = 'b',
+      ['y'] = 'j',
+      ['u'] = 'f',
+      ['i'] = 'u',
+      ['o'] = 'p',
+      ['p'] = ';',
+      ['['] = '[',
+      [']'] = ']',
+      ['\\'] = '\\',
+      ['a'] = 'a',
+      ['s'] = 's',
+      ['d'] = 'h',
+      ['f'] = 't',
+      ['g'] = 'g',
+      ['h'] = 'y',
+      ['j'] = 'n',
+      ['k'] = 'e',
+      ['l'] = 'o',
+      [';'] = 'i',
+      ['\''] = '\'',
+      ['z'] = 'z',
+      ['x'] = 'x',
+      ['c'] = 'm',
+      ['v'] = 'c',
+      ['b'] = 'v',
+      ['n'] = 'k',
+      ['m'] = 'l',
+      [','] = ',',
+      ['.'] = '.',
+      ['/'] = '/'
     };
 
     private static readonly Dictionary<char, char> ShiftPairs = new Dictionary<char, char> {
-      ['1'] = '!', ['2'] = '@', ['3'] = '#', ['4'] = '$', ['5'] = '%',
-      ['6'] = '^', ['7'] = '&', ['8'] = '*', ['9'] = '(', ['0'] = ')',
-      ['-'] = '_', ['='] = '+', ['['] = '{', [']'] = '}', ['\\'] = '|',
-      [';'] = ':', ['\''] = '"', [','] = '<', ['.'] = '>', ['/'] = '?', ['`'] = '~'
+      ['1'] = '!',
+      ['2'] = '@',
+      ['3'] = '#',
+      ['4'] = '$',
+      ['5'] = '%',
+      ['6'] = '^',
+      ['7'] = '&',
+      ['8'] = '*',
+      ['9'] = '(',
+      ['0'] = ')',
+      ['-'] = '_',
+      ['='] = '+',
+      ['['] = '{',
+      [']'] = '}',
+      ['\\'] = '|',
+      [';'] = ':',
+      ['\''] = '"',
+      [','] = '<',
+      ['.'] = '>',
+      ['/'] = '?',
+      ['`'] = '~'
     };
 
     private static readonly Dictionary<char, char> ShiftedToUnshifted = ShiftPairs.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
@@ -68,8 +111,7 @@ namespace TerryDavis.Commands {
         if (char.IsLetter(ch)) {
           baseChar = char.ToLowerInvariant(ch);
           wasShifted = char.IsUpper(ch);
-        }
-        else if (ShiftedToUnshifted.TryGetValue(ch, out var unshift)) {
+        } else if (ShiftedToUnshifted.TryGetValue(ch, out var unshift)) {
           baseChar = unshift;
           wasShifted = true;
         } else {
@@ -83,8 +125,7 @@ namespace TerryDavis.Commands {
           if (wasShifted) {
             if (char.IsLetter(mappedChar)) {
               outChar = char.ToUpperInvariant(mappedChar);
-            }
-            else if (ShiftPairs.TryGetValue(mappedChar, out var shiftedMapped)) {
+            } else if (ShiftPairs.TryGetValue(mappedChar, out var shiftedMapped)) {
               outChar = shiftedMapped;
             }
           }
