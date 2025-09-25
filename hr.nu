@@ -1,4 +1,4 @@
-#! /usr/bin/env nu
+#!/usr/bin/env nu
 use std/log;
 
 let isWindows = (not (which uname | is-empty))
