@@ -29,6 +29,7 @@ namespace TerryDavis.Commands {
     private static readonly Dictionary<char, char> ShiftedToUnshifted = ShiftPairs.ToDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
     [Command("deworkmanise")]
+    [Alias(["hrdpwelakusr"])]
     [Summary("Decodes text using the deworkmanise mapping.")]
     public async Task DeworkmaniseAsync([Remainder] string input = "") {
       string textToDecode = input;
