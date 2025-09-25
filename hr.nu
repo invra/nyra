@@ -4,7 +4,7 @@ use std/log;
 let isWindows = (not (which uname | is-empty))
 
 let log_p = if $isWindows {
-q  $"($env.TEMP)\\discord-cs.log"
+  $"($env.TEMP)\\discord-cs.log"
 } else {
   "/tmp/discord-cs.log"
 }
