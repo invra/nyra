@@ -12,21 +12,17 @@ print "Press r to reload and q to quit"
 loop {
   let jid = job spawn -t "Spawner Thread" {||
     job spawn { dotnet run o+e>> $log_p } -t "Discord-C#"
-    log debug "Started"
     
     watch . --glob "**/*[!log]" --debounce-ms 1000 -q {|op, path: string, npath|
       if (not ((file --mime-type $path) | str contains "text")) {
         return
       }
 
-      log info $"Path changed ($path)"
-
       job list
         | where tag == "Discord-C#"
         | each { job kill $in.id }
 
       job spawn { dotnet run o+e>> $log_p } -t "Discord-C#"
-      log debug "Restarted"
     }
 
   }
@@ -39,4 +35,7 @@ loop {
   if $key == "q" {
      break;   
   }
+  print "reloaded"
 }
+
+print "Exiting..."
