@@ -4,11 +4,11 @@ using SkiaSharp;
 
 namespace TerryDavis.Commands {
   public class ColourCommand : ModuleBase<SocketCommandContext> {
-    private readonly DiscordSocketClient _client;
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly DiscordSocketClient client;
+    private readonly HttpClient httpClient = new HttpClient();
 
     public ColourCommand(DiscordSocketClient client) {
-      _client = client;
+      this.client = client;
     }
 
     [Command("colour")]
@@ -99,7 +99,7 @@ namespace TerryDavis.Commands {
 
     private async Task<string> GetColorNameAsync(string hex) {
       try {
-        var response = await _httpClient.GetStringAsync($"https://www.thecolorapi.com/id?hex={hex.Substring(1)}");
+        var response = await httpClient.GetStringAsync($"https://www.thecolorapi.com/id?hex={hex.Substring(1)}");
         using var doc = JsonDocument.Parse(response);
         return doc.RootElement.GetProperty("name").GetProperty("value").GetString() ?? "Unknown";
       } catch {
@@ -109,7 +109,7 @@ namespace TerryDavis.Commands {
 
     private async Task<string> GetPantoneApproximationAsync(string hex) {
       try {
-        var response = await _httpClient.GetStringAsync($"https://www.thecolorapi.com/id?hex={hex.Substring(1)}");
+        var response = await httpClient.GetStringAsync($"https://www.thecolorapi.com/id?hex={hex.Substring(1)}");
         using var doc = JsonDocument.Parse(response);
         var cmyk = doc.RootElement.GetProperty("cmyk");
         int c = cmyk.GetProperty("c").GetInt32();

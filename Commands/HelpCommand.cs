@@ -1,9 +1,9 @@
 namespace TerryDavis.Commands {
   public class HelpCommand : ModuleBase<SocketCommandContext> {
-    private readonly CommandService _commands;
+    private readonly CommandService commands;
 
     public HelpCommand(CommandService commands) {
-      _commands = commands;
+      this.commands = commands;
     }
 
     [Command("help")]
@@ -15,7 +15,7 @@ namespace TerryDavis.Commands {
         .WithFooter($"Requested by {Context.User.Username}")
         .WithCurrentTimestamp();
 
-      foreach (var module in _commands.Modules) {
+      foreach (var module in this.commands.Modules) {
         var commandDescriptions = new List<string>();
 
         foreach (var cmd in module.Commands) {
