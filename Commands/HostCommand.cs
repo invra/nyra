@@ -90,7 +90,7 @@ namespace TerryDavis.Commands {
           _ => "Unknown"
         };
 
-        return $"macOS {prettyName} ({version})";
+        return $"macOS {prettyName}";
       }
 
       if (OperatingSystem.IsWindows()) {
