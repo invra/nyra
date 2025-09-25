@@ -26,7 +26,7 @@
               nixf-diagnose.enable = true;
             };
             settings.formatter.nufmt = {
-              command = "${pkgs.dotnetCorePackages.sdk_9_0-bin}/bin/dotnet";
+              command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
               options = [
                 "format"
               ];
@@ -40,7 +40,7 @@
             license = pkgs.lib.licenses.unlicense;
           };
           buildInputs = with pkgs; [
-            dotnetCorePackages.sdk_9_0-bin
+            dotnetCorePackages.sdk_10_0-bin
             omnisharp-roslyn
           ];
 
