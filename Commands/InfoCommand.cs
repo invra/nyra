@@ -37,11 +37,11 @@ namespace Nyra.Commands {
         .WithTitle("Project Info")
         .WithColor(Color.Orange)
         .AddField("C# Code (Lines)", $"{getFileLineCounts("cs")} lines", true)
-        .AddField("Nix Code (Lines)", $"{getFileLineCounts("nix")} lines", true)
         .AddField("Runtime", $".NET {dotnetVersion}", true)
-        .AddField("Discord.Net Version", discordNetVersion, true)
+        .AddField("Discord.Net", $"v{discordNetVersion}", true)
         .AddField("Uptime", uptimeString, true)
         .AddField("Users", client.Guilds.Sum(g => g.MemberCount), true)
+        .AddField("Guilds", client.Guilds.Count, true)
         .WithFooter(footer => footer.Text = $"Info requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();
