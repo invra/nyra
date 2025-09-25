@@ -14,6 +14,7 @@ loop {
     let _ = (job spawn { dotnet run o+e>> $log_p } -t "Discord-C#");
     
     watch . --glob "**/*[!log]" --debounce-ms 1000 -q {|op, path: string, npath|
+      pkill TerryDavis
       if (not ((file --mime-type $path) | str contains "text")) {
         return
       }
@@ -30,6 +31,7 @@ loop {
   while not ($key in [q r]) {
     $key =  (input listen --types [key]).code;
   }
+  pkill TerryDavis
   job kill $jid
   let  _ = (ps -l | where ($it.cwd == (pwd) and $it.name =~ "dotnet") | each { kill $in.pid });
   if $key == "q" {
