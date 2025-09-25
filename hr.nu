@@ -2,7 +2,6 @@
 use std/log;
 
 let isWindows = (not (which uname | is-empty))
-
 let log_p = if $isWindows {
   $"($env.TEMP)\\discord-cs.log"
 } else {
