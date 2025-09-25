@@ -5,10 +5,10 @@ namespace TerryDavis {
   public class Bot {
     private readonly DiscordSocketClient client;
     private readonly CommandHandler commandHandler;
-    private readonly BotConfig config;
+    private static readonly Lazy<Bot> instance = new Lazy<Bot>(() => new Bot());
+    public static Bot TerryDavis { get {return instance.Value; } }
 
-    public Bot() {
-      config = new BotConfig();
+    private Bot() {
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Initialising the Discord bot");
       client = new DiscordSocketClient(
         new DiscordSocketConfig {
@@ -23,7 +23,7 @@ namespace TerryDavis {
         }
       );
 
-      commandHandler = new CommandHandler(client, config);
+      commandHandler = new CommandHandler(client, BotConfig.Config);
 
       client.Ready += () => {
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Bot is online");
@@ -35,9 +35,8 @@ namespace TerryDavis {
     }
 
     public async Task RunAsync() {
-      string token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!;
       client.Log += LogAsync;
-      await client.LoginAsync(TokenType.Bot, token);
+      await client.LoginAsync(TokenType.Bot, BotConfig.Config.Token);
       await client.StartAsync();
 
       await commandHandler.InitializeAsync();
