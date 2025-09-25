@@ -73,7 +73,7 @@ namespace TerryDavis.Commands {
 
     [Command("deworkmanise")]
     [Alias(["hrdpwelakusr"])]
-    [Summary("Decodes text using the deworkmanise mapping.")]
+    [Summary("Decodes what somone has typed which was meant to be on the Workman Keylayout, but typed on QWERTY.")]
     public async Task DeworkmaniseAsync([Remainder] string input = "") {
       string textToDecode = input;
 
