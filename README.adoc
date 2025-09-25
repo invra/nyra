@@ -1,0 +1,49 @@
+= Nyra
+
+An open-source Discord bot built with *Discord.Net*.
+
+== Why Nyra?
+
+This project exists for two main reasons:
+
+. To refresh my rusty C# knowledge from ~5–6 years ago.
+. To see if C# is a language I’d endulge again.
+
+== Getting Started
+
+First, copy the environment template and configure your secrets:
+
+[source,shell]
+----
+$ cp .env.example .env
+# Then edit .env with your token and other settings
+----
+
+== Supported Systems
+
+Nyra has been tested on the following platforms:
+
+* [x] Linux (any with `/etc/os-release` with `PRETTY_NAME`)
+* [x] FreeBSD
+* [x] macOS
+* [x] Windows (7–11, theoretically compatible)
+
+== Compilation & Running
+
+Nyra targets the `net9.0` runtime as a minimum requirement.
+
+To build and run:
+
+[source,shell]
+----
+dotnet restore
+dotnet run
+----
+
+The first command fetches dependencies from NuGet, and the second compiles and executes the bot.
+
+== License
+
+This project’s code is licensed under link:./LICENSE.txt[the Unlicense].
+
+Essentially, this means you can do almost anything you want with it — see <https://unlicense.org> for details. 
