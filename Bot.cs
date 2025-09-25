@@ -1,5 +1,3 @@
-using Discord;
-using Discord.WebSocket;
 using TerryDavis.Commands;
 using TerryDavis.Config;
 
@@ -8,7 +6,6 @@ namespace TerryDavis {
     private readonly DiscordSocketClient client;
     private readonly CommandHandler commandHandler;
     private readonly BotConfig config;
-
 
     public Bot() {
       config = new BotConfig();
