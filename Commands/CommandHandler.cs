@@ -6,9 +6,9 @@ global using Discord.Rest;
 global using Discord.WebSocket;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
-using TerryDavis.Config;
+using Nyra.Config;
 
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class CommandHandler {
     private readonly DiscordSocketClient client;
     private readonly CommandService commands;

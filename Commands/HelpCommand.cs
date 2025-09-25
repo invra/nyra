@@ -1,4 +1,4 @@
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class HelpCommand : ModuleBase<SocketCommandContext> {
     private readonly CommandService commands;
 

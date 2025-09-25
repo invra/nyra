@@ -1,4 +1,4 @@
-namespace TerryDavis.Config {
+namespace Nyra.Config {
   public class BotConfig {
     public string Prefix { get; }
     public string Token { get; }

@@ -1,4 +1,4 @@
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class BanCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

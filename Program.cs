@@ -1,6 +1,6 @@
 using System.Net.NetworkInformation;
 
-namespace TerryDavis {
+namespace Nyra {
   class Program {
     static async Task Main(string[] args) {
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Creating instance");
@@ -17,7 +17,7 @@ namespace TerryDavis {
         Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Cannot contact Discord, this is just a warning it may not connect.");
       }
 
-      await Bot.TerryDavis.RunAsync();
+      await Bot.Nyra.RunAsync();
     }
   }
 }

@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.Json;
 using SkiaSharp;
 
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class ColourCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
     private readonly HttpClient httpClient = new HttpClient();

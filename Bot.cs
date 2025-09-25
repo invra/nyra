@@ -1,12 +1,12 @@
-using TerryDavis.Commands;
-using TerryDavis.Config;
+using Nyra.Commands;
+using Nyra.Config;
 
-namespace TerryDavis {
+namespace Nyra {
   public class Bot {
     private readonly DiscordSocketClient client;
     private readonly CommandHandler commandHandler;
     private static readonly Lazy<Bot> instance = new Lazy<Bot>(() => new Bot());
-    public static Bot TerryDavis { get { return instance.Value; } }
+    public static Bot Nyra { get { return instance.Value; } }
 
     private Bot() {
       Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Initialising the Discord bot");

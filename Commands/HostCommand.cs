@@ -3,7 +3,7 @@ using System.Management;
 using System.Runtime.InteropServices;
 using Hardware.Info;
 
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class HostCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

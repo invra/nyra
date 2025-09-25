@@ -1,6 +1,8 @@
 #!/usr/bin/env nu 
 use std/log
 
+let bname = "Nyra"
+
 let log_p: string = if ($nu.os-info.name == "windows") {
   $"($env.TEMP)\\discord-cs.log"
 } else {
@@ -14,7 +16,7 @@ loop {
     let _ = (job spawn { dotnet run o+e>> $log_p } -t "Discord-C#");
     
     watch . --glob "**/*[!log]" --debounce-ms 1000 -q {|op, path: string, npath|
-      pkill TerryDavis
+      pkill $bname
       if (not ((file --mime-type $path) | str contains "text")) {
         return
       }
@@ -31,7 +33,7 @@ loop {
   while not ($key in [q r]) {
     $key =  (input listen --types [key]).code;
   }
-  pkill TerryDavis
+  pkill $bname
   job kill $jid
   let  _ = (ps -l | where ($it.cwd == (pwd) and $it.name =~ "dotnet") | each { kill $in.pid });
   if $key == "q" {

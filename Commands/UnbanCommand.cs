@@ -1,4 +1,4 @@
-namespace TerryDavis.Commands {
+namespace Nyra.Commands {
   public class UnbanCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 
