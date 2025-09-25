@@ -1,8 +1,5 @@
 using System.Globalization;
 using System.Text.Json;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using SkiaSharp;
 
 namespace TerryDavis.Commands {

@@ -2,9 +2,6 @@ using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using Hardware.Info;
 
 namespace TerryDavis.Commands {

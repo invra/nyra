@@ -1,7 +1,3 @@
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-
 namespace TerryDavis.Commands {
   public class PingCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;

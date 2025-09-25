@@ -1,6 +1,3 @@
-using Discord;
-using Discord.Commands;
-
 namespace TerryDavis.Commands {
   public class HelpCommand : ModuleBase<SocketCommandContext> {
     private readonly CommandService _commands;

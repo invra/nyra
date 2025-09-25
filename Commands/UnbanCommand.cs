@@ -1,8 +1,3 @@
-using Discord;
-using Discord.Commands;
-using Discord.Rest;
-using Discord.WebSocket;
-
 namespace TerryDavis.Commands {
   public class UnbanCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;

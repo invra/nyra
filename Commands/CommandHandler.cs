@@ -1,7 +1,8 @@
+global using Discord;
+global using Discord.Rest;
+global using Discord.Commands;
+global using Discord.WebSocket;
 using System.Reflection;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using TerryDavis.Config;
 
