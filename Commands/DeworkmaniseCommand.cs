@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace TerryDavis.Commands {
   public class DeworkmaniseCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
