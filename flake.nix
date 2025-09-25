@@ -25,6 +25,13 @@
               nixfmt.enable = true;
               nixf-diagnose.enable = true;
             };
+            settings.formatter.nufmt = {
+              command = "${pkgs.dotnetCorePackages.sdk_9_0-bin}/bin/dotnet";
+              options = [
+                "format"
+              ];
+              includes = [ "*.csproj" ];
+            };
           })).config.build;
       in
       {
