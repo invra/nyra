@@ -21,7 +21,7 @@ namespace TerryDavis.Commands {
           return Environment.ProcessorCount;
         } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
           int procCount = 0;
-          foreach(var line in File.ReadAllText("/proc/cpuinfo").Split("\n")) {
+          foreach (var line in File.ReadAllText("/proc/cpuinfo").Split("\n")) {
             if (line.StartsWith("cpu cores")) {
               procCount = int.Parse(line.Split(":")[1].Trim());
               break;
