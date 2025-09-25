@@ -3,6 +3,7 @@ global using Discord.Commands;
 global using Discord.Rest;
 global using Discord.WebSocket;
 global using System.Text;
+global using System.Text.RegularExpressions;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using TerryDavis.Config;

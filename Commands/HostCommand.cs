@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using Hardware.Info;
 
 namespace TerryDavis.Commands {
