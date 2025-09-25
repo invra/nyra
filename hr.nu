@@ -1,7 +1,11 @@
 #! /usr/bin/env nu
 use std/log;
 
-watch . {|op, path, npath|
+let jid = (job spawn {|| dotnet run o+e> /tmp/discord-cs.log});
+job tag $jid "Discord-C#";
+log debug "Started"
+
+watch . --glob "**/*[!log]" --debounce-ms 1000 {|op, path: string, npath|
   if (not ((file --mime-type $path) | str contains "text")) {
     return;    
   }
@@ -12,8 +16,7 @@ watch . {|op, path, npath|
     | where tag == "Discord-C#"
     | each { job kill $in.id };
 
-  let jid = (job spawn {|| dotnet run});
+  let jid = (job spawn {|| dotnet run o+e> /tmp/discord-cs.log});
   job tag $jid "Discord-C#";
-
-  log debug "reloaded"
+  log debug "Restarted"
 }
