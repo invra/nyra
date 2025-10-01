@@ -33,7 +33,7 @@
               nixf-diagnose.enable = true;
             };
             settings.formatter.dotnet-format = {
-              command = "${pkgs.dotnetCorePackages.sdk_9_0-bin}/bin/dotnet";
+              command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
               options = [
                 "format"
               ];
