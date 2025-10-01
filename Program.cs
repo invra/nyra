@@ -1,10 +1,11 @@
 using System.Net.NetworkInformation;
+using Nyra.Colourise;
 
 namespace Nyra {
   class Program {
     static async Task Main(string[] args) {
-      Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Creating instance");
-      Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Testing network connectivity to Discord");
+      Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Creating instance");
+      Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Testing network connectivity to Discord");
       try {
         Ping myPing = new Ping();
         String host = "discord.com";
@@ -12,9 +13,9 @@ namespace Nyra {
         int timeout = 1000;
         PingOptions pingOptions = new PingOptions();
         PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
-        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Networking test has passed");
+        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Networking test has passed");
       } catch {
-        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Cannot contact Discord, this is just a warning it may not connect.");
+        Console.WriteLine($"{"[STDOUT/warning]:".Yellow().Bold()} Cannot contact Discord, this is just a warning it may not connect.");
       }
 
       await Bot.Nyra.RunAsync();

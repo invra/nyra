@@ -1,3 +1,5 @@
+using Nyra.Colourise;
+
 namespace Nyra.Config {
   public class BotConfig {
     public string Prefix { get; }
@@ -13,22 +15,22 @@ namespace Nyra.Config {
       try {
         Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX")!;
         if (Prefix.Length > 2) {
-          Console.WriteLine("\x1b[0;33m[STDOUT/WARNING]: The bot prefix is longer than 2 characters! This will cause impaired usage.\x1b[0;0m");
+          Console.WriteLine($"{"[STDOUT/warning]:".Yellow().Bold()} The bot prefix is longer than 2 characters! This will cause impaired usage.");
         }
-        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m \"{Prefix}\" has been accepted as the bot prefix");
+        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} \"{Prefix}\" has been accepted as the bot prefix");
       } catch {
         Prefix = string.Empty;
-        Console.WriteLine($"\x1b[1;31m[STDERR/critical]:\x1b[0m No BOT_PREFIX variable found in the ENV", Console.Error);
+        Console.WriteLine($"{"[STDOUT/critical]:".Red().Bold()} No BOT_PREFIX variable found in the ENV", Console.Error);
         errors = true;
       }
 
       try {
         Token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!;
         Token = (Token.Trim() == string.Empty ? null : Token)!;
-        Console.WriteLine($"\x1b[1;36m[STDOUT/status]:\x1b[0m Provided Discord token {Token[..10]}… has been accepted");
+        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Provided Discord token {Token[..10]}… has been accepted");
       } catch {
         Token = string.Empty;
-        Console.WriteLine($"\x1b[1;31m[STDERR/critical]:\x1b[0m No DISCORD_TOKEN variable found in the ENV", Console.Error);
+        Console.WriteLine($"{"[STDOUT/critical]:".Red().Bold()} No DISCORD_TOKEN variable found in the ENV", Console.Error);
         errors = true;
       }
 
