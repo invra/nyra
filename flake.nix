@@ -74,7 +74,7 @@
           nugetDeps = ./deps.json;
 
           installPhase = ''
-            dotnet publish nyra.csproj -c Release -f net9.0 -o $out/bin
+            dotnet publish -o $out/bin
             chmod +x $out/bin/nyra
           '';
         };
