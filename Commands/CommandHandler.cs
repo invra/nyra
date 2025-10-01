@@ -14,6 +14,7 @@ global using Discord.WebSocket;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Nyra.Config;
+using Nyra.Stdout;
 
 namespace Nyra.Commands {
   [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
@@ -45,6 +46,12 @@ namespace Nyra.Commands {
     public async Task InitializeAsync() {
       await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
+      foreach (var module in commands.Modules) {
+        foreach (var cmd in module.Commands) {
+          ConsoleCalls.PrintStatus($"Added command: {cmd.Name}");
+        }
+      }
+
       client.MessageReceived += HandleCommandAsync;
     }
 
@@ -65,7 +72,7 @@ namespace Nyra.Commands {
         if (result.Error == CommandError.UnknownCommand)
           await context.Channel.SendMessageAsync("This command doesn't exist!");
         else
-          Console.WriteLine($"[Command Error] {result.ErrorReason}");
+          ConsoleCalls.PrintError(result.ErrorReason);
       }
     }
   }
