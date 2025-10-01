@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Colourise.cs
+    Authors: Invra
+    Notes: Functions for different common printing messages
+*/
+
 using Nyra.Colourise;
 
 namespace Nyra.Stdout {

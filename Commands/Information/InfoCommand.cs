@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Information/InfoCommand.cs
+    Authors: Invra
+    Notes: A bot information command
+*/
+
 using System.Diagnostics;
 using System.Reflection;
 

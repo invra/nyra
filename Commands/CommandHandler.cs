@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/CommandHandler.cs
+    Authors: Invra
+    Notes: Simple command handler to manage all deeper commands
+*/
+
 global using System.Text;
 global using System.Text.RegularExpressions;
 global using Discord;

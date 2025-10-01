@@ -1,4 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<!-- SPDX-License-Identifier: Unlicense               -->
+<!-- Projects: Nyra                                   -->
+<!-- File: nyra.csproj                                -->
+<!-- Authors: Invra                                   -->
+<!-- Notes: C# project file                           -->
+
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <SelfContained>true</SelfContained>

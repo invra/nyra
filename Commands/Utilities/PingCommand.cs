@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Utilities/PingCommand.cs
+    Authors: Invra
+    Notes: A command to ping Discord gateway
+*/
+
 namespace Nyra.Commands {
   [Category("Utility")]
   public class PingCommand : ModuleBase<SocketCommandContext> {

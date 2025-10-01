@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Moderation/KickCommand.cs
+    Authors: Invra
+    Notes: A kick command
+*/
+
 namespace Nyra.Commands {
   [Category("Moderation")]
   public class KickCommand : ModuleBase<SocketCommandContext> {

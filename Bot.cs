@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Bot.cs
+    Authors: Invra
+    Notes:
+*/
+
 using Nyra.Colourise;
 using Nyra.Commands;
 using Nyra.Config;

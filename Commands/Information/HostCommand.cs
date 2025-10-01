@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Information/HostCommand.cs
+    Authors: Invra
+    Notes: A host information command
+*/
+
 using System.Diagnostics;
 using System.Management;
 using System.Runtime.InteropServices;

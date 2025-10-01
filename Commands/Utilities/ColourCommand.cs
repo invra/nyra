@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Utilities/ColourCommand.cs
+    Authors: Invra
+    Notes: A colour tool command
+*/
+
 using System.Globalization;
 using System.Text.Json;
 using SkiaSharp;

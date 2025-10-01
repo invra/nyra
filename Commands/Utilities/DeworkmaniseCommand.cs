@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Utilities/DeworkmaniseCommand.cs
+    Authors: Invra
+    Notes: A tool to parse garbled workman
+*/
+
 namespace Nyra.Commands {
   [Category("Utility")]
   public class DeworkmaniseCommand : ModuleBase<SocketCommandContext> {

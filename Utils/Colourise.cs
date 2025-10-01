@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Colourise.cs
+    Authors: Invra
+    Notes: Methods for wrapping ANSI escapes
+*/
+
 namespace Nyra.Colourise {
   public static class AnsiExtensions {
     private const string Reset = "\u001b[0m";

@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Moderation/UnbanCommand.cs
+    Authors: Invra
+    Notes: An unban command
+*/
+
 namespace Nyra.Commands {
   [Category("Moderation")]
   public class UnbanCommand : ModuleBase<SocketCommandContext> {

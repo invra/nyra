@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Information/HelpCommand.cs
+    Authors: Invra
+    Notes: A help command
+*/
+
 namespace Nyra.Commands {
   [Category("Information")]
   public class HelpCommand : ModuleBase<SocketCommandContext> {

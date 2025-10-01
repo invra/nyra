@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/BotConfig.cs
+    Authors: Invra
+    Notes: Singleton for Config
+*/
+
 using Nyra.Stdout;
 
 namespace Nyra.Config {

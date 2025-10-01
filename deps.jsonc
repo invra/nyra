@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: deps.jsonc
+    Authors: Invra
+    Notes: A data structure for all the NuGet depedencies for Nix to reproduce
+*/
+
 [
   {
     "pname": "Discord.Net",

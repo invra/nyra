@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Moderation/BanCommand.cs
+    Authors: Invra
+    Notes: A ban command
+*/
+
 namespace Nyra.Commands {
   [Category("Moderation")]
   public class BanCommand : ModuleBase<SocketCommandContext> {

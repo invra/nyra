@@ -1,3 +1,9 @@
+<!-- SPDX-License-Identifier: Unlicense               -->
+<!-- Projects: Nyra                                   -->
+<!-- File: nyra.slnx                                  -->
+<!-- Authors: Invra                                   -->
+<!-- Notes: Solution file                             -->
+
 <Solution>
   <Project Path="nyra.csproj" />
 </Solution>

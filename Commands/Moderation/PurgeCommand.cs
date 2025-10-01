@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Utils/Moderation/PurgeCommand.cs
+    Authors: Invra
+    Notes: A purge command
+*/
+
 namespace Nyra.Commands {
   [Category("Moderation")]
   public class PurgeCommand : ModuleBase<SocketCommandContext> {

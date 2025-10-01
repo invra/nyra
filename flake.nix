@@ -1,3 +1,10 @@
+# *
+#   SPDX-License-Identifier: Unlicense
+#   Projects: Nyra
+#   File: nyra.csproj
+#   Authors: Invra
+#   Notes: C# project file
+
 {
   description = "Flake for Dotnet";
 
@@ -71,7 +78,7 @@
 
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
-          nugetDeps = ./deps.json;
+          nugetDeps = ./deps.jsonc;
 
           installPhase = ''
             dotnet publish -o $out/bin

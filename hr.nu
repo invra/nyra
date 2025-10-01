@@ -1,3 +1,10 @@
+# * SPDX-License-Identifier: Unlicense
+#   Projects: Nyra
+#   File: hr.nu
+#   Authors: Invra
+#   Notes: Hot-reload Nushell script
+# *
+
 #!/usr/bin/env nu 
 use std/log
 
