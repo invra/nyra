@@ -16,8 +16,8 @@ This project exists for two main reasons:
 == Getting Started
 
 === Development
-* link:./docs/development/wterminal.adoc[Building in the Windows Terminal]
 * link:./docs/development/terminal.adoc[Building in a POSIX Terminal]
+* link:./docs/development/wterminal.adoc[Building in the Windows Terminal]
 * link:./docs/development/mwvs.adoc[Building in Visual Studio]
 
 ---
