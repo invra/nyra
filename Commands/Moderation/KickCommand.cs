@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Moderation")]
   public class KickCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public KickCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public KickCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("kick")]
     [Summary("Kicks a user by mention or ID.")]

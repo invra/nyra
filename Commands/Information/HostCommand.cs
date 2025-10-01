@@ -14,10 +14,7 @@ namespace Nyra.Commands {
   [Category("Information")]
   public class HostCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public HostCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public HostCommand(DiscordSocketClient client) => this.client = client;
 
     public static int GetPhysicalCores() {
       try {

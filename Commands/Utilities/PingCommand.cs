@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Utility")]
   public class PingCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public PingCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public PingCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("ping")]
     [Summary("Replies with pong and latency stats in an embed.")]

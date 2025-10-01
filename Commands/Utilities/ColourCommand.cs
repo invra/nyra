@@ -14,10 +14,7 @@ namespace Nyra.Commands {
   public class ColourCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
     private readonly HttpClient httpClient = new HttpClient();
-
-    public ColourCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public ColourCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("colour")]
     [Alias("color")]

@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Moderation")]
   public class BanCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public BanCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public BanCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("ban")]
     [Summary("Bans a user by mention or ID.")]

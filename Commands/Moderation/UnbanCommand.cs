@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Moderation")]
   public class UnbanCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public UnbanCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public UnbanCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("unban")]
     [Summary("Unbans a user by ID.")]

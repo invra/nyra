@@ -12,10 +12,7 @@ namespace Nyra.Commands {
   [Category("Information")]
   public class InfoCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public InfoCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public InfoCommand(DiscordSocketClient client) => this.client = client;
 
     private static string FormatUptime(TimeSpan uptime) {
       var parts = new List<string>();

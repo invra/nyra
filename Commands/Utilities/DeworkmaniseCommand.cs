@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Utility")]
   public class DeworkmaniseCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public DeworkmaniseCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public DeworkmaniseCommand(DiscordSocketClient client) => this.client = client;
 
     private static readonly Dictionary<char, char> translationBooklet = new Dictionary<char, char> {
       ['q'] = 'q',
