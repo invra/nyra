@@ -25,7 +25,7 @@
               nixfmt.enable = true;
               nixf-diagnose.enable = true;
             };
-            settings.formatter.nufmt = {
+            settings.formatter.dotnet-format = {
               command = "${pkgs.dotnetCorePackages.sdk_9_0-bin}/bin/dotnet";
               options = [
                 "format"
