@@ -1,4 +1,4 @@
-using Nyra.Colourise;
+using Nyra.Stdout;
 
 namespace Nyra.Config {
   public class BotConfig {
@@ -6,32 +6,29 @@ namespace Nyra.Config {
     public string Token { get; }
 
     private static readonly Lazy<BotConfig> instance = new Lazy<BotConfig>(() => new BotConfig());
-    public static BotConfig Config { get { return instance.Value; } }
+    public static BotConfig Config => instance.Value;
 
     private BotConfig() {
       DotNetEnv.Env.Load();
       bool errors = false;
 
-      try {
-        Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX")!;
-        if (Prefix.Length > 2) {
-          Console.WriteLine($"{"[STDOUT/warning]:".Yellow().Bold()} The bot prefix is longer than 2 characters! This will cause impaired usage.");
-        }
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} \"{Prefix}\" has been accepted as the bot prefix");
-      } catch {
-        Prefix = string.Empty;
-        Console.WriteLine($"{"[STDOUT/critical]:".Red().Bold()} No BOT_PREFIX variable found in the ENV", Console.Error);
+      Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX") ?? string.Empty;
+      if (string.IsNullOrEmpty(Prefix)) {
+        ConsoleCalls.PrintError("No BOT_PREFIX variable found in the ENV");
         errors = true;
+      } else {
+        if (Prefix.Length > 2) {
+          ConsoleCalls.PrintWarning("The bot prefix is longer than 2 characters! This may cause impaired usage.");
+        }
+        ConsoleCalls.PrintStatus($"\"{Prefix}\" has been accepted as the bot prefix");
       }
 
-      try {
-        Token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!;
-        Token = (Token.Trim() == string.Empty ? null : Token)!;
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Provided Discord token {Token[..10]}… has been accepted");
-      } catch {
-        Token = string.Empty;
-        Console.WriteLine($"{"[STDOUT/critical]:".Red().Bold()} No DISCORD_TOKEN variable found in the ENV", Console.Error);
+      Token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")?.Trim() ?? string.Empty;
+      if (string.IsNullOrEmpty(Token)) {
+        ConsoleCalls.PrintError("No DISCORD_TOKEN variable found in the ENV");
         errors = true;
+      } else {
+        ConsoleCalls.PrintStatus($"Provided Discord token {Token[..10]}… has been accepted");
       }
 
       if (errors) {

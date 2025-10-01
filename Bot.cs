@@ -1,6 +1,7 @@
 using Nyra.Colourise;
 using Nyra.Commands;
 using Nyra.Config;
+using Nyra.Stdout;
 
 namespace Nyra {
   public class Bot {
@@ -10,7 +11,7 @@ namespace Nyra {
     public static Bot Nyra { get { return instance.Value; } }
 
     private Bot() {
-      Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Initialising the Discord bot");
+      ConsoleCalls.PrintStatus("Initialising the Discord bot");
       client = new DiscordSocketClient(
         new DiscordSocketConfig {
           AlwaysDownloadUsers = true,
@@ -27,10 +28,10 @@ namespace Nyra {
       commandHandler = new CommandHandler(client, BotConfig.Config);
 
       client.Ready += () => {
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Bot is online");
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Bot username is: {client.CurrentUser.Username}");
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Bot Id: {client.CurrentUser.Id}");
-        Console.WriteLine($"{"[STDOUT/status]:".Cyan().Bold()} Is a Bot: {client.CurrentUser.IsBot}");
+        ConsoleCalls.PrintStatus("Bot is online");
+        ConsoleCalls.PrintStatus($"Bot username is: {client.CurrentUser.Username}");
+        ConsoleCalls.PrintStatus($"Bot Id: {client.CurrentUser.Id}");
+        ConsoleCalls.PrintStatus($"Is a Bot: {client.CurrentUser.IsBot}");
         return Task.CompletedTask;
       };
     }
@@ -47,7 +48,7 @@ namespace Nyra {
 
     private Task LogAsync(LogMessage message) {
       if (message.Severity != LogSeverity.Info) {
-        Console.WriteLine($"{$"[STDOUT/{message.Severity}]:".Yellow().Bold()} {message.Message}");
+        ConsoleCalls.PrintCustom(message.Message, message.Severity.ToString());
       }
       return Task.CompletedTask;
     }
