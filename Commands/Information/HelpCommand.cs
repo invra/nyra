@@ -1,5 +1,5 @@
 namespace Nyra.Commands {
-  [Category("Utility")]
+  [Category("Information")]
   public class HelpCommand : ModuleBase<SocketCommandContext> {
     private readonly CommandService commands;
     private readonly DiscordSocketClient client;
@@ -21,7 +21,7 @@ namespace Nyra.Commands {
         .WithMinValues(1)
         .WithMaxValues(1);
 
-      menuBuilder.AddOption("All Commands", "all", "View all available commands", new Emoji("📚"));
+      menuBuilder.AddOption("All Commands", "all", "View all available commands", new Emoji("📖"));
       foreach (var category in categorizedCommands.Keys.OrderBy(c => c)) {
         var emoji = GetCategoryEmoji(category);
         menuBuilder.AddOption(category, category.ToLower(), $"View {category} commands", emoji);
@@ -93,7 +93,7 @@ namespace Nyra.Commands {
 
     private Embed BuildOverviewEmbed(Dictionary<string, List<string>> categorizedCommands) {
       var embed = new EmbedBuilder()
-        .WithTitle("📚 Command Help")
+        .WithTitle("📖 Command Help")
         .WithDescription("Use the dropdown menu below to browse commands by category.")
         .WithColor(Color.Blue)
         .WithFooter($"Requested by {Context.User.Username}")
@@ -129,6 +129,7 @@ namespace Nyra.Commands {
 
     private Emoji GetCategoryEmoji(string category) {
       return category switch {
+        "Information" => new Emoji("📚"),
         "Moderation" => new Emoji("🛡️"),
         "Utility" => new Emoji("🔧"),
         _ => new Emoji("📁")
@@ -137,6 +138,7 @@ namespace Nyra.Commands {
 
     private Color GetCategoryColor(string category) {
       return category switch {
+        "Information" => Color.Blue,
         "Moderation" => Color.Red,
         "Utility" => Color.Green,
         _ => Color.Purple

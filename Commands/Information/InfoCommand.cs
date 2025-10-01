@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 namespace Nyra.Commands {
-  [Category("Utility")]
+  [Category("Information")]
   public class InfoCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 
