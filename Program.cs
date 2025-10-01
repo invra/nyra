@@ -22,6 +22,7 @@ namespace Nyra {
         int timeout = 1000;
         PingOptions pingOptions = new PingOptions();
         PingReply reply = myPing.Send(host, timeout, buffer, pingOptions);
+
         ConsoleCalls.PrintStatus("Networking test has passed");
       } catch {
         ConsoleCalls.PrintWarning("Cannot contact Discord, this is just a warning it may not connect.");
