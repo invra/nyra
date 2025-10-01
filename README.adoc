@@ -56,7 +56,7 @@ If you're using Visual Studio on Windows, follow these setup steps:
    * Open Visual Studio 2022 (or newer)
    * Go to `Tools` > `Options`
    
-image:./docs/pics/tools.png[Tools,500]
+image:./docs/pics/tools.png[Tools,350]
 
    * Expand `Environment` > `Preview Features`
    * Enable **"Use previews of the .NET SDK"**
