@@ -67,7 +67,6 @@
 
         packages.default = pkgs.buildDotnetModule {
           name = "nyra";
-
           src = ./.;
 
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0-bin;
