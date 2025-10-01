@@ -54,12 +54,16 @@ If you're using Visual Studio on Windows, follow these setup steps:
 3. **Enable SDK Previews in Visual Studio**
 
    * Open Visual Studio 2022 (or newer)
-   * Go to `Tools` > `Options`   
-   image:./docs/pics/tools.png[Tools,250]
+   * Go to `Tools` > `Options`
+   
+image:./docs/pics/tools.png[Tools,500]
+
    * Expand `Environment` > `Preview Features`
    * Enable **"Use previews of the .NET SDK"**
    * Click OK and restart Visual Studio
-   image:./docs/pics/options.png[Opts]
+
+image:./docs/pics/options.png[Opts,500]
+
 
 After completing these steps, you should be ready to build and run the bot.
 
