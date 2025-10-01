@@ -8,7 +8,6 @@
 namespace Nyra.Colourise {
   public static class AnsiExtensions {
     private const string Reset = "\u001b[0m";
-
     public static string Red(this string text) => $"\u001b[31m{text}{Reset}";
     public static string Green(this string text) => $"\u001b[32m{text}{Reset}";
     public static string Yellow(this string text) => $"\u001b[33m{text}{Reset}";
