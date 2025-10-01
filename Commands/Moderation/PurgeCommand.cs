@@ -9,10 +9,7 @@ namespace Nyra.Commands {
   [Category("Moderation")]
   public class PurgeCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
-
-    public PurgeCommand(DiscordSocketClient client) {
-      this.client = client;
-    }
+    public PurgeCommand(DiscordSocketClient client) => this.client = client;
 
     [Command("purge")]
     [Summary("Deletes a specified number of messages from the current channel.")]
@@ -34,6 +31,7 @@ namespace Nyra.Commands {
       }
 
       var confirmation = await ReplyAsync($"Deleted {filtered.Count() - 1} messages.");
+
       await Task.Delay(3000);
       await confirmation.DeleteAsync();
     }
