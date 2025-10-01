@@ -13,4 +13,5 @@ out
 result
 .vscode/
 .DS_Store
+.windsurf/
 update.patch
