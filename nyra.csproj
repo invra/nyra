@@ -9,7 +9,6 @@
     <PublishSingleFile>true</PublishSingleFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>4</WarningLevel>
