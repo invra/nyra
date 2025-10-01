@@ -45,11 +45,10 @@ namespace Nyra {
 
     public async Task RunAsync() {
       client.Log += LogAsync;
+
       await client.LoginAsync(TokenType.Bot, BotConfig.Config.Token);
       await client.StartAsync();
-
       await commandHandler.InitializeAsync();
-
       await Task.Delay(-1);
     }
 
