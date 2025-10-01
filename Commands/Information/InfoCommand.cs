@@ -24,7 +24,6 @@ namespace Nyra.Commands {
       if (uptime.Hours > 0) parts.Add($"{uptime.Hours}h");
       if (uptime.Minutes > 0) parts.Add($"{uptime.Minutes}m");
       if (uptime.Seconds > 0) parts.Add($"{uptime.Seconds}s");
-
       if (parts.Count == 0) return "0s";
 
       return string.Join(" ", parts);
@@ -34,9 +33,9 @@ namespace Nyra.Commands {
     [Summary("Replies with information about the bot itself.")]
     public async Task PingAsync() {
       var msg = await ReplyAsync("Calculating info...");
-
       TimeSpan uptime = DateTime.UtcNow - Process.GetCurrentProcess().StartTime.ToUniversalTime();
       string uptimeString = FormatUptime(uptime);
+
       var dotnetVersion = Environment.Version.ToString();
       var discordNetVersion = Assembly.GetAssembly(typeof(DiscordSocketClient))?
         .GetName().Version?.ToString() ?? "Unknown";
@@ -63,8 +62,8 @@ namespace Nyra.Commands {
     private static int getFileLineCounts(string extension) {
       if (extension.StartsWith(".")) extension = extension[1..];
       string currentDirectory = Directory.GetCurrentDirectory();
-      var files = Directory.GetFiles(currentDirectory, $"*.{extension}", SearchOption.AllDirectories);
       int totalLines = 0;
+      var files = Directory.GetFiles(currentDirectory, $"*.{extension}", SearchOption.AllDirectories);
 
       foreach (var file in files) {
         try {
@@ -73,7 +72,6 @@ namespace Nyra.Commands {
           Console.WriteLine($"Failed to read {file}: {ex.Message}");
         }
       }
-
       return totalLines;
     }
   }
