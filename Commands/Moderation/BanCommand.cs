@@ -74,7 +74,7 @@ namespace Nyra.Commands {
       }
     }
 
-    private SocketGuildUser? ParseUser(string input) {
+    private SocketGuildUser ParseUser(string input) {
       if (input.StartsWith("<@") && input.EndsWith(">"))
         input = input.Replace("<@!", "").Replace("<@", "").Replace(">", "");
 

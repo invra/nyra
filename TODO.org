@@ -2,5 +2,5 @@
 
 ** Errors and warnings
 
-   - [ ] Fix warnings with warn CS8632.
+   - [X] Fix warnings with warn CS8632.
    - [ ] Fix a warning with warn NETSDK1128.

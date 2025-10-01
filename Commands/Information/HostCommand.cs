@@ -42,7 +42,7 @@ namespace Nyra.Commands {
             }
           };
           proc.Start();
-          string? output = proc.StandardOutput.ReadLine();
+          string output = proc.StandardOutput.ReadLine() ?? "0";
           proc.WaitForExit();
           if (int.TryParse(output, out int cores))
             return cores;

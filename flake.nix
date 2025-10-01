@@ -1,4 +1,3 @@
-# *
 #   SPDX-License-Identifier: Unlicense
 #   Project: Nyra
 #   File: nyra.csproj
@@ -79,7 +78,6 @@
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
           nugetDeps = ./deps.jsonc;
-
           installPhase = ''
             dotnet publish -o $out/bin
             chmod +x $out/bin/nyra

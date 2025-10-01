@@ -7,7 +7,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <SelfContained>true</SelfContained>
+    <!-- <SelfContained>false</SelfContained> -->
     <TargetFramework>net10.0</TargetFramework>
     <EnableComHosting>true</EnableComHosting>
     <ImplicitUsings>enable</ImplicitUsings>

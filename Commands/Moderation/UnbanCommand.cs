@@ -39,7 +39,7 @@ namespace Nyra.Commands {
       }
 
       try {
-        RestBan? banInfo = null;
+        RestBan banInfo = null;
         await foreach (var batch in Context.Guild.GetBansAsync()) {
           banInfo = batch.FirstOrDefault(b => b.User.Id == userId);
           if (banInfo != null)
