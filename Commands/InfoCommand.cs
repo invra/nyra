@@ -1,5 +1,5 @@
-using System.Reflection;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Nyra.Commands {
   public class InfoCommand : ModuleBase<SocketCommandContext> {
@@ -61,8 +61,7 @@ namespace Nyra.Commands {
       foreach (var file in files) {
         try {
           totalLines += File.ReadAllLines(file).Length;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           Console.WriteLine($"Failed to read {file}: {ex.Message}");
         }
       }
