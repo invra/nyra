@@ -16,13 +16,13 @@ Before building, install the following:
 . Open **Visual Studio 2022** (or newer)
 . Go to `Tools` > `Options`
 +
-image:./pics/tools.png[Tools,350]
+image:../pics/tools.png[Tools,350]
 
 . Expand `Environment` > `Preview Features`
 . Enable **"Use previews of the .NET SDK"**
 . Click **OK** and restart Visual Studio
 +
-image:./pics/options.png[Options,500]
+image:../pics/options.png[Options,500]
 
 == Configure
 
