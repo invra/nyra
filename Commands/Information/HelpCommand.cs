@@ -10,7 +10,6 @@ namespace Nyra.Commands {
   public class HelpCommand : ModuleBase<SocketCommandContext> {
     private readonly CommandService commands;
     private readonly DiscordSocketClient client;
-
     public HelpCommand(CommandService commands, DiscordSocketClient client) {
       this.commands = commands;
       this.client = client;
