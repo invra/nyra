@@ -31,7 +31,7 @@ Copy the provided `.env.example` and fill in your details (Discord bot token, pr
 
 [source,shell]
 ----
-$ cp .env.example .env
+cp .env.example .env
 ----
 
 == Build
@@ -61,5 +61,5 @@ These errors indicate Nyra cannot find required environment variables.
 Solution: Copy the example configuration file and fill in the required values:
 [source,shell]
 ----
-$ cp .env.example .env
+cp .env.example .env
 ----
