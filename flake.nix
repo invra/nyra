@@ -18,7 +18,6 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
-        lib = pkgs.lib;
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
             projectRootFile = ".git/config";
