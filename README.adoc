@@ -26,4 +26,4 @@ This project exists for two main reasons:
 
 This project is licensed under link:./LICENSE.txt[The Unlicense].
 
-Essentially, you're free to use, modify, and distribute the code as you see fit. See link:https://unlicense.org[unlicense.org] for more details.
+Essentially, you're free to use, modify, and distribute the code as you see fit. See link:https://unlicense.org[<unlicense.org>] for more details.
