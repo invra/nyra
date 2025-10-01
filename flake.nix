@@ -18,6 +18,7 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
+        lib = pkgs.lib;
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
             projectRootFile = ".git/config";
@@ -26,7 +27,7 @@
               nixf-diagnose.enable = true;
             };
             settings.formatter.nufmt = {
-              command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
+              command = "${pkgs.dotnetCorePackages.sdk_9_0-bin}/bin/dotnet";
               options = [
                 "format"
               ];
@@ -41,7 +42,6 @@
           };
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_9_0-bin
-            dotnetCorePackages.sdk_10_0-bin
             omnisharp-roslyn
           ];
 
@@ -67,9 +67,18 @@
         };
 
         packages.default = pkgs.buildDotnetModule {
-          name = "terry-davis";
+          name = "nyra";
+
           src = ./.;
-          # vendorHash = null;
+
+          dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0-bin;
+          dotnet-runtime = pkgs.dotnetCorePackages.runtime_9_0;
+          nugetDeps = ./deps.json;
+
+          installPhase = ''
+            dotnet publish nyra.csproj -c Release -f net9.0 -o $out/bin
+            chmod +x $out/bin/nyra
+          '';
         };
 
         formatter = formatters.wrapper;
