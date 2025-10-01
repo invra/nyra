@@ -40,7 +40,7 @@
             license = pkgs.lib.licenses.unlicense;
           };
           buildInputs = with pkgs; [
-            dotnetCorePackages.sdk_9_0-bin
+            dotnetCorePackages.sdk_10_0-bin
             omnisharp-roslyn
           ];
 
@@ -69,8 +69,8 @@
           name = "nyra";
           src = ./.;
 
-          dotnet-sdk = pkgs.dotnetCorePackages.sdk_9_0-bin;
-          dotnet-runtime = pkgs.dotnetCorePackages.runtime_9_0;
+          dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
+          dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
           nugetDeps = ./deps.json;
 
           installPhase = ''
