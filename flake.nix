@@ -1,5 +1,5 @@
 {
-  description = "Flake for Go-lang development";
+  description = "Flake for Dotnet";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -40,6 +40,7 @@
             license = pkgs.lib.licenses.unlicense;
           };
           buildInputs = with pkgs; [
+            dotnetCorePackages.sdk_9_0-bin
             dotnetCorePackages.sdk_10_0-bin
             omnisharp-roslyn
           ];
