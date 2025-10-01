@@ -2,7 +2,7 @@
     Projects: Nyra
     File: Bot.cs
     Authors: Invra
-    Notes:
+    Notes: Bot constructor
 */
 
 using Nyra.Colourise;

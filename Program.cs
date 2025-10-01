@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Projects: Nyra
+    File: Program.cs
+    Authors: Invra
+    Notes: Entrypoint file
+*/
+
 using System.Net.NetworkInformation;
 using Nyra.Colourise;
 using Nyra.Stdout;
