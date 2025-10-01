@@ -27,7 +27,7 @@ namespace Nyra.Config {
         if (Prefix.Length > 2) {
           ConsoleCalls.PrintWarning("The bot prefix is longer than 2 characters! This may cause impaired usage.");
         }
-        ConsoleCalls.PrintStatus($"\"{Prefix}\" has been accepted as the bot prefix");
+        ConsoleCalls.PrintStatus($"The provided bot prefix \"{Prefix}\" has been accepted");
       }
 
       Token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")?.Trim() ?? string.Empty;
@@ -35,7 +35,7 @@ namespace Nyra.Config {
         ConsoleCalls.PrintError("No DISCORD_TOKEN variable found in the ENV");
         errors = true;
       } else {
-        ConsoleCalls.PrintStatus($"Provided Discord token {Token[..10]}… has been accepted");
+        ConsoleCalls.PrintStatus($"The provided Discord token {Token[..10]}… has been accepted");
       }
 
       if (errors) {
