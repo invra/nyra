@@ -1,4 +1,5 @@
 namespace Nyra.Commands {
+  [Category("Moderation")]
   public class PurgeCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

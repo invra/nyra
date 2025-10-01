@@ -1,4 +1,5 @@
 namespace Nyra.Commands {
+  [Category("Utility")]
   public class PingCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

@@ -1,4 +1,5 @@
 namespace Nyra.Commands {
+  [Category("Utility")]
   public class DeworkmaniseCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

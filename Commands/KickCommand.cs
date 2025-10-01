@@ -1,4 +1,5 @@
 namespace Nyra.Commands {
+  [Category("Moderation")]
   public class KickCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

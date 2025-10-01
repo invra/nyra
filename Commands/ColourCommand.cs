@@ -3,6 +3,7 @@ using System.Text.Json;
 using SkiaSharp;
 
 namespace Nyra.Commands {
+  [Category("Utility")]
   public class ColourCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
     private readonly HttpClient httpClient = new HttpClient();

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Hardware.Info;
 
 namespace Nyra.Commands {
+  [Category("Utility")]
   public class HostCommand : ModuleBase<SocketCommandContext> {
     private readonly DiscordSocketClient client;
 

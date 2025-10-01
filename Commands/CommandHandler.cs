@@ -9,6 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Nyra.Config;
 
 namespace Nyra.Commands {
+  [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+  public class CategoryAttribute : Attribute {
+    public string Name { get; }
+
+    public CategoryAttribute(string name) {
+      Name = name;
+    }
+  }
+
   public class CommandHandler {
     private readonly DiscordSocketClient client;
     private readonly CommandService commands;
