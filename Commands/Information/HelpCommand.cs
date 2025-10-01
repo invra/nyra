@@ -170,7 +170,6 @@ namespace Nyra.Commands {
       }
 
       client.InteractionCreated += Handler;
-
       cts.Token.Register(() => tcs.TrySetException(new TimeoutException()));
 
       try {
