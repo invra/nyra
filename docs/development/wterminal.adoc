@@ -60,11 +60,7 @@ If you encounter build errors:
 
 This usually means your SDK is outdated or the wrong `dotnet` binary is being used.
 
-* Verify your version:
-  [source,powershell]
-  ----
-  dotnet --version
-  ----
+* Verify your version with `dotnet --version`.
 * Ensure the Visual Studio .NET 10 SDK is installed and prioritized.
 
 === Error: "No BOT_PREFIX variable found in the ENV" or "No DISCORD_TOKEN variable found in the ENV"
