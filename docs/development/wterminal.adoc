@@ -1,0 +1,75 @@
+= Building Nyra on Windows (Terminal)
+
+== Repository
+Clone the link:../../[Nyra GitLab] repository.
+
+== Dependencies
+
+You still need Visual Studio installed because Windows relies on its build tools and SDKs.  
+Make sure the following are installed:
+
+* link:https://visualstudio.microsoft.com/downloads/[Visual Studio 2022 (or newer)]
+* link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[.NET 10.0 Visual Studio SDK]
+* link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[.NET Framework 4.8.1 Developer Pack]
+
+NOTE: Even if you do not plan to open Visual Studio, it must be installed for its build toolchain.
+
+== Configure
+
+Nyra requires a configuration file before it can run.  
+Copy the provided `.env.example` file and fill in your bot details (Discord token, prefix, etc.):
+
+[source,powershell]
+----
+copy .env.example .env
+----
+
+== Build
+
+From a **Developer Command Prompt for Visual Studio** or any shell where `dotnet` is available:
+
+. Restore dependencies:
++
+[source,powershell]
+----
+dotnet restore nyra.slnx
+----
+
+. Build the solution:
++
+[source,powershell]
+----
+dotnet build nyra.slnx
+----
+
+. Run the project:
++
+[source,powershell]
+----
+dotnet run --project nyra.slnx
+----
+
+The bot will compile and start from the terminal.  
+Compiled binaries are located in `bin\Debug\net10.0\`.
+
+== Troubleshooting
+
+If you encounter build errors:
+
+=== Error: "The current .NET SDK does not support targeting .NET 10.0."
+
+This usually means your SDK is outdated or the wrong `dotnet` binary is being used.
+
+* Verify your version:
+  [source,powershell]
+  ----
+  dotnet --version
+  ----
+* Ensure the Visual Studio .NET 10 SDK is installed and prioritized.
+
+=== Error: "No BOT_PREFIX variable found in the ENV" or "No DISCORD_TOKEN variable found in the ENV"
+
+These errors indicate Nyra cannot find required environment variables.
+
+* Ensure your `.env` file exists and contains valid values.
+* The `.env` must be in the project root alongside `nyra.slnx`.

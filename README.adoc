@@ -15,69 +15,10 @@ This project exists for two main reasons:
 
 == Getting Started
 
-Start by copying the environment template and setting up your secrets:
-
-[source,shell]
-----
-$ cp .env.example .env
-----
-
-Then edit `.env` and add your bot token and any other necessary settings
-
----
-
-== Supported Platforms
-
-Nyra has been tested and confirmed working on:
-
-* Linux (any distro with `/etc/os-release` and its `PRETTY_NAME` key)
-* FreeBSD
-* macOS
-* Windows (7 through 11; assumed to be compatible across all)
-
----
-
-== Building & Running
-
-Nyra targets **.NET 10.0** as the minimum runtime requirement.
-
-=== Visual Studio (Windows)
-
-If you're using Visual Studio on Windows, follow these setup steps:
-
-1. **Install the .NET 10.0 SDK**
-   Download the appropriate SDK from link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[here].
-
-2. **Install .NET Framework 4.8.1 Developer Pack**
-   Required for certain internal tooling. Download it link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[here].
-
-3. **Enable SDK Previews in Visual Studio**
-
-   * Open Visual Studio 2022 (or newer)
-   * Go to `Tools` > `Options`
-   
-image:./docs/pics/tools.png[Tools,350]
-
-   * Expand `Environment` > `Preview Features`
-   * Enable **"Use previews of the .NET SDK"**
-   * Click OK and restart Visual Studio
-
-image:./docs/pics/options.png[Opts,500]
-
-
-After completing these steps, you should be ready to build and run the bot.
-
-=== Other (normal) systems
-
-To run from the terminal:
-
-```shell
-$ dotnet restore
-$ dotnet run
-```
-
-* `dotnet restore` pulls in NuGet dependencies
-* `dotnet run` compiles and launches the bot
+=== Development
+* link:./docs/development/wterminal.adoc[Building in the Windows Terminal]
+* link:./docs/development/terminal.adoc[Building in a POSIX Terminal]
+* link:./docs/development/mwvs.adoc[Building in Visual Studio]
 
 ---
 
