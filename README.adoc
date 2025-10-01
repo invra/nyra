@@ -8,52 +8,75 @@ An open-source Discord bot built with *Discord.Net*.
 
 This project exists for two main reasons:
 
-. To refresh my rusty C# knowledge from ~5–6 years ago.
-. To see if C# is a language I’d endulge again.
+1. To refresh my C# skills after a ~5–6 year break on it.
+2. To evaluate whether C# is a language I’d enjoy working with again.
 
 ---
 
 == Getting Started
 
-First, copy the environment template and configure your secrets:
+Start by copying the environment template and setting up your secrets:
 
 [source,shell]
 ----
 $ cp .env.example .env
-# Then edit .env with your token and other settings
 ----
+
+Then edit `.env` and add your bot token and any other necessary settings
 
 ---
 
-== Supported Systems
+== Supported Platforms
 
-Nyra has been tested on the following platforms:
+Nyra has been tested and confirmed working on:
 
-* [x] Linux (any with `/etc/os-release` with `PRETTY_NAME`)
-* [x] FreeBSD
-* [x] macOS
-* [x] Windows (7–11, theoretically compatible)
+* Linux (any distro with `/etc/os-release` and its `PRETTY_NAME` key)
+* FreeBSD
+* macOS
+* Windows (7 through 11; assumed to be compatible across all)
 
 ---
 
-== Compilation & Running
+== Building & Running
 
-Nyra targets the `net10.0` runtime as a minimum requirement.
+Nyra targets **.NET 10.0** as the minimum runtime requirement.
 
-To build and run:
+=== Visual Studio (Windows)
 
-[source,shell]
-----
-dotnet restore
-dotnet run
-----
+If you're using Visual Studio on Windows, follow these setup steps:
 
-The first command fetches dependencies from NuGet, and the second compiles and executes the bot.
+1. **Install the .NET 10.0 SDK**
+   Download the appropriate SDK from: https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk
+
+2. **Install .NET Framework 4.8.1 Developer Pack**
+   Required for certain internal tooling. Download it here: https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer
+
+3. **Enable SDK Previews in Visual Studio**
+
+   * Open Visual Studio 2022 (or newer)
+   * Go to `Tools` > `Options`
+   * Expand `Environment` > `Preview Features`
+   * Enable **"Use previews of the .NET SDK"**
+   * Click OK and restart Visual Studio
+
+After completing these steps, you should be ready to build and run the bot.
+
+=== Other (normal) systems
+
+To run from the terminal:
+
+```shell
+$ dotnet restore
+$ dotnet run
+```
+
+* `dotnet restore` pulls in NuGet dependencies
+* `dotnet run` compiles and launches the bot
 
 ---
 
 == License
 
-This project’s code is licensed under link:./LICENSE.txt[the Unlicense].
+This project is licensed under link:./LICENSE.txt[The Unlicense].
 
-Essentially, this means you can do almost anything you want with it — see <https://unlicense.org> for details. 
+Essentially, you're free to use, modify, and distribute the code as you see fit. See [https://unlicense.org](https://unlicense.org) for more details.
