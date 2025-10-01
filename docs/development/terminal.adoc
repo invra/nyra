@@ -51,9 +51,5 @@ The development environment will override your `PATH` and provide the correct .N
 If the build does not succeed:
 
 * Verify that you are inside the Nix development environment (`nix develop` must be run first).  
-* Confirm `.NET 10` is available by running:
-  [source,shell]
-  ----
-  dotnet --version
-  ----
+* Confirm `.NET 10` is available by running `dotnet --version`.
 * Ensure your `.env` file exists in the project root and contains valid values.
