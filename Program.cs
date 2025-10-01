@@ -14,6 +14,7 @@ namespace Nyra {
     static async Task Main(string[] args) {
       ConsoleCalls.PrintStatus("Creating instance");
       ConsoleCalls.PrintStatus("Testing network connectivity to Discord");
+
       try {
         Ping myPing = new Ping();
         String host = "discord.com";
