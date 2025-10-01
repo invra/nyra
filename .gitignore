@@ -1,7 +1,10 @@
 bin
 obj
 out
+.vs/
 .env
 *.out
 result
+.vscode/
 .DS_Store
+update.patch
