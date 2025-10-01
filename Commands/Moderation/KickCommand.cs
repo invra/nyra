@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Moderation/KickCommand.cs
     Authors: Invra
     Notes: A kick command

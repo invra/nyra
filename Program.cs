@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Program.cs
     Authors: Invra
     Notes: Entrypoint file

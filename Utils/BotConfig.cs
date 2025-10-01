@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/BotConfig.cs
     Authors: Invra
     Notes: Singleton for Config

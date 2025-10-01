@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Moderation/PurgeCommand.cs
     Authors: Invra
     Notes: A purge command

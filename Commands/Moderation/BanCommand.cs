@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Moderation/BanCommand.cs
     Authors: Invra
     Notes: A ban command

@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Utilities/ColourCommand.cs
     Authors: Invra
     Notes: A colour tool command

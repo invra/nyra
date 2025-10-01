@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Utilities/PingCommand.cs
     Authors: Invra
     Notes: A command to ping Discord gateway

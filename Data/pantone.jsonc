@@ -1,5 +1,12 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: Data/pantone.jsonc
+    Authors: Invra
+    Notes: A data structure for all the Pantone colours
+*/
+
 {
-  "11-0103": {
+"11-0103": {
     "name": "egret",
     "hex": "f3ece0"
   },

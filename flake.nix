@@ -1,6 +1,6 @@
 # *
 #   SPDX-License-Identifier: Unlicense
-#   Projects: Nyra
+#   Project: Nyra
 #   File: nyra.csproj
 #   Authors: Invra
 #   Notes: C# project file

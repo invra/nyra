@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Information/HelpCommand.cs
     Authors: Invra
     Notes: A help command

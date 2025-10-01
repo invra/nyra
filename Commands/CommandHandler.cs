@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/CommandHandler.cs
     Authors: Invra
     Notes: Simple command handler to manage all deeper commands

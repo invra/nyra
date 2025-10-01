@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Information/InfoCommand.cs
     Authors: Invra
     Notes: A bot information command

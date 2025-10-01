@@ -1,5 +1,5 @@
 # * SPDX-License-Identifier: Unlicense
-#   Projects: Nyra
+#   Project: Nyra
 #   File: hr.nu
 #   Authors: Invra
 #   Notes: Hot-reload Nushell script

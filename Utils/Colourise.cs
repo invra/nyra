@@ -1,5 +1,5 @@
 /*  SPDX-License-Identifier: Unlicense
-    Projects: Nyra
+    Project: Nyra
     File: Utils/Colourise.cs
     Authors: Invra
     Notes: Methods for wrapping ANSI escapes
