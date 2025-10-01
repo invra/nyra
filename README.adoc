@@ -39,27 +39,27 @@ Nyra has been tested and confirmed working on:
 
 == Building & Running
 
-Nyra targets **.NET 10.0** as the minimum runtime requirement.
+Nyra targets **.NET 9.0** as the minimum runtime requirement.
 
-=== Visual Studio (Windows)
+// === Visual Studio (Windows)
 
-If you're using Visual Studio on Windows, follow these setup steps:
+// If you're using Visual Studio on Windows, follow these setup steps:
 
-1. **Install the .NET 10.0 SDK**
-   Download the appropriate SDK from link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[here].
+// 1. **Install the .NET 10.0 SDK**
+//    Download the appropriate SDK from link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[here].
 
-2. **Install .NET Framework 4.8.1 Developer Pack**
-   Required for certain internal tooling. Download it link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[here].
+// 2. **Install .NET Framework 4.8.1 Developer Pack**
+//    Required for certain internal tooling. Download it link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[here].
 
-3. **Enable SDK Previews in Visual Studio**
+// 3. **Enable SDK Previews in Visual Studio**
 
-   * Open Visual Studio 2022 (or newer)
-   * Go to `Tools` > `Options`
-   * Expand `Environment` > `Preview Features`
-   * Enable **"Use previews of the .NET SDK"**
-   * Click OK and restart Visual Studio
+//    * Open Visual Studio 2022 (or newer)
+//    * Go to `Tools` > `Options`
+//    * Expand `Environment` > `Preview Features`
+//    * Enable **"Use previews of the .NET SDK"**
+//    * Click OK and restart Visual Studio
 
-After completing these steps, you should be ready to build and run the bot.
+// After completing these steps, you should be ready to build and run the bot.
 
 === Other (normal) systems
 
