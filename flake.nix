@@ -1,8 +1,8 @@
 #   SPDX-License-Identifier: Unlicense
 #   Project: Nyra
-#   File: nyra.csproj
+#   File: flake.nix
 #   Authors: Invra
-#   Notes: C# project file
+#   Notes: Nix flake output or something
 
 {
   description = "Flake for Dotnet";
@@ -39,6 +39,7 @@
               includes = [ "*.csproj" ];
             };
           })).config.build;
+        omnisharp = pkgs.omnisharp-roslyn;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -47,7 +48,7 @@
           };
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
-            omnisharp-roslyn
+            omnisharp
           ];
 
           shellHook =
