@@ -26,6 +26,8 @@
       system:
       let
         pkgs = import nixpkgs { inherit system; };
+        lsp = csharp-language-server.packages.${system}.csharp-language-server;
+
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
             projectRootFile = ".git/config";
@@ -49,7 +51,7 @@
           };
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
-            csharp-language-server.packages.${system}.csharp-language-server
+            lsp
           ];
 
           shellHook =
