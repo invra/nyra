@@ -11,6 +11,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    csharp-language-server.url = "github:SofusA/csharp-language-server";
   };
 
   outputs =
@@ -18,6 +19,7 @@
       nixpkgs,
       flake-utils,
       treefmt-nix,
+      csharp-language-server,
       self,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -39,7 +41,6 @@
               includes = [ "*.csproj" ];
             };
           })).config.build;
-        omnisharp = pkgs.omnisharp-roslyn;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -48,7 +49,7 @@
           };
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
-            omnisharp
+            csharp-language-server.packages.${system}.csharp-language-server
           ];
 
           shellHook =
