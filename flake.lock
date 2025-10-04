@@ -1,20 +1,20 @@
 {
   "nodes": {
-    "csharp-language-server": {
+    "csharp-ls": {
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1759416348,
-        "narHash": "sha256-VpzvaLUypfbbyAEJ5VOfQ1e5UPNB1ODVT6lkgN7cUvk=",
-        "owner": "SofusA",
+        "lastModified": 1759506392,
+        "narHash": "sha256-4/qae2Pzz+d3iTXoNzSw9xNo0Be3Wi3dwTGCjuZOt1A=",
+        "owner": "invra",
         "repo": "csharp-language-server",
-        "rev": "77e451010a9249f29a49c8f5dcd5079f360db0ae",
+        "rev": "5b5489399c340ccaea75239580d99e7879c1b141",
         "type": "github"
       },
       "original": {
-        "owner": "SofusA",
+        "owner": "invra",
         "repo": "csharp-language-server",
         "type": "github"
       }
@@ -105,7 +105,7 @@
     },
     "root": {
       "inputs": {
-        "csharp-language-server": "csharp-language-server",
+        "csharp-ls": "csharp-ls",
         "flake-utils": "flake-utils_2",
         "nixpkgs": "nixpkgs_2",
         "treefmt-nix": "treefmt-nix"

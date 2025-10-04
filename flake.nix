@@ -11,7 +11,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    csharp-language-server.url = "github:SofusA/csharp-language-server";
+    csharp-ls.url = "github:invra/csharp-language-server";
   };
 
   outputs =
@@ -19,14 +19,16 @@
       nixpkgs,
       flake-utils,
       treefmt-nix,
-      csharp-language-server,
+      csharp-ls,
       self,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs { inherit system; };
-        lsp = csharp-language-server.packages.${system}.csharp-language-server;
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ csharp-ls.overlays.default ];
+        };
 
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
@@ -46,12 +48,10 @@
       in
       {
         devShells.default = pkgs.mkShell {
-          meta = {
-            license = pkgs.lib.licenses.unlicense;
-          };
+          meta.license = pkgs.lib.licenses.unlicense;
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
-            lsp
+            csharp-language-server
           ];
 
           shellHook =
@@ -77,11 +77,13 @@
 
         packages.default = pkgs.buildDotnetModule {
           name = "nyra";
+
           src = ./.;
 
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
           nugetDeps = ./deps.jsonc;
+
           installPhase = ''
             dotnet publish -o $out/bin
             chmod +x $out/bin/nyra
