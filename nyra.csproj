@@ -1,5 +1,5 @@
 ﻿<!-- SPDX-License-Identifier: Unlicense               -->
-<!-- Project: Nyra                                   -->
+<!-- Project: Nyra                                    -->
 <!-- File: nyra.csproj                                -->
 <!-- Authors: Invra                                   -->
 <!-- Notes: C# project file                           -->
@@ -49,11 +49,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <NativeLib Include="./HardwareInfo/target/$(Configuration)/libhardwareinfo.dylib" />
+      <NativeLib Include="./HardwareInfo/target/$(RustTargetDir)/*" />
     </ItemGroup>
 
     <Copy SourceFiles="@(NativeLib)"
           DestinationFolder="$(OutputPath)"
-          SkipUnchangedFiles="true" 1/>
+          SkipUnchangedFiles="true"/>
   </Target>
 </Project>

@@ -1,8 +1,9 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: Utils/Information/InfoCommand.cs
-    Authors: Invra
-    Notes: A bot information command
+/*
+  SPDX-License-Identifier: Unlicense
+  Project: Nyra
+  File: Utils/Information/InfoCommand.cs
+  Authors: Invra
+  Notes: A bot information command
 */
 
 using System.Diagnostics;
@@ -12,7 +13,6 @@ using Spectre.Console;
 using System.Reflection;
 
 public partial class Testing {
-  //[LibraryImport("HardwareInfo/target/release/libhardwareinfo", EntryPoint = "add")]
   [LibraryImport("libhardwareinfo", EntryPoint = "add")]
   public static partial int Add(int left, int right);
 }
