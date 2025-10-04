@@ -52,6 +52,9 @@
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
             csharp-language-server
+            rust-analyzer
+            cargo
+            rustc
           ];
 
           shellHook =

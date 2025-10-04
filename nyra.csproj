@@ -12,6 +12,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>true</PublishSingleFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,4 +29,31 @@
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.51.1"/>
+  </ItemGroup>
+  
+  <Target Name="RustBuild" BeforeTargets="Build">
+    <Message Text="Building Rust library for $(Configuration)" Importance="high" />
+    <Exec Condition="'$(Configuration)' == 'Release'"
+          Command="cargo build --release"
+          WorkingDirectory="HardwareInfo" />
+    <Exec Condition="'$(Configuration)' != 'Release'"
+          Command="cargo build"
+          WorkingDirectory="HardwareInfo" />
+
+    <PropertyGroup>
+      <RustTargetDir Condition="'$(Configuration)' == 'Release'">release</RustTargetDir>
+      <RustTargetDir Condition="'$(Configuration)' != 'Release'">debug</RustTargetDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <NativeLib Include="./HardwareInfo/target/$(Configuration)/libhardwareinfo.dylib" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(NativeLib)"
+          DestinationFolder="$(OutputPath)"
+          SkipUnchangedFiles="true" 1/>
+  </Target>
 </Project>

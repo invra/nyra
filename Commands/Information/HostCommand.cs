@@ -191,7 +191,7 @@ namespace Nyra.Commands {
 
       var embed = new EmbedBuilder()
           .WithTitle("Host System Information")
-          .WithColor(Color.Purple)
+          .WithColor(Discord.Color.Purple)
           .AddField("CPU", cpuName, true)
           .AddField("Processors", $"{GetPhysicalCores()}", true)
           .AddField("RAM", $"{usedRamStr} / {totalRamStr}", true)

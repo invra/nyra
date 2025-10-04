@@ -15,3 +15,7 @@ result
 .DS_Store
 .windsurf/
 update.patch
+!HardwareInfo/**.rs
+!HardwareInfo/Cargo.toml
+!HardwareInfo/Cargo.lock
+HardwareInfo
