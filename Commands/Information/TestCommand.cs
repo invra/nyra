@@ -31,6 +31,7 @@ namespace Nyra.Commands {
         .WithColor(Discord.Color.Orange)
         .AddField("CPU Model", hardware.CpuModel, true)
         .AddField("CPU Cores", hardware.CpuCores, true)
+        .AddField("Memory Usage", hardware.MemoryTotal, true)
         .WithFooter(footer => footer.Text = $"Info requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();

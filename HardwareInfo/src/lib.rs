@@ -13,7 +13,7 @@ use {
 };
 
 #[unsafe(no_mangle)]
-pub extern "C" fn get_cpu_model() -> *mut c_char {
+pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
     let mut sys = System::new_all();
 
     sys.refresh_cpu();
@@ -27,7 +27,7 @@ pub extern "C" fn get_cpu_model() -> *mut c_char {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn get_cpu_core_count() -> usize {
+pub unsafe extern "C" fn get_cpu_core_count() -> usize {
     let mut sys = System::new_all();
 
     sys.refresh_cpu();
@@ -36,7 +36,14 @@ pub extern "C" fn get_cpu_core_count() -> usize {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn free_string(s: *mut c_char) {
+pub unsafe extern "C" fn get_mem_heap_usize() -> usize {
+    let mut sys = System::new_all();
+    sys.refresh_memory();
+    sys.total_memory() as usize
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn free_string(s: *mut c_char) {
     if s.is_null() {
         return;
     }

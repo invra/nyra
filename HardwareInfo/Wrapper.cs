@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
 
 namespace Nyra.HardwareInfo {
   public static partial class Ffi {
@@ -20,23 +21,26 @@ namespace Nyra.HardwareInfo {
 
     [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_core_count")]
     public static partial int GetCpuCoreCount();
+
+    [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_heap_usize")]
+    public static partial int GetTotalMemoryHeap();
   }
 
   public class GetHardwareInfo {
     private string cpuModel;
     private int cpuCores;
-    private double ramSizeGB;
+    private double memoryTotal;
     private string osVersion;
 
     public GetHardwareInfo(
       string cpuModel = null,
       int cpuCores = 8,
-      double ramSizeGB = 16.0,
+      double memoryTotal = 8192,
       string osVersion = "macOS"
     ) {
       this.cpuModel = Ffi.GetCpuModelSafe();
       this.cpuCores = Ffi.GetCpuCoreCount();
-      this.ramSizeGB = ramSizeGB;
+      this.memoryTotal = Ffi.GetTotalMemoryHeap();
       this.osVersion = osVersion;
     }
 
@@ -50,9 +54,9 @@ namespace Nyra.HardwareInfo {
       set => cpuCores = value;
     }
 
-    public double RamSizeGB {
-      get => ramSizeGB;
-      set => ramSizeGB = value;
+    public double MemoryTotal {
+      get => memoryTotal;
+      set => memoryTotal = value;
     }
 
     public string OsVersion {
