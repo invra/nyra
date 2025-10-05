@@ -170,7 +170,7 @@ namespace Nyra.Commands {
     public async Task HostAsync() {
       var msg = await ReplyAsync("Getting system information...");
 
-      var hardwareInfo = new HardwareInfo();
+      var hardwareInfo = new Hardware.Info.HardwareInfo();
       hardwareInfo.RefreshAll();
 
       var cpu = hardwareInfo.CpuList.FirstOrDefault();
