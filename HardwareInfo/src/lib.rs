@@ -13,11 +13,6 @@ use {
 };
 
 #[unsafe(no_mangle)]
-pub extern "C" fn add(left: i64, right: i64) -> i128 {
-    (left + right).into()
-}
-
-#[unsafe(no_mangle)]
 pub extern "C" fn get_cpu_model() -> *mut c_char {
     let mut sys = System::new_all();
 
