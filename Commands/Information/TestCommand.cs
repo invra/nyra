@@ -30,6 +30,7 @@ namespace Nyra.Commands {
         .WithTitle("Testing Embed")
         .WithColor(Discord.Color.Orange)
         .AddField("CPU Model", hardware.CpuModel, true)
+        .AddField("CPU Cores", hardware.CpuCores, true)
         .WithFooter(footer => footer.Text = $"Info requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();

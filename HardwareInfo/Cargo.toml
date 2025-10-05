@@ -9,3 +9,4 @@ crate-type=["dylib"]
 
 [dependencies]
 rand = "0.8.5"
+sysinfo = "0.29"

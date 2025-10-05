@@ -1,12 +1,16 @@
-use rand::prelude::*;
-use std::ffi::{c_char, CStr};
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: HardwareInfo/src/lib.rs
+    Authors: Invra
+    Notes: Entrypoint file for HardwareInfo
+*/
 
-#[repr(C)]
-#[derive(Debug)]
-pub struct Point {
-    pub x: u32,
-    pub y: u32,
-}
+use {
+    sysinfo::{CpuExt, System, SystemExt},
+    std::ffi::CString,
+    std::os::raw::c_char,
+    std::ptr,
+};
 
 #[unsafe(no_mangle)]
 pub extern "C" fn add(left: i64, right: i64) -> i128 {
@@ -14,61 +18,33 @@ pub extern "C" fn add(left: i64, right: i64) -> i128 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn say_hello(name: *const c_char) {
-    let c_str = unsafe { CStr::from_ptr(name) };
-    println!("Hello, {}", c_str.to_str().unwrap())
-}
+pub extern "C" fn get_cpu_model() -> *mut c_char {
+    let mut sys = System::new_all();
 
-#[unsafe(no_mangle)]
-pub extern "C" fn random_point() -> Point {
-    let mut rng = rand::thread_rng();
-    Point {
-        x: rng.r#gen::<u32>(),
-        y: rng.r#gen::<u32>(),
+    sys.refresh_cpu();
+
+    let cpu_brand = sys.global_cpu_info().brand().to_string();
+
+    match CString::new(cpu_brand) {
+        Ok(c_string) => c_string.into_raw(),
+        Err(_) => ptr::null_mut(),
     }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn distance(first: &Point, second: &Point) -> f64 {
-    let dx: f64 = (second.x - first.x).into();
-    let dy: f64 = (second.y - first.y).into();
+pub extern "C" fn get_cpu_core_count() -> usize {
+    let mut sys = System::new_all();
 
-    println!("calculating distance...");
+    sys.refresh_cpu();
 
-    (dx.powf(2.0) + dy.powf(2.0)).sqrt()
+    sys.cpus().len()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+#[unsafe(no_mangle)]
+pub extern "C" fn free_string(s: *mut c_char) {
+    if s.is_null() {
+        return;
     }
 
-    #[test]
-    fn say_hello_test() {
-        let _result = say_hello("Khalid".as_ptr() as *const i8);
-
-        assert!(true)
-    }
-
-    #[test]
-    fn get_random_point() {
-        let point: Point = random_point();
-        println!("{:?}", point);
-        assert!(true);
-    }
-
-    #[test]
-    fn can_calculate_distance() {
-        let one = Point { x: 1, y: 1 };
-        let two = Point { x: 2, y: 2 };
-
-        let result = distance(&one, &two);
-        println!("distance between {:?} and {:?} is {}", one, two, result);
-        assert!((result - 1.414).abs() < 0.001)
-    }
+    unsafe { let _ = CString::from_raw(s); }
 }
