@@ -5,7 +5,7 @@
 #   Notes: Nix flake output or something
 
 {
-  description = "Flake for Dotnet";
+  description = "Flake for Nyra";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
