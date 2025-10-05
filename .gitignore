@@ -16,6 +16,7 @@ result
 .windsurf/
 update.patch
 !HardwareInfo/**.rs
+!HardwareInfo/**.cs
 !HardwareInfo/Cargo.toml
 !HardwareInfo/Cargo.lock
 HardwareInfo
