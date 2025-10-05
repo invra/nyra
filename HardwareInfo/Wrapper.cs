@@ -21,6 +21,7 @@ namespace Nyra.HardwareInfo {
       [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_core_count")]
       public static partial int GetCpuCoreCount();
   }
+
   public class GetHardwareInfo {
     private string cpuModel;
     private int cpuCores;
@@ -28,15 +29,15 @@ namespace Nyra.HardwareInfo {
     private string osVersion;
 
     public GetHardwareInfo(
-        string cpuModel = null,
-        int cpuCores = 8,
-        double ramSizeGB = 16.0,
-        string osVersion = "macOS")
-    {
-        this.cpuModel = cpuModel ?? Ffi.GetCpuModelSafe();
-        this.cpuCores = Ffi.GetCpuCoreCount();
-        this.ramSizeGB = ramSizeGB;
-        this.osVersion = osVersion;
+      string cpuModel = null,
+      int cpuCores = 8,
+      double ramSizeGB = 16.0,
+      string osVersion = "macOS"
+    ) {
+      this.cpuModel = Ffi.GetCpuModelSafe();
+      this.cpuCores = Ffi.GetCpuCoreCount();
+      this.ramSizeGB = ramSizeGB;
+      this.osVersion = osVersion;
     }
 
     public string CpuModel {
