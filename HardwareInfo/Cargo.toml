@@ -1,12 +1,12 @@
+[dependencies]
+rand = "0.8.5"
+sysinfo = "0.29"
+
+[lib]
+name = "hardwareinfo"
+crate-type = ["dylib"]
+
 [package]
 name = "hardwareinfo"
 version = "0.1.0"
 edition = "2024"
-
-[lib]
-name="hardwareinfo"
-crate-type=["dylib"]
-
-[dependencies]
-rand = "0.8.5"
-sysinfo = "0.29"

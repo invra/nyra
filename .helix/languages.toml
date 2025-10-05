@@ -1,6 +1,6 @@
-[language-server.csharp]
-command = "csharp-language-server"
-
 [[language]]
 name = "c-sharp"
 language-servers = ["csharp"]
+
+[language-server.csharp]
+command = "csharp-language-server"

@@ -2,24 +2,24 @@ using System.Runtime.InteropServices;
 
 namespace Nyra.HardwareInfo {
   public static partial class Ffi {
-      [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_model")]
-      public static partial nint GetCpuModelPtr();
+    [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_model")]
+    public static partial nint GetCpuModelPtr();
 
-      [LibraryImport("libhardwareinfo", EntryPoint = "free_string")]
-      public static partial void FreeString(nint ptr);
+    [LibraryImport("libhardwareinfo", EntryPoint = "free_string")]
+    public static partial void FreeString(nint ptr);
 
-      public static string GetCpuModelSafe() {
-          nint ptr = GetCpuModelPtr();
-          if (ptr == IntPtr.Zero)
-              return string.Empty;
+    public static string GetCpuModelSafe() {
+      nint ptr = GetCpuModelPtr();
+      if (ptr == IntPtr.Zero)
+        return string.Empty;
 
-          string result = Marshal.PtrToStringAnsi(ptr)!;
-          FreeString(ptr);
-          return result;
-      }
+      string result = Marshal.PtrToStringAnsi(ptr)!;
+      FreeString(ptr);
+      return result;
+    }
 
-      [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_core_count")]
-      public static partial int GetCpuCoreCount();
+    [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_core_count")]
+    public static partial int GetCpuCoreCount();
   }
 
   public class GetHardwareInfo {

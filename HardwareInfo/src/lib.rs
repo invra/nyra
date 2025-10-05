@@ -6,10 +6,10 @@
 */
 
 use {
-    sysinfo::{CpuExt, System, SystemExt},
     std::ffi::CString,
     std::os::raw::c_char,
     std::ptr,
+    sysinfo::{CpuExt, System, SystemExt},
 };
 
 #[unsafe(no_mangle)]
@@ -41,5 +41,7 @@ pub extern "C" fn free_string(s: *mut c_char) {
         return;
     }
 
-    unsafe { let _ = CString::from_raw(s); }
+    unsafe {
+        let _ = CString::from_raw(s);
+    }
 }
