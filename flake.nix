@@ -98,6 +98,16 @@
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
           nugetDeps = ./deps.jsonc;
+          nativeBuildInputs = with pkgs; [
+            rustc
+            cargo
+            clang
+            pkg-config
+          ];
+
+          buildInputs = with pkgs; [
+            libiconv
+          ];
 
           installPhase = ''
             dotnet publish -o $out/bin
