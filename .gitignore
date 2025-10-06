@@ -12,6 +12,7 @@ out
 *.out
 result
 .vscode/
+nyra.toml
 .DS_Store
 .windsurf/
 update.patch
