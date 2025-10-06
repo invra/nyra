@@ -1,5 +1,7 @@
 = Building Nyra on a POSIX-Compliant System
 
+When we mean POSIX-Compliant we mean macOS, Linux, *BSD, and the lot.
+
 == Repository
 Clone the link:../../[Nyra GitLab] repository.
 

@@ -10,6 +10,7 @@ Before building, install the following:
 * link:https://visualstudio.microsoft.com/downloads/[Visual Studio]
 * link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[.NET 10.0 Visual Studio SDK]
 * link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[.NET Framework 4.8.1 Developer Pack]
+* link:https://rust-lang.org/tools/install/[Rust Toolchain]
 
 === Enable SDK Previews in Visual Studio
 

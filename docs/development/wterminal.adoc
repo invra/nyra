@@ -11,6 +11,7 @@ Make sure the following are installed:
 * link:https://visualstudio.microsoft.com/downloads/[Visual Studio 2022 (or newer)]
 * link:https://dotnet.microsoft.com/en-us/download/visual-studio-sdks?cid=getdotnetsdk[.NET 10.0 Visual Studio SDK]
 * link:https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net481-developer-pack-offline-installer[.NET Framework 4.8.1 Developer Pack]
+* link:https://rust-lang.org/tools/install/[Rust Toolchain]
 
 NOTE: Even if you do not plan to open Visual Studio, it must be installed for its build toolchain.
 
