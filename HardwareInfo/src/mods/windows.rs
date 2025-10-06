@@ -2,5 +2,5 @@
 pub fn get_windows_caption() -> Option<String> {
   use winver::WindowsVersion;
 
-  WindowsVersion::detect().unwrap()
+  WindowsVersion::detect().unwrap().to_string()
 }
