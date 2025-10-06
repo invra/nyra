@@ -19,7 +19,6 @@ use {
 #[cfg(target_os = "windows")]
 use mods::windows::get_caption;
 
-
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
   let mut sys = System::new_all();
