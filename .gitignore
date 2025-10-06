@@ -4,14 +4,9 @@
 #   Authors: Invra
 #   Notes: Git ignore file
 
-bin
-out
-.vs/
 *.out
-result
-nyra.toml
+*.patch
 .DS_Store
-update.patch
 
 # Ignore all untrusted top level files.
 
