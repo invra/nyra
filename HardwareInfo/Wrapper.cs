@@ -23,19 +23,19 @@ namespace Nyra.HardwareInfo {
     public static partial int GetCpuCoreCount();
 
     [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_heap_usize")]
-    public static partial int GetTotalMemoryHeap();
+    public static partial ulong GetTotalMemoryHeap();
   }
 
   public class GetHardwareInfo {
     private string cpuModel;
     private int cpuCores;
-    private double memoryTotal;
+    private ulong memoryTotal;
     private string osVersion;
 
     public GetHardwareInfo(
       string cpuModel = null,
       int cpuCores = 8,
-      double memoryTotal = 8192,
+      ulong memoryTotal = 8192,
       string osVersion = "macOS"
     ) {
       this.cpuModel = Ffi.GetCpuModelSafe();
@@ -54,7 +54,7 @@ namespace Nyra.HardwareInfo {
       set => cpuCores = value;
     }
 
-    public double MemoryTotal {
+    public ulong MemoryTotal {
       get => memoryTotal;
       set => memoryTotal = value;
     }
