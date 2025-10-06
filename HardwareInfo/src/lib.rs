@@ -38,7 +38,9 @@ pub unsafe extern "C" fn get_cpu_core_count() -> usize {
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn get_mem_heap_usize() -> usize {
     let mut sys = System::new_all();
+
     sys.refresh_memory();
+
     sys.total_memory() as usize
 }
 
