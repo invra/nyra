@@ -20,11 +20,16 @@ pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
 
   sys.refresh_cpu();
 
-  let cpu_brand = sys.global_cpu_info().brand().to_string();
+  let cpu_brand = sys.global_cpu_info().brand();
+  let cpu_brand_str = cpu_brand.to_string();
 
-  println!("{cpu_brand}");
+  let cpu_brand_str = if cpu_brand_str.is_empty() {
+    "Unknown CPU"
+  } else {
+    &cpu_brand_str
+  };
 
-  match CString::new(cpu_brand) {
+  match CString::new(cpu_brand_str) {
     Ok(c_string) => c_string.into_raw(),
     Err(_) => CString::new("Unknown CPU").unwrap().into_raw(),
   }
