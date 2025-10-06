@@ -21,25 +21,21 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Discord.Net" Version="3.14.1" />
-    <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="Hardware.Info" Version="101.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
+    <PackageReference Include="Tommy" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.51.1"/>
+    <PackageReference Include="Spectre.Console" Version="0.51.1" />
   </ItemGroup>
   
   <Target Name="RustBuild" BeforeTargets="Build">
     <Message Text="Building Rust library for $(Configuration)" Importance="high" />
-    <Exec Condition="'$(Configuration)' == 'Release'"
-          Command="cargo build --release"
-          WorkingDirectory="HardwareInfo" />
-    <Exec Condition="'$(Configuration)' != 'Release'"
-          Command="cargo build"
-          WorkingDirectory="HardwareInfo" />
+    <Exec Condition="'$(Configuration)' == 'Release'" Command="cargo build --release" WorkingDirectory="HardwareInfo" />
+    <Exec Condition="'$(Configuration)' != 'Release'" Command="cargo build" WorkingDirectory="HardwareInfo" />
 
     <PropertyGroup>
       <RustTargetDir Condition="'$(Configuration)' == 'Release'">release</RustTargetDir>
@@ -50,8 +46,6 @@
       <NativeLib Include="./HardwareInfo/target/$(RustTargetDir)/*" />
     </ItemGroup>
 
-    <Copy SourceFiles="@(NativeLib)"
-          DestinationFolder="$(OutputPath)"
-          SkipUnchangedFiles="true"/>
+    <Copy SourceFiles="@(NativeLib)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
   </Target>
 </Project>

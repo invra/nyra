@@ -35,24 +35,9 @@
     "hash": "sha256-gD880jEO0N+9TOXNqbvnzwxybn6ZFvzUVPfhx2DCfPc="
   },
   {
-    "pname": "DotNetEnv",
-    "version": "3.1.1",
-    "hash": "sha256-w1gfQvaehGc795ZQCc7OCXn5XZosNVy0O50MzPkhjr4="
-  },
-  {
     "pname": "Hardware.Info",
     "version": "101.1.0",
     "hash": "sha256-kVOIbxKjjt5BGGAC5x697DTDp3bhhtrnUTDZOqsWTCc="
-  },
-  {
-    "pname": "Microsoft.Extensions.Configuration",
-    "version": "1.1.2",
-    "hash": "sha256-mflybImbXhmBrOys0YeVbQq88XTZQ3Jx7yyvQ01ZoGo="
-  },
-  {
-    "pname": "Microsoft.Extensions.Configuration.Abstractions",
-    "version": "1.1.2",
-    "hash": "sha256-JKV0QPI/t1PE5HtFa5/mOd9MoW2whk4e1BQ//V2fA30="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection",
@@ -70,19 +55,14 @@
     "hash": "sha256-cfjbyI71tswpICTVvYqBdCf8psYA0SMYCCSg0yG1BHY="
   },
   {
-    "pname": "Microsoft.Extensions.Primitives",
-    "version": "1.1.1",
-    "hash": "sha256-/bwS/DmHWp4SLR7OBK7DVuH2zQavrjGRNsknlMPvnGU="
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
+    "version": "1.0.2",
+    "hash": "sha256-CkB8iyn+WeG9rwCB5HFC/E4Dqr9W1ZQOAhbu2pHNgkQ="
   },
   {
-    "pname": "Microsoft.NETCore.Platforms",
-    "version": "1.1.0",
-    "hash": "sha256-FeM40ktcObQJk4nMYShB61H/E8B7tIKfl9ObJ0IOcCM="
-  },
-  {
-    "pname": "NETStandard.Library",
-    "version": "1.6.1",
-    "hash": "sha256-iNan1ix7RtncGWC9AjAZ2sk70DoxOsmEOgQ10fXm4Pw="
+    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net461",
+    "version": "1.0.2",
+    "hash": "sha256-4iJ/QJ2LhqTMrGsredRuQ/xSdYVnwwuwQP1ra8RtQ0s="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -108,11 +88,6 @@
     "pname": "Spectre.Console",
     "version": "0.51.1",
     "hash": "sha256-FQAK07dEwEsNYVI1T3S488LHv8AXJ+ZeA9N2hPpWBoo="
-  },
-  {
-    "pname": "Sprache",
-    "version": "2.3.1",
-    "hash": "sha256-RbpqpBsC6RszUU2QOYd+TBCpj3qco9Bhul4SFEx0ijI="
   },
   {
     "pname": "System.CodeDom",
@@ -158,5 +133,10 @@
     "pname": "System.Security.Cryptography.ProtectedData",
     "version": "8.0.0",
     "hash": "sha256-fb0pa9sQxN+mr0vnXg1Igbx49CaOqS+GDkTfWNboUvs="
+  },
+  {
+    "pname": "Tommy",
+    "version": "3.1.2",
+    "hash": "sha256-To5O34Fyl/Y7e7MT+OqlODAL5MHzFDJO4kHgyXZym0I="
   }
 ]
