@@ -55,16 +55,6 @@
     "hash": "sha256-cfjbyI71tswpICTVvYqBdCf8psYA0SMYCCSg0yG1BHY="
   },
   {
-    "pname": "Microsoft.NETFramework.ReferenceAssemblies",
-    "version": "1.0.2",
-    "hash": "sha256-CkB8iyn+WeG9rwCB5HFC/E4Dqr9W1ZQOAhbu2pHNgkQ="
-  },
-  {
-    "pname": "Microsoft.NETFramework.ReferenceAssemblies.net461",
-    "version": "1.0.2",
-    "hash": "sha256-4iJ/QJ2LhqTMrGsredRuQ/xSdYVnwwuwQP1ra8RtQ0s="
-  },
-  {
     "pname": "Newtonsoft.Json",
     "version": "13.0.3",
     "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
@@ -135,8 +125,8 @@
     "hash": "sha256-fb0pa9sQxN+mr0vnXg1Igbx49CaOqS+GDkTfWNboUvs="
   },
   {
-    "pname": "Tommy",
-    "version": "3.1.2",
-    "hash": "sha256-To5O34Fyl/Y7e7MT+OqlODAL5MHzFDJO4kHgyXZym0I="
+    "pname": "Tomlyn",
+    "version": "0.19.0",
+    "hash": "sha256-TPw6K1JzN1FUyGSpANHu5lDW2mFN1sg0apMNKMOBX+8="
   }
 ]
