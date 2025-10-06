@@ -5,14 +5,20 @@
     Notes: Entrypoint file for HardwareInfo
 */
 
-mod macos;
+mod mods;
 
 use {
-    std::ffi::CString,
-    std::os::raw::c_char,
-    sysinfo::{CpuExt, System, SystemExt},
-    macos::get_version_name
+  std::ffi::CString,
+  std::os::raw::c_char,
+  sysinfo::{CpuExt, System, SystemExt},
+  mods::{
+    macos::get_version_name,
+  }
 };
+
+#[cfg(target_os = "windows")]
+use mods::windows::get_caption;
+
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
@@ -75,8 +81,9 @@ pub unsafe extern "C" fn get_host_os_string() -> *mut c_char {
       format!("macOS {}", get_version_name(major, minor))
     }
 
+    #[cfg(target_os = "windows")]
     os_info::Type::Windows => {
-      format!("Windows {}", info.version())  
+      format!("Windows {}", get_caption())
     }
     
     other => other.to_string(),

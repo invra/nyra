@@ -2,6 +2,8 @@
 os_info = "3.12.0"
 rand = "0.8.5"
 sysinfo = "0.29"
+serde = { version = "1.0", features = ["derive"] }
+
 
 [lib]
 name = "hardwareinfo"
