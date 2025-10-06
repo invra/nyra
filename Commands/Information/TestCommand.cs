@@ -31,7 +31,7 @@ namespace Nyra.Commands {
         .WithColor(Discord.Color.Blue)
         .AddField("CPU Model", hardware.CpuModel ?? "Unknown", true)
         .AddField("Processors", $"{hardware.CpuCores}", true)
-        .AddField("Memory", $"{hardware.MemoryUsed:F2} GB / {hardware.MemoryTotal} GB", true)
+        .AddField("Memory", $"{hardware.MemoryUsed:F2} GB / {hardware.MemoryTotal:F2} GB", true)
         .WithFooter(footer => footer.Text = $"Requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();
