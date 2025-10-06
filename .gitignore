@@ -5,15 +5,30 @@
 #   Notes: Git ignore file
 
 bin
-obj
 out
 .vs/
-.env
 *.out
 result
-.vscode/
 nyra.toml
 .DS_Store
-.windsurf/
 update.patch
-HardwareInfo/target
+
+# Ignore all untrusted top level files.
+
+*/
+!Bot.cs
+!Commands
+!Data
+!HardwareInfo
+!LICENSE.txt
+!Program.cs
+!README.adoc
+!TODO.org
+!Utils
+!bin
+!deps.jsonc
+!docs
+!flake.{lock,nix}
+!hr.nu
+!.vscode/extensions.json
+!nyra.{csproj,slnx,toml.example}
