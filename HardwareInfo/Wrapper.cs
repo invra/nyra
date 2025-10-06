@@ -3,10 +3,10 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Nyra.HardwareInfo {
   public static partial class Ffi {
-    [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_model")]
+    [LibraryImport("hardwareinfo", EntryPoint = "get_cpu_model")]
     public static partial nint GetCpuModelPtr();
 
-    [LibraryImport("libhardwareinfo", EntryPoint = "free_string")]
+    [LibraryImport("hardwareinfo", EntryPoint = "free_string")]
     public static partial void FreeString(nint ptr);
 
     public static string GetCpuModelSafe() {
@@ -19,16 +19,16 @@ namespace Nyra.HardwareInfo {
       return result;
     }
 
-    [LibraryImport("libhardwareinfo", EntryPoint = "get_cpu_core_count")]
+    [LibraryImport("hardwareinfo", EntryPoint = "get_cpu_core_count")]
     public static partial int GetCpuCoreCount();
 
-    [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_heap_usize")]
+    [LibraryImport("hardwareinfo", EntryPoint = "get_mem_heap_usize")]
     public static partial ulong GetTotalMemoryHeap();
 
-    [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_used_usize")]
+    [LibraryImport("hardwareinfo", EntryPoint = "get_mem_used_usize")]
     public static partial ulong GetTotalMemoryUsed();
 
-    [LibraryImport("libhardwareinfo", EntryPoint = "get_host_os_string")]
+    [LibraryImport("hardwareinfo", EntryPoint = "get_host_os_string")]
     public static partial nint GetHostOperatingSystemPtr();
 
     public static string GetHostOperatingSystemSafe() {
