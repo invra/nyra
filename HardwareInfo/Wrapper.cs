@@ -55,12 +55,11 @@ namespace Nyra.HardwareInfo {
       double memoryTotal = 64.0,
       string osVersion = "macOS"
     ) {
-      Console.WriteLine(Ffi.GetHostOperatingSystemSafe());
       this.cpuModel = Ffi.GetCpuModelSafe();
       this.cpuCores = Ffi.GetCpuCoreCount();
       this.memoryTotal = (Ffi.GetTotalMemoryHeap() / Math.Pow(1024, 3));
       this.memoryUsed = (Ffi.GetTotalMemoryUsed() / Math.Pow(1024, 3));
-      this.osVersion = osVersion;
+      this.osVersion = Ffi.GetHostOperatingSystemSafe();
     }
 
     public string CpuModel {

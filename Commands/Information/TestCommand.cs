@@ -32,6 +32,9 @@ namespace Nyra.Commands {
         .AddField("CPU Model", hardware.CpuModel ?? "Unknown", true)
         .AddField("Processors", $"{hardware.CpuCores}", true)
         .AddField("Memory", $"{hardware.MemoryUsed:F2} GB / {hardware.MemoryTotal:F2} GB", true)
+        .AddField("OS", hardware.OsVersion, true)
+        .AddField("64-bit Proc", Environment.Is64BitProcess, true)
+        .AddField("Elevated Proc", Environment.IsPrivilegedProcess, true)
         .WithFooter(footer => footer.Text = $"Requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();
