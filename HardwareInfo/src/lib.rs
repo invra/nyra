@@ -25,7 +25,7 @@ pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
 
   match CString::new(cpu_brand) {
     Ok(c_string) => c_string.into_raw(),
-    Err(_) => ptr::null_mut(),
+    Err(_) => CString::new("Unknown CPU").unwrap().into_raw(),
   }
 }
 
