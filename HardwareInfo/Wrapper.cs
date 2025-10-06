@@ -29,18 +29,18 @@ namespace Nyra.HardwareInfo {
   public class GetHardwareInfo {
     private string cpuModel;
     private int cpuCores;
-    private ulong memoryTotal;
+    private double memoryTotal;
     private string osVersion;
 
     public GetHardwareInfo(
       string cpuModel = null,
       int cpuCores = 8,
-      ulong memoryTotal = 8192,
+      double memoryTotal = 64.0,
       string osVersion = "macOS"
     ) {
       this.cpuModel = Ffi.GetCpuModelSafe();
       this.cpuCores = Ffi.GetCpuCoreCount();
-      this.memoryTotal = Ffi.GetTotalMemoryHeap();
+      this.memoryTotal = (Ffi.GetTotalMemoryHeap() / Math.Pow(1024, 2));
       this.osVersion = osVersion;
     }
 
@@ -54,7 +54,7 @@ namespace Nyra.HardwareInfo {
       set => cpuCores = value;
     }
 
-    public ulong MemoryTotal {
+    public double MemoryTotal {
       get => memoryTotal;
       set => memoryTotal = value;
     }
