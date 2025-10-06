@@ -5,6 +5,7 @@
     Notes: Special macos implementation file
 */
 
+#[cfg(target_os = "macos")]
 pub(crate) fn get_version_name(major: u32, minor: u32) -> &'static str {
   match major {
     10 => match minor {

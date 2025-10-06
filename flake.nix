@@ -8,7 +8,7 @@
   description = "Flake for Nyra";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     csharp-ls.url = "github:invra/csharp-language-server";
@@ -39,12 +39,22 @@
               toml-sort.enable = true;
               rustfmt.enable = true;
             };
-            settings.formatter.dotnet-format = {
-              command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
-              options = [
-                "format"
-              ];
-              includes = [ "*.csproj" ];
+            settings.formatter = {
+              rustfmt = {
+                options = [
+                  "--config"
+                  "condense_wildcard_suffixes=true,tab_spaces=2"
+                  "--style-edition"
+                  "2024"
+                ];
+              };
+              dotnet-format = {
+                command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
+                options = [
+                  "format"
+                ];
+                includes = [ "*.csproj" ];
+              };
             };
           })).config.build;
       in

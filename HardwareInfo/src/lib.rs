@@ -11,9 +11,6 @@ use {
   std::ffi::CString,
   std::os::raw::c_char,
   sysinfo::{CpuExt, System, SystemExt},
-  mods::{
-    macos::get_version_name,
-  }
 };
 
 #[cfg(target_os = "windows")]
@@ -34,7 +31,9 @@ pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
     &cpu_brand_str
   };
 
-  CString::new(cpu_brand_str).unwrap_or_else(|_| CString::new("Unknown").unwrap()).into_raw()
+  CString::new(cpu_brand_str)
+    .unwrap_or_else(|_| CString::new("Unknown").unwrap())
+    .into_raw()
 }
 
 #[unsafe(no_mangle)]
@@ -69,28 +68,42 @@ pub unsafe extern "C" fn get_host_os_string() -> *mut c_char {
   use std::ffi::CString;
 
   let info = os_info::get();
+  #[cfg(target_os = "macos")]
+  {
+    use crate::mods::macos::get_version_name;
+    let version = info.version().to_string();
+    let mut parts = version.split('.');
+    let major = parts
+      .next()
+      .and_then(|s| s.parse::<u32>().ok())
+      .unwrap_or(0);
+    let minor = parts
+      .next()
+      .and_then(|s| s.parse::<u32>().ok())
+      .unwrap_or(0);
 
-  let os_string = match info.os_type() {
-    os_info::Type::Macos => {
-      let version = info.version().to_string();
-      let mut parts = version.split('.');
-      let major = parts.next().and_then(|s| s.parse::<u32>().ok()).unwrap_or(0);
-      let minor = parts.next().and_then(|s| s.parse::<u32>().ok()).unwrap_or(0);
+    CString::new(format!("macOS {}", get_version_name(major, minor)).into_bytes())
+      .unwrap_or_default()
+      .into_raw()
+  }
 
-      format!("macOS {}", get_version_name(major, minor))
-    }
+  #[cfg(target_os = "windows")]
+  {
+    CString::new(format!("Windows {}", get_caption()).into_bytes())
+      .unwrap_or_default()
+      .into_raw()
+  }
 
-    #[cfg(target_os = "windows")]
-    os_info::Type::Windows => {
-      format!("Windows {}", get_caption())
-    }
-    
-    other => other.to_string(),
-  };
-
-  match CString::new(os_string) {
-    Ok(c_string) => c_string.into_raw(),
-    Err(_) => CString::new("").unwrap().into_raw(),
+  #[cfg(target_os = "linux")]
+  {
+    CString::new(
+      crate::mods::linux::get_distro_and_version()
+        .unwrap_or("Unknown".into())
+        .as_bytes()
+        .to_vec(),
+    )
+    .unwrap_or_default()
+    .into_raw()
   }
 }
 

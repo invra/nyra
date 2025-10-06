@@ -39,13 +39,13 @@ namespace Nyra.HardwareInfo {
     public static partial nint GetHostOperatingSystemPtr();
 
     public static string GetHostOperatingSystemSafe() {
-        nint ptr = GetHostOperatingSystemPtr();
-        if (ptr == IntPtr.Zero)
-            return string.Empty;
+      nint ptr = GetHostOperatingSystemPtr();
+      if (ptr == IntPtr.Zero)
+        return string.Empty;
 
-        string result = Marshal.PtrToStringAnsi(ptr)!;
-        FreeString(ptr);
-        return result;
+      string result = Marshal.PtrToStringAnsi(ptr)!;
+      FreeString(ptr);
+      return result;
     }
   }
 
