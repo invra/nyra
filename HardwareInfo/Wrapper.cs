@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: HardwareInfo/Wrapper.cs
+    Authors: Invra
+    Notes: Library interop and constructor file
+*/
+
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 

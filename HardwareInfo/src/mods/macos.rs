@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: HardwareInfo/src/mods/macos.rs
+    Authors: Invra
+    Notes: Special macos implementation file
+*/
+
 pub(crate) fn get_version_name(major: u32, minor: u32) -> &'static str {
   match major {
     10 => match minor {
