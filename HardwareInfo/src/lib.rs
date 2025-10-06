@@ -10,7 +10,6 @@ mod macos;
 use {
     std::ffi::CString,
     std::os::raw::c_char,
-    std::ptr,
     sysinfo::{CpuExt, System, SystemExt},
     macos::get_version_name
 };
@@ -22,6 +21,8 @@ pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
   sys.refresh_cpu();
 
   let cpu_brand = sys.global_cpu_info().brand().to_string();
+
+  println!("{cpu_brand}");
 
   match CString::new(cpu_brand) {
     Ok(c_string) => c_string.into_raw(),
