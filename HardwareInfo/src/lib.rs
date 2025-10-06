@@ -24,15 +24,12 @@ pub unsafe extern "C" fn get_cpu_model() -> *mut c_char {
   let cpu_brand_str = cpu_brand.to_string();
 
   let cpu_brand_str = if cpu_brand_str.is_empty() {
-    "Unknown CPU"
+    "Unknown"
   } else {
     &cpu_brand_str
   };
 
-  match CString::new(cpu_brand_str) {
-    Ok(c_string) => c_string.into_raw(),
-    Err(_) => CString::new("Unknown CPU").unwrap().into_raw(),
-  }
+  CString::new(cpu_brand_str).unwrap_or_else(|_| CString::new("Unknown").unwrap()).into_raw()
 }
 
 #[unsafe(no_mangle)]
