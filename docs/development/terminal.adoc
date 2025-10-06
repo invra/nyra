@@ -1,12 +1,5 @@
 = Building Nyra on a Normal System
 
-[source,shell]
-----
-cp .env.example .env
-----
-
-== Build
-
 . Enter the Nix development environment:
 +
 [source,shell]

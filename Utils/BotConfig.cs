@@ -73,7 +73,7 @@ namespace Nyra.Config {
       string defaultDir;
 
       if (OperatingSystem.IsWindows()) {
-        defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NyraBot");
+        defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "nyra");
       } else {
         defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config/nyra");
       }

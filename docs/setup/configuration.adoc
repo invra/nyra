@@ -1,12 +1,16 @@
 = Configuring Nyra
 
-Nyra requires an `.env` file before running.
+Nyra requires an `nyra.toml` file before running.
 
 Copy the example:
 
 [source,shell]
 ----
-cp .env.example .env
+# Not for Windows
+cp nyra.toml.example ~/.config/nyra/nyra.toml
+
+# For Windows
+cp nyra.toml.example %LOCALAPPDATA%/nyra/nyra.toml
 ----
 
-Then inside of the `.env` fill out your information.
+Then inside of the `nyra.toml` fill out your information.

@@ -16,5 +16,9 @@ These errors indicate Nyra cannot find required environment variables.
 Solution: Copy the example configuration file and fill in the required values:
 [source,shell]
 ----
-cp .env.example .env
+# Not for Windows
+cp nyra.toml.example ~/.config/nyra/nyra.toml
+
+# For Windows
+cp nyra.toml.example %LOCALAPPDATA%/nyra/nyra.toml
 ----
