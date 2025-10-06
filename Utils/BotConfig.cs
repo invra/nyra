@@ -1,7 +1,9 @@
-// SPDX-License-Identifier: Unlicense
-// Project: Nyra
-// File: Utils/BotConfig.cs
-// Authors: Invra
+/* SPDX-License-Identifier: Unlicense
+   Project: Nyra
+   File: Utils/BotConfig.cs
+   Authors: Invra
+*/
+
 
 using System;
 using System.IO;
@@ -36,24 +38,33 @@ namespace Nyra.Config {
         return;
       }
 
-      var general = toml["general"] as TomlTable;
+      if (!toml.ContainsKey("general")) {
+        ConsoleCalls.PrintError("Config file is missing required [general] section");
+        Environment.Exit(1);
+      }
 
-      Prefix = general?["prefix"]?.ToString() ?? string.Empty;
-      if (string.IsNullOrEmpty(Prefix)) {
-        ConsoleCalls.PrintError("No 'general.prefix' found in config");
+      var general = toml["general"] as TomlTable;
+      if (general == null) {
+        ConsoleCalls.PrintError("'general' section in config is invalid");
+        Environment.Exit(1);
+      }
+
+      if (!general.ContainsKey("prefix") || string.IsNullOrEmpty(general["prefix"]?.ToString())) {
+        ConsoleCalls.PrintError("Missing required 'general.prefix' in config");
         errors = true;
       } else {
+        Prefix = general["prefix"].ToString();
         if (Prefix.Length > 2) {
           ConsoleCalls.PrintWarning("The bot prefix is longer than 2 characters! This may cause impaired usage.");
         }
         ConsoleCalls.PrintStatus($"The provided bot prefix \"{Prefix}\" has been accepted");
       }
 
-      Token = general?["token"]?.ToString()?.Trim() ?? string.Empty;
-      if (string.IsNullOrEmpty(Token)) {
-        ConsoleCalls.PrintError("No 'general.token' found in config");
+      if (!general.ContainsKey("token") || string.IsNullOrEmpty(general["token"]?.ToString()?.Trim())) {
+        ConsoleCalls.PrintError("Missing required 'general.token' in config");
         errors = true;
       } else {
+        Token = general["token"].ToString().Trim();
         ConsoleCalls.PrintStatus($"The provided Discord token {Token[..10]}… has been accepted");
       }
 
