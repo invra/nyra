@@ -9,7 +9,7 @@
 .DS_Store
 
 # Ignore all untrusted top level files.
-*/
+*
 !bin
 !Data
 !docs
