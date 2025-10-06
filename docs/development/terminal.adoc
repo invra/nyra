@@ -1,22 +1,4 @@
-= Building Nyra on a POSIX-Compliant System
-
-When we mean POSIX-Compliant we mean macOS, Linux, *BSD, and the lot.
-
-== Repository
-Clone the link:../../[Nyra GitLab] repository.
-
-== Dependencies
-
-Before building, make sure you have:
-
-* link:https://nixos.org/download/[Nix]
-
-NOTE: Nix provides the development environment and ensures the correct .NET SDK is available.
-
-== Configure
-
-Nyra requires a configuration file before it can run.  
-Copy the provided `.env.example` and update it with your bot details (Discord token, prefix, etc.):
+= Building Nyra on a Normal System
 
 [source,shell]
 ----
@@ -47,11 +29,3 @@ dotnet run
 ----
 
 The development environment will override your `PATH` and provide the correct .NET 10 SDK, so the build should succeed without extra configuration.
-
-== Troubleshooting
-
-If the build does not succeed:
-
-* Verify that you are inside the Nix development environment (`nix develop` must be run first).  
-* Confirm `.NET 10` is available by running `dotnet --version`.
-* Ensure your `.env` file exists in the project root and contains valid values.

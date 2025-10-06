@@ -1,0 +1,34 @@
+= Nyra's Dependencies
+
+There is two sections, one for Nix, and one for General systems. If you are able to use Nix, and dont have grudge about it
+I would highly recommend Nix for this project.
+
+== Nix Dev Environment
+
+The Nix way is really helpful, as all you have to do is
+
+[source, shell]
+----
+nix develop
+----
+
+and then you will have everything.
+
+== Other systems
+
+The list of prerequisites is:
+* https://rust-lang.org/tools/install/[The Rust Toolchain]
+* https://dotnet.microsoft.com/en-us/download/dotnet/10.0[.NET 10 (10.0.0-rc.1 or later)]
+
+=== Turning on stuff in Visual Studio (Windows only)
+
+. Open **Visual Studio 2022** (or newer)
+. Go to `Tools` > `Options`
++
+image:../pics/tools.png[Tools,350]
+
+. Expand `Environment` > `Preview Features`
+. Enable **"Use previews of the .NET SDK"**
+. Click **OK** and restart Visual Studio
++
+image:../pics/options.png[Options,500]

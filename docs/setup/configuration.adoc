@@ -1,0 +1,12 @@
+= Configuring Nyra
+
+Nyra requires an `.env` file before running.
+
+Copy the example:
+
+[source,shell]
+----
+cp .env.example .env
+----
+
+Then inside of the `.env` fill out your information.
