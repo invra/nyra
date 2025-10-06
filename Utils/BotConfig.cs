@@ -1,11 +1,13 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: Utils/BotConfig.cs
-    Authors: Invra
-    Notes: Singleton for Config
-*/
+// SPDX-License-Identifier: Unlicense
+// Project: Nyra
+// File: Utils/BotConfig.cs
+// Authors: Invra
 
+using System;
+using System.IO;
 using Nyra.Stdout;
+using Tomlyn;
+using Tomlyn.Model;
 
 namespace Nyra.Config {
   public class BotConfig {
@@ -16,12 +18,29 @@ namespace Nyra.Config {
     public static BotConfig Config => instance.Value;
 
     private BotConfig() {
-      DotNetEnv.Env.Load();
+      string configPath = GetConfigLocation();
       bool errors = false;
 
-      Prefix = Environment.GetEnvironmentVariable("BOT_PREFIX") ?? string.Empty;
+      if (!File.Exists(configPath)) {
+        ConsoleCalls.PrintError($"Config file not found at {configPath}");
+        Environment.Exit(1);
+      }
+
+      string tomlContent = File.ReadAllText(configPath);
+      TomlTable toml;
+      try {
+        toml = Toml.Parse(tomlContent).ToModel();
+      } catch (Exception ex) {
+        ConsoleCalls.PrintError($"Failed to parse TOML config: {ex.Message}");
+        Environment.Exit(1);
+        return;
+      }
+
+      var general = toml["general"] as TomlTable;
+
+      Prefix = general?["prefix"]?.ToString() ?? string.Empty;
       if (string.IsNullOrEmpty(Prefix)) {
-        ConsoleCalls.PrintError("No BOT_PREFIX variable found in the ENV");
+        ConsoleCalls.PrintError("No 'general.prefix' found in config");
         errors = true;
       } else {
         if (Prefix.Length > 2) {
@@ -30,9 +49,9 @@ namespace Nyra.Config {
         ConsoleCalls.PrintStatus($"The provided bot prefix \"{Prefix}\" has been accepted");
       }
 
-      Token = Environment.GetEnvironmentVariable("DISCORD_TOKEN")?.Trim() ?? string.Empty;
+      Token = general?["token"]?.ToString()?.Trim() ?? string.Empty;
       if (string.IsNullOrEmpty(Token)) {
-        ConsoleCalls.PrintError("No DISCORD_TOKEN variable found in the ENV");
+        ConsoleCalls.PrintError("No 'general.token' found in config");
         errors = true;
       } else {
         ConsoleCalls.PrintStatus($"The provided Discord token {Token[..10]}… has been accepted");
@@ -41,6 +60,27 @@ namespace Nyra.Config {
       if (errors) {
         Environment.Exit(1);
       }
+    }
+
+    public static string GetConfigLocation() {
+      var envPath = Environment.GetEnvironmentVariable("BOT_CONFIG_PATH");
+      if (!string.IsNullOrEmpty(envPath)) {
+        ConsoleCalls.PrintStatus($"Using config path from BOT_CONFIG_PATH: {envPath}");
+        return envPath;
+      }
+
+      string defaultFile = "nyra.toml";
+      string defaultDir;
+
+      if (OperatingSystem.IsWindows()) {
+        defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NyraBot");
+      } else {
+        defaultDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config/nyra");
+      }
+
+      string path = Path.Combine(defaultDir, defaultFile);
+      ConsoleCalls.PrintStatus($"Using default config path: {path}");
+      return path;
     }
   }
 }
