@@ -1,32 +1,11 @@
-#[cfg(target_os = "windows")]
-pub(crate) fn get_caption() -> String {
-    use windows::Win32::System::Registry::*;
-    use windows::core::PCSTR;
-    use std::ptr::null_mut;
+// TODO: Windows sucks ass and i cant do this correctly
 
-    unsafe {
-        let mut key = HKEY::default();
-        let subkey = b"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\0";
-        if RegOpenKeyExA(HKEY_LOCAL_MACHINE, PCSTR(subkey.as_ptr()), 0, KEY_READ, &mut key).is_err() {
-            return "Windows (Unknown)".to_string();
-        }
+// use wmi::{COMLibrary, WMIConnection};
 
-        let value_name = b"ProductName\0";
-        let mut buf = [0u8; 256];
-        let mut buf_size: u32 = buf.len() as u32;
-
-        if RegQueryValueExA(
-            key,
-            PCSTR(value_name.as_ptr()),
-            None,
-            None,
-            Some(buf.as_mut_ptr()),
-            Some(&mut buf_size),
-        ).is_err() {
-            return "Windows (Unknown)".to_string();
-        }
-
-        let s = String::from_utf8_lossy(&buf[..buf_size as usize]).to_string();
-        s
-    }
-}
+// pub fn get_windows_caption() -> Option<String> {
+//   let com = COMLibrary::new().ok()?;
+//   let wmi_con = WMIConnection::new(com.into()).ok()?;
+//   let results: Vec<std::collections::HashMap<String, wmi::Variant>> =
+//     wmi_con.raw_query("SELECT Caption FROM Win32_OperatingSystem").ok()?;
+//   results.first()?.get("Caption")?.to_string().into()
+// }
