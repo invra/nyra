@@ -75,11 +75,6 @@
     "hash": "sha256-ySPkn8SrShOqhihC33EJ4HJt9desDISC4gAI4FQBi2U="
   },
   {
-    "pname": "Spectre.Console",
-    "version": "0.51.1",
-    "hash": "sha256-FQAK07dEwEsNYVI1T3S488LHv8AXJ+ZeA9N2hPpWBoo="
-  },
-  {
     "pname": "System.CodeDom",
     "version": "8.0.0",
     "hash": "sha256-uwVhi3xcvX7eiOGQi7dRETk3Qx1EfHsUfchZsEto338="
