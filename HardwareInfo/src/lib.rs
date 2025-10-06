@@ -5,11 +5,14 @@
     Notes: Entrypoint file for HardwareInfo
 */
 
+mod macos;
+
 use {
     std::ffi::CString,
     std::os::raw::c_char,
     std::ptr,
     sysinfo::{CpuExt, System, SystemExt},
+    macos::get_version_name
 };
 
 #[unsafe(no_mangle)]
