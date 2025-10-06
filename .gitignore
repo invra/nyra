@@ -9,21 +9,20 @@
 .DS_Store
 
 # Ignore all untrusted top level files.
-
 */
-!Bot.cs
-!Commands
+!bin
 !Data
-!HardwareInfo
-!LICENSE.txt
+!docs
+!Utils
+!hr.nu
+!Bot.cs
+!TODO.org
+!Commands
+!deps.jsonc
 !Program.cs
 !README.adoc
-!TODO.org
-!Utils
-!bin
-!deps.jsonc
-!docs
+!LICENSE.txt
+!HardwareInfo
 !flake.{lock,nix}
-!hr.nu
 !.vscode/extensions.json
 !nyra.{csproj,slnx,toml.example}
