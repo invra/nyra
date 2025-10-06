@@ -9,16 +9,7 @@ csharp_new_line_before_else = false
 csharp_new_line_before_catch = false
 csharp_new_line_before_finally = false
 
-indent_style = space
-indent_size = 2
-max_line_length = 80
-
-[*.rs]
-indent_style = space
-indent_size = 2
-max_line_length = 80
-
-[*.{config,csproj,props,slnx,targets,xaml,xml}]
+[*.{rs,cs,config,csproj,props,slnx,targets,xaml,xml}]
 indent_style = space
 indent_size = 2
 max_line_length = 80
