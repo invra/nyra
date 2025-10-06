@@ -27,6 +27,19 @@ namespace Nyra.HardwareInfo {
 
     [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_used_usize")]
     public static partial ulong GetTotalMemoryUsed();
+
+    [LibraryImport("libhardwareinfo", EntryPoint = "get_host_os_string")]
+    public static partial nint GetHostOperatingSystemPtr();
+
+    public static string GetHostOperatingSystemSafe() {
+        nint ptr = GetHostOperatingSystemPtr();
+        if (ptr == IntPtr.Zero)
+            return string.Empty;
+
+        string result = Marshal.PtrToStringAnsi(ptr)!;
+        FreeString(ptr);
+        return result;
+    }
   }
 
   public class GetHardwareInfo {
@@ -42,6 +55,7 @@ namespace Nyra.HardwareInfo {
       double memoryTotal = 64.0,
       string osVersion = "macOS"
     ) {
+      Ffi.GetHostOperatingSystemSafe();
       this.cpuModel = Ffi.GetCpuModelSafe();
       this.cpuCores = Ffi.GetCpuCoreCount();
       this.memoryTotal = (Ffi.GetTotalMemoryHeap() / Math.Pow(1024, 3));
