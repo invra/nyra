@@ -45,6 +45,15 @@ pub unsafe extern "C" fn get_mem_heap_usize() -> usize {
 }
 
 #[unsafe(no_mangle)]
+pub unsafe extern "C" fn get_mem_used_usize() -> usize {
+    let mut sys = System::new_all();
+
+    sys.refresh_memory();
+
+    sys.used_memory() as usize
+}
+
+#[unsafe(no_mangle)]
 pub unsafe extern "C" fn free_string(s: *mut c_char) {
     if s.is_null() {
         return;

@@ -22,17 +22,17 @@ namespace Nyra.Commands {
 
     [Command("test")]
     [Summary("Testing command for library.")]
-    public async Task PingAsync() {
+    public async Task TestAsync() {
       GetHardwareInfo hardware = new GetHardwareInfo();
       var msg = await ReplyAsync("Gathering...");
 
       var embed = new EmbedBuilder()
         .WithTitle("Testing Embed")
-        .WithColor(Discord.Color.Orange)
+        .WithColor(Discord.Color.Blue)
         .AddField("CPU Model", hardware.CpuModel, true)
-        .AddField("CPU Cores", hardware.CpuCores, true)
-        .AddField("Memory Usage", hardware.MemoryTotal, true)
-        .WithFooter(footer => footer.Text = $"Info requested by {Context.User.Username}")
+        .AddField("Processors", hardware.CpuCores, true)
+        .AddField("Memory", $"{hardware.MemoryUsed:F2} GB / {hardware.MemoryTotal} GB", true)
+        .WithFooter(footer => footer.Text = $"Requested by {Context.User.Username}")
         .WithCurrentTimestamp()
         .Build();
 

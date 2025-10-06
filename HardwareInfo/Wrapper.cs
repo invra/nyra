@@ -24,12 +24,16 @@ namespace Nyra.HardwareInfo {
 
     [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_heap_usize")]
     public static partial ulong GetTotalMemoryHeap();
+
+    [LibraryImport("libhardwareinfo", EntryPoint = "get_mem_used_usize")]
+    public static partial ulong GetTotalMemoryUsed();
   }
 
   public class GetHardwareInfo {
     private string cpuModel;
     private int cpuCores;
     private double memoryTotal;
+    private double memoryUsed;
     private string osVersion;
 
     public GetHardwareInfo(
@@ -40,7 +44,8 @@ namespace Nyra.HardwareInfo {
     ) {
       this.cpuModel = Ffi.GetCpuModelSafe();
       this.cpuCores = Ffi.GetCpuCoreCount();
-      this.memoryTotal = (Ffi.GetTotalMemoryHeap() / Math.Pow(1024, 2));
+      this.memoryTotal = (Ffi.GetTotalMemoryHeap() / Math.Pow(1024, 3));
+      this.memoryUsed = (Ffi.GetTotalMemoryUsed() / Math.Pow(1024, 3));
       this.osVersion = osVersion;
     }
 
@@ -57,6 +62,11 @@ namespace Nyra.HardwareInfo {
     public double MemoryTotal {
       get => memoryTotal;
       set => memoryTotal = value;
+    }
+
+    public double MemoryUsed {
+      get => memoryUsed;
+      set => memoryUsed = value;
     }
 
     public string OsVersion {
