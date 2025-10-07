@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: HardwareInfo/src/mods/linux.rs
+    Authors: Invra
+    Notes: Special Linux implementation file
+*/
+
 #[cfg(target_os = "linux")]
 pub fn get_distro_and_version() -> Result<Box<str>, Box<str>> {
   use std::{collections::HashMap, fs::OpenOptions, io::Read};
