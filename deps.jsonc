@@ -80,6 +80,11 @@
     "hash": "sha256-uwVhi3xcvX7eiOGQi7dRETk3Qx1EfHsUfchZsEto338="
   },
   {
+    "pname": "System.CommandLine",
+    "version": "2.0.0-beta4.22272.1",
+    "hash": "sha256-zSO+CYnMH8deBHDI9DHhCPj79Ce3GOzHCyH1/TiHxcc="
+  },
+  {
     "pname": "System.Configuration.ConfigurationManager",
     "version": "8.0.0",
     "hash": "sha256-xhljqSkNQk8DMkEOBSYnn9lzCSEDDq4yO910itptqiE="
