@@ -14,8 +14,8 @@ namespace Nyra.Commands {
     [Command("kick")]
     [Summary("Kicks a user by mention or ID.")]
     public async Task KickAsync(
-        string userInput,
-        [Remainder] string reason = "No reason provided"
+      string userInput,
+      [Remainder] string reason = "No reason provided"
     ) {
       if (Context.Guild == null) {
         await ReplyAsync("This command cannot be used in DMs.");
@@ -46,21 +46,20 @@ namespace Nyra.Commands {
 
       try {
         await guildUser.KickAsync(reason);
-
         var msg = await ReplyAsync($"Kicking {guildUser.Username}...");
 
         var embed = new EmbedBuilder()
-            .WithTitle("User Kicked")
-            .WithColor(Color.Green)
-            .AddField(
-                "Kicked User",
-                $"{guildUser.Username}#{guildUser.Discriminator}",
-                true
-            )
-            .AddField("Moderator", Context.User.Username, true)
-            .AddField("Reason", reason)
-            .WithCurrentTimestamp()
-            .Build();
+          .WithTitle("User Kicked")
+          .WithColor(Color.Green)
+          .AddField(
+              "Kicked User",
+              $"{guildUser.Username}#{guildUser.Discriminator}",
+              true
+          )
+          .AddField("Moderator", Context.User.Username, true)
+          .AddField("Reason", reason)
+          .WithCurrentTimestamp()
+          .Build();
 
         await msg.ModifyAsync(m => {
           m.Content = string.Empty;
@@ -75,9 +74,7 @@ namespace Nyra.Commands {
       if (input.StartsWith("<@") && input.EndsWith(">"))
         input = input.Replace("<@!", "").Replace("<@", "").Replace(">", "");
 
-      if (!ulong.TryParse(input, out ulong id))
-        return null;
-
+      if (!ulong.TryParse(input, out ulong id)) return null;
       return Context.Guild.GetUser(id);
     }
   }
