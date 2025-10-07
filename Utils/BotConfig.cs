@@ -74,7 +74,7 @@ namespace Nyra.Config {
     }
 
     public static string GetConfigLocation() {
-      var envPath = Environment.GetEnvironmentVariable("BOT_CONFIG_PATH");
+      var envPath = Environment.GetEnvironmentVariable("NYRA_BOT_CONFIG_PATH");
       if (!string.IsNullOrEmpty(envPath)) {
         ConsoleCalls.PrintStatus($"Using config path from BOT_CONFIG_PATH: {envPath}");
         return envPath;
