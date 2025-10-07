@@ -25,4 +25,5 @@
 !HardwareInfo
 !flake.{lock,nix}
 !.vscode/extensions.json
-!nyra.{csproj,slnx,toml.example}
+!nyra.{csproj,slnx,toml.example,.example.toml}
+!nyra.example.toml
