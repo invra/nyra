@@ -67,9 +67,9 @@ pub unsafe extern "C" fn get_mem_used_usize() -> usize {
 pub unsafe extern "C" fn get_host_os_string() -> *mut c_char {
   use std::ffi::CString;
 
-  let info = os_info::get();
   #[cfg(target_os = "macos")]
   {
+    let info = os_info::get();
     use crate::mods::macos::get_version_name;
     let version = info.version().to_string();
     let mut parts = version.split('.');

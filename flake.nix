@@ -65,6 +65,7 @@
             dotnetCorePackages.sdk_10_0-bin
             csharp-language-server
             rust-analyzer
+            clippy
             cargo
             rustc
           ];

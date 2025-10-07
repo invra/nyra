@@ -39,16 +39,15 @@ namespace Nyra {
         bool configOptionProvided = context.ParseResult.FindResultFor(this.configOption) != null;
 
         if (configOptionProvided && string.IsNullOrEmpty(config)) {
-            ConsoleCalls.PrintError("Error: --config option requires a valid file path.");
-            throw new ArgumentException("The --config option requires a valid file path.");
+          ConsoleCalls.PrintError("Error: --config option requires a valid file path.");
+          throw new ArgumentException("The --config option requires a valid file path.");
         }
 
         if (!string.IsNullOrEmpty(config)) {
-            Environment.SetEnvironmentVariable("NYRA_BOT_CONFIG_PATH", config);
-            ConsoleCalls.PrintStatus($"Using config: {config}");
-        }
-        else {
-            ConsoleCalls.PrintStatus("No config specified; using defaults.");
+          Environment.SetEnvironmentVariable("NYRA_BOT_CONFIG_PATH", config);
+          ConsoleCalls.PrintStatus($"Using config: {config}");
+        } else {
+          ConsoleCalls.PrintStatus("No config specified; using defaults.");
         }
 
         ConsoleCalls.PrintStatus("Creating instance");
@@ -62,13 +61,11 @@ namespace Nyra {
           var reply = ping.Send(host, timeout, buffer, new PingOptions());
 
           if (reply.Status == IPStatus.Success) {
-              ConsoleCalls.PrintStatus("Networking test has passed");
+            ConsoleCalls.PrintStatus("Networking test has passed");
+          } else {
+            ConsoleCalls.PrintWarning($"Ping returned status {reply.Status}");
           }
-          else {
-              ConsoleCalls.PrintWarning($"Ping returned status {reply.Status}");
-          }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
           ConsoleCalls.PrintWarning($"Cannot contact Discord: {ex.Message}");
         }
 

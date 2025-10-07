@@ -37,6 +37,8 @@ pub fn get_distro_and_version() -> Result<Box<str>, Box<str>> {
         )
         .replace("()", "")
         .into()
-      }),
+      })
+      .replace("\"", "")
+      .into(),
   )
 }
