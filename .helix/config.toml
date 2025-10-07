@@ -1,0 +1,20 @@
+theme = "rose_pine"
+
+[editor]
+bufferline = "multiple"
+color-modes = true
+end-of-line-diagnostics = "hint"
+insert-final-newline = false
+line-number = "relative"
+popup-border = "all"
+scrolloff = 100
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+
+[editor.lsp]
+display-inlay-hints = true
+display-progress-messages = true
