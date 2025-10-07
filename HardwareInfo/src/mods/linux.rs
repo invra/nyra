@@ -30,10 +30,9 @@ pub fn get_distro_and_version() -> Result<Box<str>, Box<str>> {
       .map(Box::<str>::from)
       .unwrap_or_else(|| {
         format!(
-          "{} {} ({})",
+          "{} {}",
           os_data[&"NAME"],
-          os_data[&"VERSION"],
-          os_data.get("VERSION_CODENAME").copied().unwrap_or("")
+          os_data[&"VERSION"]
         )
         .replace("()", "")
         .into()
