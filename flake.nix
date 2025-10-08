@@ -56,7 +56,7 @@
                 includes = [ "*.csproj" ];
               };
             };
-          })).config.build.wrapper;
+          })).config.build;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -117,7 +117,7 @@
           '';
         };
 
-        formatter = formatters;
+        formatter = formatters.wrapper;
         checks.formatting = formatters.check self;
       }
     );
