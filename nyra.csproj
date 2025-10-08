@@ -29,7 +29,7 @@
     <PackageReference Include="Tomlyn" Version="0.19.0" />
   </ItemGroup>
   
-  <Target Name="RustBuild" BeforeTargets="Build">
+  <Target Name="HardwareInfo" BeforeTargets="Build">
     <Message Text="Building Rust library for $(Configuration)" Importance="high" />
     <Exec Condition="'$(Configuration)' == 'Release'" Command="cargo build --release" WorkingDirectory="HardwareInfo" />
     <Exec Condition="'$(Configuration)' != 'Release'" Command="cargo build" WorkingDirectory="HardwareInfo" />
@@ -41,6 +41,23 @@
 
     <ItemGroup>
       <NativeLib Include="./HardwareInfo/target/$(RustTargetDir)/*" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(NativeLib)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="WindowPlatform" BeforeTargets="Build">
+    <Message Text="Building Rust library for $(Configuration)" Importance="high" />
+    <Exec Condition="'$(Configuration)' == 'Release'" Command="cargo build --release" WorkingDirectory="WindowPltaform" />
+    <Exec Condition="'$(Configuration)' != 'Release'" Command="cargo build" WorkingDirectory="WindowPltaform" />
+
+    <PropertyGroup>
+      <RustTargetDir Condition="'$(Configuration)' == 'Release'">release</RustTargetDir>
+      <RustTargetDir Condition="'$(Configuration)' != 'Release'">debug</RustTargetDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <NativeLib Include="./WindowPltaform/target/$(RustTargetDir)/*" />
     </ItemGroup>
 
     <Copy SourceFiles="@(NativeLib)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />

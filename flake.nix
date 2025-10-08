@@ -64,6 +64,7 @@
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
             csharp-language-server
+            qt6Packages.full
             rust-analyzer
             clippy
             cargo

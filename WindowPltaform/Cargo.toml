@@ -1,0 +1,12 @@
+[dependencies]
+iced = {version = "0.13", features = ["wgpu", "tokio"]}
+libloading = "0.8.9"
+tokio = {version = "1", features = ["rt", "macros"]}
+
+[lib]
+crate-type = ["cdylib"]
+
+[package]
+name = "nyra_gui"
+version = "0.1.0"
+edition = "2024"
