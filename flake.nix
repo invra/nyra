@@ -56,7 +56,7 @@
                 includes = [ "*.csproj" ];
               };
             };
-          })).config.build;
+          })).config.build.wrapper;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -95,10 +95,11 @@
           name = "nyra";
 
           src = ./.;
+          nugetDeps = ./deps.jsonc;
 
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
-          nugetDeps = ./deps.jsonc;
+
           nativeBuildInputs = with pkgs; [
             rustc
             cargo
@@ -116,7 +117,7 @@
           '';
         };
 
-        formatter = formatters.wrapper;
+        formatter = formatters;
         checks.formatting = formatters.check self;
       }
     );
