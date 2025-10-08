@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 
 namespace Nyra.Gui {
   public static partial class NyraGui {
-    [DllImport("libnyra_gui", EntryPoint = "init_gui", CallingConvention = CallingConvention.Cdecl)]
-    private static extern void InitGui(IntPtr config, IntPtr start_bot);
+    [LibraryImport("nyra_gui", EntryPoint = "init_gui")]
+    private static partial void InitGui(IntPtr config, IntPtr start_bot);
 
     public static unsafe void Start(string? config = null) {
       IntPtr configPtr = IntPtr.Zero;
