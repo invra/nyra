@@ -27,7 +27,7 @@ use {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-  StartBot,
+  StartBot = 0,
 }
 
 #[derive(Debug, Default)]
