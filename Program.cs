@@ -84,6 +84,20 @@ namespace Nyra {
 
   class Program {
     static int Main(string[] args) {
+      var keybindings = new Dictionary<ConsoleKey, Action> {
+        [ConsoleKey.Q] = () => {
+          ConsoleCalls.PrintStatus("Keybind Q was hit, gracefully terminating proc…");
+          Environment.Exit(0);
+        }
+      };
+
+      _ = Task.Run(() => {
+        while (true) {
+          var key = Console.ReadKey(true).Key;
+          if (keybindings.TryGetValue(key, out var action)) action();
+        }
+      });
+
       var configOption = new Option<string>(
           aliases: new[] { "--config", "-c" },
           description: "Path to the configuration file") {
