@@ -8,7 +8,11 @@
 
 use {
   iced::{
-    widget::{button, column, text},
+    widget::{
+      text,
+      button,
+      column
+    },
     Element, Settings, Task
   },
   std::{
@@ -21,19 +25,16 @@ use {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-  Increment,
-  Decrement,
   StartBot,
 }
 
 #[derive(Debug, Default)]
-pub struct Counter {
-  val: i64,
+pub struct NyraGui {
   config: Option<String>,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 }
 
-impl Counter {
+impl NyraGui {
   fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn (*mut c_char)>) -> Self {
     Self {
       config,
@@ -44,8 +45,6 @@ impl Counter {
 
   fn update(&mut self, message: Message) {
     match message {
-      Message::Increment => self.val += 1,
-      Message::Decrement => self.val -= 1,
       Message::StartBot => {
          let Some(start_bot) = self.start_bot else {
           eprintln!("Error: start_bot function not provided");
@@ -71,9 +70,7 @@ impl Counter {
 
   fn view(&self) -> Element<'_, Message> {
     column![
-      button("+").on_press(Message::Increment),
-      text(self.val).size(50),
-      button("-").on_press(Message::Decrement),
+      text("Nyra"),
       button("Start Bot").on_press(Message::StartBot),
     ]
     .into()
@@ -97,9 +94,10 @@ pub extern "C" fn init_gui(
       .map(String::from);
 
   let settings = Settings::default();
+  println!("\x1b[1m\x1b[36m[STDOUT/status]:\x1b[0m {}", "GUI has started.");
 
-  _ = iced::application("Nyra Control Panel", Counter::update, Counter::view)
+  _ = iced::application("Nyra Control Panel", NyraGui::update, NyraGui::view)
     .settings(settings)
-    .run_with(move || (Counter::new(config_str, start_bot), Task::none()))
+    .run_with(move || (NyraGui::new(config_str, start_bot), Task::none()))
     .inspect_err(|e| eprintln!("Failed to run GUI: {e}"));
 }

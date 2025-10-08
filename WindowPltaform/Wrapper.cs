@@ -21,7 +21,6 @@ namespace Nyra.Gui {
       IntPtr startBotPtr = (IntPtr)(delegate* unmanaged<nint, void>)&Nyra.BotLauncher.StartBot;
 
       try {
-        Console.WriteLine($"Calling InitGui with configPtr: {configPtr}, startBotPtr: {startBotPtr}");
         InitGui(configPtr, startBotPtr);
       } finally {
         if (configPtr != IntPtr.Zero)
