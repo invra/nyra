@@ -71,20 +71,23 @@
             rustc
           ];
 
-          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (with pkgs;[
-            expat
-            fontconfig
-            freetype
-            freetype.dev
-            libGL
-            pkg-config
-            xorg.libX11
-            xorg.libXcursor
-            xorg.libXi
-            xorg.libXrandr
-            wayland
-            libxkbcommon
-          ]);
+          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
+            with pkgs;
+            [
+              expat
+              fontconfig
+              freetype
+              freetype.dev
+              libGL
+              pkg-config
+              xorg.libX11
+              xorg.libXcursor
+              xorg.libXi
+              xorg.libXrandr
+              wayland
+              libxkbcommon
+            ]
+          );
 
           LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
 
@@ -129,21 +132,23 @@
             libiconv
           ];
 
-          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (with pkgs;[
-            expat
-            fontconfig
-            freetype
-            freetype.dev
-            libGL
-            pkg-config
-            xorg.libX11
-            xorg.libXcursor
-            xorg.libXi
-            xorg.libXrandr
-            wayland
-            libxkbcommon
-          ])
-          ;
+          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
+            with pkgs;
+            [
+              expat
+              fontconfig
+              freetype
+              freetype.dev
+              libGL
+              pkg-config
+              xorg.libX11
+              xorg.libXcursor
+              xorg.libXi
+              xorg.libXrandr
+              wayland
+              libxkbcommon
+            ]
+          );
 
           LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
           installPhase = ''

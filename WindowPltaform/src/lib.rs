@@ -8,19 +8,21 @@
 
 use {
   iced::{
+    Element, Settings, Task,
     widget::{
       text,
       button,
-      column
+      column,
     },
-    Element, Settings, Task
   },
   std::{
-    ffi::{CStr, CString},
-    ops::Not as _,
+    ffi::{
+      CStr,
+      CString
+    },
     os::raw::c_char,
-    thread
-  }
+    thread,
+  },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -46,23 +48,25 @@ impl NyraGui {
   fn update(&mut self, message: Message) {
     match message {
       Message::StartBot => {
-         let Some(start_bot) = self.start_bot else {
+        let Some(start_bot) = self.start_bot else {
           eprintln!("Error: start_bot function not provided");
           return;
-         };
-         
+        };
         let config = self.config.clone();
 
         thread::spawn(move || unsafe {
-           config
-            .map(CString::new)
-            .transpose()
-            .ok()
-            .flatten()
-            .map(CString::into_raw)
-            .filter(|x| !x.is_null())
-            .inspect(|&x| start_bot(x))
-            .map(|x| CString::from_raw(x))
+          let config_ptr = match config {
+            Some(cfg) => CString::new(cfg)
+              .map(|c| c.into_raw())
+              .unwrap_or(std::ptr::null_mut()),
+            None => std::ptr::null_mut(),
+          };
+
+          start_bot(config_ptr);
+
+          if !config_ptr.is_null() {
+            let _ = CString::from_raw(config_ptr);
+          }
         });
       }
     }
@@ -82,22 +86,18 @@ pub extern "C" fn init_gui(
   config: *const c_char,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 ) {
-  let config_str =
-    config
-      .is_null()
-      .not()
-      .then(|| unsafe { CStr::from_ptr(config) })
-      .map(CStr::to_str)
-      .transpose()
-      .ok()
-      .flatten()
-      .map(String::from);
+  let config_str = (!config.is_null())
+    .then(|| unsafe { CStr::from_ptr(config) })
+    .and_then(|c| c.to_str().ok())
+    .map(String::from);
 
   let settings = Settings::default();
-  println!("\x1b[1m\x1b[36m[STDOUT/status]:\x1b[0m {}", "GUI has started.");
+  println!("\x1b[1m\x1b[36m[STDOUT/status]:\x1b[0m GUI has started.");
 
-  _ = iced::application("Nyra Control Panel", NyraGui::update, NyraGui::view)
+  if let Err(e) = iced::application("Nyra Control Panel", NyraGui::update, NyraGui::view)
     .settings(settings)
     .run_with(move || (NyraGui::new(config_str, start_bot), Task::none()))
-    .inspect_err(|e| eprintln!("Failed to run GUI: {e}"));
+  {
+    eprintln!("Failed to run GUI: {e}");
+  }
 }

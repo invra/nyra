@@ -109,7 +109,9 @@ pub unsafe extern "C" fn get_host_os_string() -> *mut c_char {
 
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn free_string(s: *mut c_char) {
-  if s.is_null() { return };
+  if s.is_null() {
+    return;
+  };
 
   unsafe {
     let _ = CString::from_raw(s);
