@@ -1,8 +1,9 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: Program.cs
-    Authors: Invra
-    Notes: Entrypoint file
+/*
+  SPDX-License-Identifier: Unlicense
+  Project: Nyra
+  File: Program.cs
+  Authors: Invra
+  Notes: Entrypoint file
 */
 
 using System.CommandLine;

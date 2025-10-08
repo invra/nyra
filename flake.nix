@@ -59,7 +59,7 @@
           })).config.build;
       in
       {
-        devShells.default = pkgs.mkShell {
+        devShells.default = pkgs.mkShell rec {
           meta.license = pkgs.lib.licenses.unlicense;
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
@@ -70,6 +70,23 @@
             cargo
             rustc
           ];
+
+          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (with pkgs;[
+            expat
+            fontconfig
+            freetype
+            freetype.dev
+            libGL
+            pkg-config
+            xorg.libX11
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXrandr
+            wayland
+            libxkbcommon
+          ]);
+
+          LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
 
           shellHook =
             if !pkgs.stdenv.isDarwin then
@@ -92,7 +109,7 @@
               '';
         };
 
-        packages.default = pkgs.buildDotnetModule {
+        packages.default = pkgs.buildDotnetModule rec {
           name = "nyra";
 
           src = ./.;
@@ -112,6 +129,23 @@
             libiconv
           ];
 
+          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (with pkgs;[
+            expat
+            fontconfig
+            freetype
+            freetype.dev
+            libGL
+            pkg-config
+            xorg.libX11
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXrandr
+            wayland
+            libxkbcommon
+          ])
+          ;
+
+          LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
           installPhase = ''
             dotnet publish -o $out/bin
             chmod +x $out/bin/nyra
