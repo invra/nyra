@@ -1,5 +1,5 @@
 [dependencies]
-iced = {version = "0.13", features = ["wgpu", "tokio"]}
+gpui = "0.2.0"
 libloading = "0.8.9"
 tokio = {version = "1", features = ["rt", "macros"]}
 

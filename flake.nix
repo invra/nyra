@@ -61,10 +61,10 @@
       {
         devShells.default = pkgs.mkShell rec {
           meta.license = pkgs.lib.licenses.unlicense;
+
           buildInputs = with pkgs; [
             dotnetCorePackages.sdk_10_0-bin
             csharp-language-server
-            qt6Packages.full
             rust-analyzer
             clippy
             cargo
@@ -109,6 +109,12 @@
                   $COMMAND
                   exit
                 fi
+
+                # === macOS dev env adjustments ===
+                export METAL_TOOLCHAIN="XcodeDefault"
+                export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
+
+                echo "[INFO] macOS dev env configured: DEVELOPER_DIR=$DEVELOPER_DIR, SDKROOT=$SDKROOT"
               '';
         };
 
