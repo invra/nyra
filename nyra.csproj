@@ -12,6 +12,7 @@
     <PublishReadyToRun>true</PublishReadyToRun>
     <PublishSingleFile>true</PublishSingleFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CopyNativeLibrariesToOutputDirectory>true</CopyNativeLibrariesToOutputDirectory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>4</WarningLevel>
@@ -61,5 +62,19 @@
     </ItemGroup>
 
     <Copy SourceFiles="@(NativeLib)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyNativeLibsForPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <NativeLibs Include="WindowPlatform/target/$(RustTargetDir)/*.dll" />
+      <NativeLibs Include="WindowPlatform/target/$(RustTargetDir)/*.so" />
+      <NativeLibs Include="WindowPlatform/target/$(RustTargetDir)/*.dylib" />
+
+      <NativeLibs Include="HardwareInfo/target/$(RustTargetDir)/*.dll" />
+      <NativeLibs Include="HardwareInfo/target/$(RustTargetDir)/*.so" />
+      <NativeLibs Include="HardwareInfo/target/$(RustTargetDir)/*.dylib" />
+    </ItemGroup>
+
+    <Copy SourceFiles="@(NativeLibs)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
   </Target>
 </Project>
