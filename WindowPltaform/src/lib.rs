@@ -9,17 +9,10 @@
 use {
   iced::{
     Element, Settings, Task,
-    widget::{
-      text,
-      button,
-      column,
-    },
+    widget::{button, column, text},
   },
   std::{
-    ffi::{
-      CStr,
-      CString
-    },
+    ffi::{CStr, CString},
     os::raw::c_char,
     thread,
   },
@@ -37,7 +30,7 @@ pub struct NyraGui {
 }
 
 impl NyraGui {
-  fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn (*mut c_char)>) -> Self {
+  fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
     Self {
       config,
       start_bot,
