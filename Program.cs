@@ -15,11 +15,28 @@ using Nyra.Gui;
 using Nyra.Stdout;
 
 namespace Nyra {
+  public sealed class BotStateManager {
+    private static readonly Lazy<BotStateManager> instance = new Lazy<BotStateManager>(() => new BotStateManager());
+
+    public static BotStateManager Instance => instance.Value;
+    private bool isRunning;
+    private readonly object _lock = new object();
+    private BotStateManager() { }
+
+    public bool IsRunning { get { lock (_lock) { return this.isRunning; } } }
+
+    public void SetBotRunning(bool running) {
+      lock (_lock) { this.isRunning = running; }
+    }
+  }
+
   public static class BotLauncher {
     [UnmanagedCallersOnly(EntryPoint = "start_bot")]
     public static void StartBot(IntPtr configPtr) {
+      BotStateManager.Instance.SetBotRunning(true);
       string config = configPtr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(configPtr);
       Task.Run(async () => {
+        Console.WriteLine(BotStateManager.Instance.IsRunning);
         if (!string.IsNullOrEmpty(config)) {
           Environment.SetEnvironmentVariable("NYRA_BOT_CONFIG_PATH", config);
           ConsoleCalls.PrintStatus($"Using config: {config}");
@@ -51,6 +68,7 @@ namespace Nyra {
     }
 
     public static async Task<int> Start(string config) {
+      BotStateManager.Instance.SetBotRunning(true);
       if (!string.IsNullOrEmpty(config)) {
         Environment.SetEnvironmentVariable("NYRA_BOT_CONFIG_PATH", config);
         ConsoleCalls.PrintStatus($"Using config: {config}");
