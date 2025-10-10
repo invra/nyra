@@ -4,3 +4,4 @@
 
    - [X] Fix warnings with warn CS8632.
    - [X] Fix a warning with warn NETSDK1128.
+   - [ ] Get the Nix derivation to build again
