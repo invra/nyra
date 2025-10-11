@@ -124,7 +124,7 @@ namespace Nyra {
         bool launchGui = context.ParseResult.GetValueForOption(guiOption);
 
         if (launchGui) {
-          ConsoleCalls.PrintStatus("Launching GUI...");
+          ConsoleCalls.PrintStatus("Launching GUI…");
           NyraGui.Start();
           return 0;
         }
