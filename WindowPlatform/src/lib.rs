@@ -1,12 +1,25 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: WindowPlatform/src/lib.rs
+    Authors: Invra
+    Notes: Entrypoint file for NyraGui
+*/
+
+mod theme;
 use {
-  gpui::{App, WindowBounds, WindowOptions, div, point, prelude::*, px, size},
+  gpui::{App, Rgba, WindowBounds, WindowOptions, div, point, prelude::*, px, size},
   std::{
     ffi::{CStr, CString},
     os::raw::c_char,
     sync::{Arc, Mutex},
     thread,
   },
+  theme::{Colors, Theme},
 };
+
+fn rgb(hex: u32) -> Rgba {
+  gpui::rgb(hex)
+}
 
 #[derive(Default)]
 pub struct NyraGui {
@@ -48,6 +61,7 @@ impl NyraGui {
 
 struct NyraView {
   gui: Arc<Mutex<NyraGui>>,
+  colors: Colors,
 }
 
 impl gpui::Render for NyraView {
@@ -60,16 +74,16 @@ impl gpui::Render for NyraView {
       .flex()
       .flex_col()
       .size_full()
-      .bg(gpui::rgb(0x191724))
+      .bg(self.colors.bg)
       .items_center()
-      .text_color(gpui::rgb(0xe0def4))
+      .text_color(self.colors.text)
       .child(div().child("Nyra").text_3xl())
       .child(
         div()
           .id("start-bot")
           .child("Start Bot")
-          .bg(gpui::rgb(0x1f1d2e))
-          .text_color(gpui::rgb(0xe0def4))
+          .bg(self.colors.surface)
+          .text_color(self.colors.text)
           .p(px(8.))
           .border(px(1.))
           .rounded(px(4.))
@@ -92,6 +106,7 @@ pub unsafe extern "C" fn init_gui(
     .map(String::from);
 
   let gui = Arc::new(Mutex::new(NyraGui::new(config_str, start_bot)));
+  let theme_colors = Colors::from_theme(Theme::RosePine);
 
   gpui::Application::new().run(move |cx: &mut App| {
     let bounds = WindowBounds::Windowed(gpui::Bounds::centered(None, size(px(400.), px(200.)), cx));
@@ -109,7 +124,12 @@ pub unsafe extern "C" fn init_gui(
         }),
         ..Default::default()
       },
-      move |_window, cx| cx.new(move |_| NyraView { gui: gui.clone() }),
+      move |_window, cx| {
+        cx.new(move |_| NyraView {
+          gui: gui.clone(),
+          colors: theme_colors,
+        })
+      },
     )
     .unwrap();
   });
