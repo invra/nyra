@@ -1,25 +1,10 @@
 use {
-  gpui::{
-    point,
-    div,
-    prelude::*,
-    px,
-    size,
-    App,
-    WindowBounds,
-    WindowOptions
-  },
+  gpui::{App, WindowBounds, WindowOptions, div, point, prelude::*, px, size},
   std::{
-    ffi::{
-      CStr,
-      CString
-    },
+    ffi::{CStr, CString},
     os::raw::c_char,
-    sync::{
-      Arc,
-      Mutex
-    },
-    thread
+    sync::{Arc, Mutex},
+    thread,
   },
 };
 
