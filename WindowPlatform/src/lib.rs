@@ -1,21 +1,47 @@
-use gpui::{App, Hsla, WindowBounds, WindowOptions, div, prelude::*, px, size};
-use std::{
-  os::raw::c_char,
-  sync::{Arc, Mutex},
-  thread,
+use {
+  gpui::{App, Hsla, WindowBounds, WindowOptions, div, prelude::*, px, size},
+  std::{
+    ffi::{CStr, CString},
+    os::raw::c_char,
+    sync::{Arc, Mutex},
+    thread,
+  },
 };
 
 #[derive(Default)]
 pub struct NyraGui {
+  config: Option<String>,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 }
 
 impl NyraGui {
+  fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
+    Self {
+      config,
+      start_bot,
+      ..Default::default()
+    }
+  }
+
   fn start_bot(&self) {
     if let Some(start_bot) = self.start_bot {
+      let config = self.config.clone();
       thread::spawn(move || unsafe {
-        start_bot(std::ptr::null_mut());
+        let config_ptr = match config {
+          Some(cfg) => CString::new(cfg)
+            .map(|c| c.into_raw())
+            .unwrap_or(std::ptr::null_mut()),
+          None => std::ptr::null_mut(),
+        };
+
+        start_bot(config_ptr);
+
+        if !config_ptr.is_null() {
+          let _ = CString::from_raw(config_ptr);
+        }
       });
+    } else {
+      eprintln!("Error: start_bot function not provided");
     }
   }
 }
@@ -48,8 +74,16 @@ impl gpui::Render for NyraView {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn init_gui(start_bot: Option<unsafe extern "C" fn(*mut c_char)>) {
-  let gui = Arc::new(Mutex::new(NyraGui { start_bot }));
+pub unsafe extern "C" fn init_gui(
+  config: *const c_char,
+  start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
+) {
+  let config_str = (!config.is_null())
+    .then(|| CStr::from_ptr(config))
+    .and_then(|c| c.to_str().ok())
+    .map(String::from);
+
+  let gui = Arc::new(Mutex::new(NyraGui::new(config_str, start_bot)));
 
   gpui::Application::new().run(move |cx: &mut App| {
     let bounds = WindowBounds::Windowed(gpui::Bounds::centered(None, size(px(400.), px(200.)), cx));
