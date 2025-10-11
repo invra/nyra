@@ -1,5 +1,5 @@
 [dependencies]
-gpui = "0.2.0"
+gpui = "*"
 libloading = "0.8.9"
 tokio = {version = "1", features = ["rt", "macros"]}
 

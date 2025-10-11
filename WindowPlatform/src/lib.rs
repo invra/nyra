@@ -1,107 +1,65 @@
-/*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  WindowPlatform/src/lib.rs
-  Authors: Invra, HitenTandon
-  Notes: GUI Implementation in gpui
-*/
-
-use {
-  gpui::{
-    App, Application, Bounds, Context, SharedString, Window, WindowBounds, WindowOptions, div,
-    prelude::*, px, rgb, size,
-  },
-  std::{
-    ffi::{CStr, CString},
-    os::raw::c_char,
-    sync::{Arc, Mutex},
-    thread,
-  },
+use gpui::{App, Hsla, WindowBounds, WindowOptions, div, prelude::*, px, size};
+use std::{
+  os::raw::c_char,
+  sync::{Arc, Mutex},
+  thread,
 };
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NyraGui {
-  config: Option<String>,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 }
 
 impl NyraGui {
-  fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
-    Self { config, start_bot }
-  }
-
   fn start_bot(&self) {
-    let Some(start_bot) = self.start_bot else {
-      eprintln!("Error: start_bot function not provided");
-      return;
-    };
-
-    let config = self.config.clone();
-    thread::spawn(move || unsafe {
-      let config_ptr = match config {
-        Some(cfg) => CString::new(cfg)
-          .map(|c| c.into_raw())
-          .unwrap_or(std::ptr::null_mut()),
-        None => std::ptr::null_mut(),
-      };
-      start_bot(config_ptr);
-
-      if !config_ptr.is_null() {
-        let _ = CString::from_raw(config_ptr);
-      }
-    });
+    if let Some(start_bot) = self.start_bot {
+      thread::spawn(move || unsafe {
+        start_bot(std::ptr::null_mut());
+      });
+    }
   }
 }
 
-// GPUI Application implementation
-struct NyraApp {
+struct NyraView {
   gui: Arc<Mutex<NyraGui>>,
 }
 
-impl Application for NyraApp {
-  fn draw(&mut self, ctx: &mut Context) {
-    let gui = self.gui.lock().unwrap();
-
-    // Root container
-    div()
-      .size(size(400.0, 200.0))
-      .background(rgb(0.1, 0.1, 0.1))
-      .child(
-        div()
-          .size(size(400.0, 200.0))
-          .child(gpui::text("Nyra").color(rgb(1.0, 1.0, 1.0)).size(px(24.0)))
-          .child(gpui::button("Start Bot").size(size(150.0, 50.0)).on_click({
-            let gui = gui.clone();
-            move |_| {
-              gui.lock().unwrap().start_bot();
-            }
-          })),
-      )
-      .render(ctx);
+impl gpui::Render for NyraView {
+  fn render(
+    &mut self,
+    _window: &mut gpui::Window,
+    _cx: &mut gpui::Context<Self>,
+  ) -> impl IntoElement {
+    div().child("Nyra").text_color(Hsla::white()).child(
+      div()
+        .id("start-bot")
+        .child("Start Bot")
+        .bg(Hsla::blue())
+        .text_color(Hsla::white())
+        .p(px(8.))
+        .border(px(1.))
+        .rounded(px(4.))
+        .on_click({
+          let gui = self.gui.clone();
+          move |_event, _cx, _| gui.lock().unwrap().start_bot()
+        }),
+    )
   }
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn init_gui(
-  config: *const c_char,
-  start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
-) {
-  let config_str = (!config.is_null())
-    .then(|| unsafe { CStr::from_ptr(config) })
-    .and_then(|c| c.to_str().ok())
-    .map(String::from);
+pub unsafe extern "C" fn init_gui(start_bot: Option<unsafe extern "C" fn(*mut c_char)>) {
+  let gui = Arc::new(Mutex::new(NyraGui { start_bot }));
 
-  let gui = Arc::new(Mutex::new(NyraGui::new(config_str, start_bot)));
-
-  let mut window = Window::new(
-    "Nyra Control Panel",
-    WindowBounds::new((800.0, 600.0)),
-    WindowOptions::default(),
-  );
-
-  let mut app = NyraApp { gui };
-
-  println!("\x1b[1m\x1b[36m[STDOUT/status]:\x1b[0m GUI has started.");
-
-  window.run(&mut app);
+  gpui::Application::new().run(move |cx: &mut App| {
+    let bounds = WindowBounds::Windowed(gpui::Bounds::centered(None, size(px(400.), px(200.)), cx));
+    cx.open_window(
+      WindowOptions {
+        window_bounds: Some(bounds),
+        ..Default::default()
+      },
+      move |_window, cx| cx.new(move |_| NyraView { gui: gui.clone() }),
+    )
+    .unwrap();
+  });
 }
