@@ -1,5 +1,5 @@
 use {
-  gpui::{App, Hsla, WindowBounds, WindowOptions, div, prelude::*, px, size},
+  gpui::{App, WindowBounds, WindowOptions, div, prelude::*, px, size},
   std::{
     ffi::{CStr, CString},
     os::raw::c_char,
@@ -56,20 +56,28 @@ impl gpui::Render for NyraView {
     _window: &mut gpui::Window,
     _cx: &mut gpui::Context<Self>,
   ) -> impl IntoElement {
-    div().child("Nyra").text_color(Hsla::white()).child(
-      div()
-        .id("start-bot")
-        .child("Start Bot")
-        .bg(Hsla::blue())
-        .text_color(Hsla::white())
-        .p(px(8.))
-        .border(px(1.))
-        .rounded(px(4.))
-        .on_click({
-          let gui = self.gui.clone();
-          move |_event, _cx, _| gui.lock().unwrap().start_bot()
-        }),
-    )
+    div()
+      .flex()
+      .flex_col()
+      .size_full()
+      .bg(gpui::rgb(0x191724))
+      .items_center()
+      .text_color(gpui::rgb(0xe0def4))
+      .child(div().child("Nyra").text_3xl())
+      .child(
+        div()
+          .id("start-bot")
+          .child("Start Bot")
+          .bg(gpui::rgb(0x1f1d2e))
+          .text_color(gpui::rgb(0xe0def4))
+          .p(px(8.))
+          .border(px(1.))
+          .rounded(px(4.))
+          .on_click({
+            let gui = self.gui.clone();
+            move |_event, _cx, _| gui.lock().unwrap().start_bot()
+          }),
+      )
   }
 }
 
