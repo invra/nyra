@@ -76,6 +76,7 @@ impl gpui::Render for NyraView {
       .child(
         div()
           .w_full()
+          .window_control_area(gpui::WindowControlArea::Drag)
           .h(px(35.0))
           .border_b_1()
           .border_color(self.colors.overlay)
