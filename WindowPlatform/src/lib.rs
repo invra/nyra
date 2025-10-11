@@ -79,7 +79,7 @@ pub unsafe extern "C" fn init_gui(
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 ) {
   let config_str = (!config.is_null())
-    .then(|| CStr::from_ptr(config))
+    .then(|| unsafe { CStr::from_ptr(config) })
     .and_then(|c| c.to_str().ok())
     .map(String::from);
 

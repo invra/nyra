@@ -34,16 +34,16 @@ namespace Nyra {
   public static class BotLauncher {
     [UnmanagedCallersOnly(EntryPoint = "start_bot")]
     public static void StartBot(IntPtr configPtr) {
-      string? config = configPtr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(configPtr);
+      string config = configPtr == IntPtr.Zero ? "" : Marshal.PtrToStringUTF8(configPtr);
       RunInternal(config).GetAwaiter().GetResult();
     }
 
-    public static async Task<int> Start(string? config) {
+    public static async Task<int> Start(string config = "") {
       await RunInternal(config);
       return 0;
     }
 
-    private static async Task RunInternal(string? config) {
+    private static async Task RunInternal(string config = "") {
       BotStateManager.Instance.SetBotRunning(true);
 
       if (!string.IsNullOrEmpty(config)) {

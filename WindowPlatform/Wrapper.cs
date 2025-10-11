@@ -12,7 +12,7 @@ namespace Nyra.Gui {
     [LibraryImport("nyra_gui", EntryPoint = "init_gui")]
     private static partial void InitGui(IntPtr config, IntPtr start_bot);
 
-    public static unsafe void Start(string? config = null) {
+    public static unsafe void Start(string config = "") {
       IntPtr configPtr = IntPtr.Zero;
       if (!string.IsNullOrEmpty(config)) {
         configPtr = Marshal.StringToCoTaskMemUTF8(config);

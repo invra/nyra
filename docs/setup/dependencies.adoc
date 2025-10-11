@@ -20,6 +20,20 @@ The list of prerequisites is:
 
 . link:https://rust-lang.org/tools/install/[The Rust Toolchain]
 . link:https://dotnet.microsoft.com/en-us/download/dotnet/10.0[.NET 10 (10.0.0-rc.1 or later)]
+. link:https://cmake.org/download/[CMake]
+. link:https://releases.llvm.org/download.html[CLang from the LLVM project.]
+
+=== macOS-only dependencies
+
+Since the window framework is the same as Zed-editor (GPUI) you will need Xcode with
+MetalPlatform. The Metal platform is **NOT** preinstalled with Xcode 26. Use the app-store to
+download Xcode then verify and make sure that the developer target is switched to the Xcode one by doing:
+
+[source, shell]
+----
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -license accept
+----
 
 === Turning on stuff in Visual Studio (Windows only)
 
