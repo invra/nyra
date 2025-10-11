@@ -8,7 +8,7 @@
 mod theme;
 use {
   gpui::{
-    App, KeyBinding, Rgba, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size,
+    App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size,
   },
   std::{
     ffi::{CStr, CString},
@@ -18,10 +18,6 @@ use {
   },
   theme::{Colors, Theme},
 };
-
-fn rgb(hex: u32) -> Rgba {
-  gpui::rgb(hex)
-}
 
 #[derive(Default)]
 pub struct NyraGui {

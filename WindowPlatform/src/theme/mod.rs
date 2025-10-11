@@ -5,6 +5,8 @@
     Notes: Theme system pretty much I guess
 */
 
+#![allow(dead_code)]
+
 use gpui::Rgba;
 
 pub enum Theme {
