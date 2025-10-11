@@ -1,10 +1,25 @@
 use {
-  gpui::{App, WindowBounds, WindowOptions, div, prelude::*, px, size},
+  gpui::{
+    point,
+    div,
+    prelude::*,
+    px,
+    size,
+    App,
+    WindowBounds,
+    WindowOptions
+  },
   std::{
-    ffi::{CStr, CString},
+    ffi::{
+      CStr,
+      CString
+    },
     os::raw::c_char,
-    sync::{Arc, Mutex},
-    thread,
+    sync::{
+      Arc,
+      Mutex
+    },
+    thread
   },
 };
 
@@ -98,6 +113,15 @@ pub unsafe extern "C" fn init_gui(
     cx.open_window(
       WindowOptions {
         window_bounds: Some(bounds),
+        titlebar: Some(gpui::TitlebarOptions {
+          title: None,
+          appears_transparent: true,
+          traffic_light_position: Some(point(px(9.0), px(9.0))),
+        }),
+        window_min_size: Some(gpui::Size {
+          width: px(360.0),
+          height: px(240.0),
+        }),
         ..Default::default()
       },
       move |_window, cx| cx.new(move |_| NyraView { gui: gui.clone() }),
