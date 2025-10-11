@@ -76,7 +76,7 @@ impl gpui::Render for NyraView {
       .child(
         div()
           .w_full()
-          .h(px(40.0))
+          .h(px(35.0))
           .border_b_1()
           .border_color(self.colors.overlay)
           .flex()
@@ -132,7 +132,7 @@ pub unsafe extern "C" fn init_gui(
           title: None,
 
           appears_transparent: true,
-          traffic_light_position: Some(point(px(12.0), px(12.0))),
+          traffic_light_position: Some(point(px(12.0), px(9.0))),
         }),
         window_min_size: Some(gpui::Size {
           width: px(360.0),
