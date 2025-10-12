@@ -114,7 +114,7 @@ actions!(window, [Quit]);
 pub unsafe extern "C" fn init_gui(
   config: *const c_char,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
-) {
+) -> () {
   let gui = Arc::new(Mutex::new(NyraGui::new(
     (!config.is_null())
       .then(|| unsafe { CStr::from_ptr(config) })
