@@ -65,13 +65,10 @@
           buildInputs =
             with pkgs;
             [
-              dotnetCorePackages.sdk_10_0-bin
-              csharp-language-server
               rust-analyzer
               clippy
               cargo
               rustc
-
             ]
             ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
               pkg-config
@@ -130,52 +127,38 @@
               '';
         };
 
-        packages.default = pkgs.buildDotnetModule rec {
+        packages.default = with pkgs; rustPlatform.buildRustPackage rec {
           name = "nyra";
 
           src = ./.;
-          nugetDeps = ./deps.jsonc;
+          cargoHash = "sha256-a8yHnmNW/USJmE5/6Qu1e4R6qfAfVGsMFIWaEiv+6Jw=";
 
-          dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
-          dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
+          nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
+            pkg-config
+            xorg.libxcb
+            xorg.xcbutil
+            libxkbcommon
+            libxkbcommon_8
+          ];
 
-          nativeBuildInputs =
-            with pkgs;
-            [
-              rustc
-              cargo
-              clang
-              pkg-config
-            ]
-            ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
-              pkg-config
-              xorg.libxcb
-              xorg.xcbutil
-              libxkbcommon
-              libxkbcommon_8
-            ];
-
-          buildInputs = with pkgs; [
+          buildInputs = [
             libiconv
           ];
 
-          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
-            with pkgs;
-            [
-              expat
-              fontconfig
-              freetype
-              freetype.dev
-              libGL
-              pkg-config
-              xorg.libX11
-              xorg.libXcursor
-              xorg.libXi
-              xorg.libXrandr
-              wayland
-              libxkbcommon
-            ]
-          );
+          runtimeLibs = nixpkgs.lib.optionals stdenv.isLinux [
+            expat
+            fontconfig
+            freetype
+            freetype.dev
+            libGL
+            pkg-config
+            xorg.libX11
+            xorg.libXcursor
+            xorg.libXi
+            xorg.libXrandr
+            wayland
+            libxkbcommon
+          ];
 
           LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
           installPhase = ''
