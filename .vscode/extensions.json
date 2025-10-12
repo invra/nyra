@@ -2,11 +2,9 @@
   "recommendations": [ 
     "rust-lang.rust-analyzer",
     "christian-kohler.path-intellisense",
-    "ms-dotnettools.csharp",
     "asciidoctor.asciidoctor-vscode",
     "bbenoist.Nix",
-    "tamasfe.even-better-toml",
-    "JetBrains.resharper-code"
+    "tamasfe.even-better-toml"
   ]
 } 
 
