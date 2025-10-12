@@ -33,20 +33,19 @@ impl EventHandler for Handler {
 
 async fn start_bot(config: Config) {
   let token = config.general.token.clone();
-  let intents =
-    GatewayIntents::GUILD_MESSAGES
+  let intents = GatewayIntents::GUILD_MESSAGES
     | GatewayIntents::DIRECT_MESSAGES
     | GatewayIntents::MESSAGE_CONTENT;
 
   let handler = Handler { config };
 
   let mut client = Client::builder(&token, intents)
-      .event_handler(handler)
-      .await
-      .expect("Err creating client");
+    .event_handler(handler)
+    .await
+    .expect("Err creating client");
 
   if let Err(why) = client.start().await {
-      println!("Client error: {why:?}");
+    println!("Client error: {why:?}");
   }
 }
 

@@ -48,13 +48,6 @@
                   "2024"
                 ];
               };
-              dotnet-format = {
-                command = "${pkgs.dotnetCorePackages.sdk_10_0-bin}/bin/dotnet";
-                options = [
-                  "format"
-                ];
-                includes = [ "*.csproj" ];
-              };
             };
           })).config.build;
       in
@@ -127,45 +120,47 @@
               '';
         };
 
-        packages.default = with pkgs; rustPlatform.buildRustPackage rec {
-          name = "nyra";
+        packages.default =
+          with pkgs;
+          rustPlatform.buildRustPackage rec {
+            name = "nyra";
 
-          src = ./.;
-          cargoHash = "sha256-a8yHnmNW/USJmE5/6Qu1e4R6qfAfVGsMFIWaEiv+6Jw=";
+            src = ./.;
+            cargoHash = "sha256-a8yHnmNW/USJmE5/6Qu1e4R6qfAfVGsMFIWaEiv+6Jw=";
 
-          nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
-            pkg-config
-            xorg.libxcb
-            xorg.xcbutil
-            libxkbcommon
-            libxkbcommon_8
-          ];
+            nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
+              pkg-config
+              xorg.libxcb
+              xorg.xcbutil
+              libxkbcommon
+              libxkbcommon_8
+            ];
 
-          buildInputs = [
-            libiconv
-          ];
+            buildInputs = [
+              libiconv
+            ];
 
-          runtimeLibs = nixpkgs.lib.optionals stdenv.isLinux [
-            expat
-            fontconfig
-            freetype
-            freetype.dev
-            libGL
-            pkg-config
-            xorg.libX11
-            xorg.libXcursor
-            xorg.libXi
-            xorg.libXrandr
-            wayland
-            libxkbcommon
-          ];
+            runtimeLibs = nixpkgs.lib.optionals stdenv.isLinux [
+              expat
+              fontconfig
+              freetype
+              freetype.dev
+              libGL
+              pkg-config
+              xorg.libX11
+              xorg.libXcursor
+              xorg.libXi
+              xorg.libXrandr
+              wayland
+              libxkbcommon
+            ];
 
-          LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
-          installPhase = ''
-            dotnet publish -o $out/bin
-            chmod +x $out/bin/nyra
-          '';
-        };
+            LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
+            installPhase = ''
+              dotnet publish -o $out/bin
+              chmod +x $out/bin/nyra
+            '';
+          };
 
         formatter = formatters.wrapper;
         checks.formatting = formatters.check self;
