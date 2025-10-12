@@ -10,7 +10,11 @@ mod mods;
 use {
   std::ffi::CString,
   std::os::raw::c_char,
-  sysinfo::{CpuExt, System, SystemExt},
+  sysinfo::{
+    CpuExt,
+    System,
+    SystemExt,
+  },
 };
 
 #[cfg(target_os = "windows")]

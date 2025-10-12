@@ -7,14 +7,34 @@
 
 mod theme;
 use {
-  gpui::{App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size},
+  gpui::{
+    App,
+    KeyBinding,
+    WindowBounds,
+    WindowOptions,
+    actions,
+    div,
+    point,
+    prelude::*,
+    px,
+    size,
+  },
   std::{
-    ffi::{CStr, CString},
+    ffi::{
+      CStr,
+      CString,
+    },
     os::raw::c_char,
-    sync::{Arc, Mutex},
+    sync::{
+      Arc,
+      Mutex,
+    },
     thread,
   },
-  theme::{Colors, Theme},
+  theme::{
+    Colors,
+    Theme,
+  },
 };
 
 #[derive(Default)]

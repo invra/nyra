@@ -1,6 +1,9 @@
 use {
-  serde::Deserialize, serenity::async_trait, serenity::model::channel::Message,
-  serenity::prelude::*, std::fs,
+  serde::Deserialize,
+  serenity::async_trait,
+  serenity::model::channel::Message,
+  serenity::prelude::*,
+  std::fs,
 };
 
 #[derive(Deserialize, Clone)]

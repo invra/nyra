@@ -7,7 +7,11 @@
 
 #[cfg(target_os = "linux")]
 pub fn get_distro_and_version() -> Result<Box<str>, Box<str>> {
-  use std::{collections::HashMap, fs::OpenOptions, io::Read};
+  use std::{
+    collections::HashMap,
+    fs::OpenOptions,
+    io::Read,
+  };
   let mut buf = String::new();
 
   _ = OpenOptions::new()
