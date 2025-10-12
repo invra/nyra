@@ -13,7 +13,7 @@ namespace Nyra.Gui {
     private static partial void InitGui(IntPtr config, IntPtr start_bot);
 
     public static unsafe void Start(string config = "") {
-      IntPtr configPtr = IntPtr.Zero;
+      IntPtr configPtr = Marshal.StringToCoTaskMemUTF8(string.Empty);
       if (!string.IsNullOrEmpty(config)) {
         configPtr = Marshal.StringToCoTaskMemUTF8(config);
       }

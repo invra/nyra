@@ -62,14 +62,24 @@
         devShells.default = pkgs.mkShell rec {
           meta.license = pkgs.lib.licenses.unlicense;
 
-          buildInputs = with pkgs; [
-            dotnetCorePackages.sdk_10_0-bin
-            csharp-language-server
-            rust-analyzer
-            clippy
-            cargo
-            rustc
-          ];
+          buildInputs =
+            with pkgs;
+            [
+              dotnetCorePackages.sdk_10_0-bin
+              csharp-language-server
+              rust-analyzer
+              clippy
+              cargo
+              rustc
+
+            ]
+            ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
+              pkg-config
+              xorg.libxcb
+              xorg.xcbutil
+              libxkbcommon
+              libxkbcommon_8
+            ];
 
           runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
             with pkgs;
@@ -79,12 +89,14 @@
               freetype
               freetype.dev
               libGL
-              pkg-config
-              xorg.libX11
-              xorg.libXcursor
-              xorg.libXi
-              xorg.libXrandr
               wayland
+              xorg.libXi
+              xorg.libX11
+              xorg.xcbutil
+              xorg.libXrandr
+              xorg.libXcursor
+              xorg.libxcb
+              xorg.xcbutil
               libxkbcommon
             ]
           );
@@ -127,12 +139,21 @@
           dotnet-sdk = pkgs.dotnetCorePackages.sdk_10_0-bin;
           dotnet-runtime = pkgs.dotnetCorePackages.runtime_10_0;
 
-          nativeBuildInputs = with pkgs; [
-            rustc
-            cargo
-            clang
-            pkg-config
-          ];
+          nativeBuildInputs =
+            with pkgs;
+            [
+              rustc
+              cargo
+              clang
+              pkg-config
+            ]
+            ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
+              pkg-config
+              xorg.libxcb
+              xorg.xcbutil
+              libxkbcommon
+              libxkbcommon_8
+            ];
 
           buildInputs = with pkgs; [
             libiconv

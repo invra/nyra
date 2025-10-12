@@ -7,9 +7,7 @@
 
 mod theme;
 use {
-  gpui::{
-    App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size,
-  },
+  gpui::{App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size},
   std::{
     ffi::{CStr, CString},
     os::raw::c_char,
@@ -21,12 +19,12 @@ use {
 
 #[derive(Default)]
 pub struct NyraGui {
-  config: Option<String>,
+  config: String,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 }
 
 impl NyraGui {
-  fn new(config: Option<String>, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
+  fn new(config: String, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
     Self {
       config,
       start_bot,
@@ -35,25 +33,27 @@ impl NyraGui {
   }
 
   fn start_bot(&self) {
-    if let Some(start_bot) = self.start_bot {
-      let config = self.config.clone();
-      thread::spawn(move || unsafe {
-        let config_ptr = match config {
-          Some(cfg) => CString::new(cfg)
-            .map(|c| c.into_raw())
-            .unwrap_or(std::ptr::null_mut()),
-          None => std::ptr::null_mut(),
-        };
-
-        start_bot(config_ptr);
-
-        if !config_ptr.is_null() {
-          let _ = CString::from_raw(config_ptr);
-        }
-      });
-    } else {
+    let Some(start_bot) = self.start_bot else {
       eprintln!("Error: start_bot function not provided");
-    }
+      return;
+    };
+
+    let config = self.config.clone();
+
+    thread::spawn(move || unsafe {
+      _ = CString::new(config)
+        .map(CString::into_raw)
+        .ok()
+        .map(|x| {
+          if x.is_null() {
+            CString::default().into_raw()
+          } else {
+            x
+          }
+        })
+        .inspect(|&x| start_bot(x))
+        .map(|x| CString::from_raw(x))
+    });
   }
 }
 
@@ -115,12 +115,15 @@ pub unsafe extern "C" fn init_gui(
   config: *const c_char,
   start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
 ) {
-  let config_str = (!config.is_null())
-    .then(|| unsafe { CStr::from_ptr(config) })
-    .and_then(|c| c.to_str().ok())
-    .map(String::from);
-
-  let gui = Arc::new(Mutex::new(NyraGui::new(config_str, start_bot)));
+  let gui = Arc::new(Mutex::new(NyraGui::new(
+    (!config.is_null())
+      .then(|| unsafe { CStr::from_ptr(config) })
+      .map(CStr::to_str)
+      .and_then(Result::ok)
+      .map(String::from)
+      .unwrap_or_default(),
+    start_bot,
+  )));
   let theme_colors = Colors::from_theme(Theme::RosePine);
 
   gpui::Application::new().run(move |cx: &mut App| {
@@ -130,8 +133,7 @@ pub unsafe extern "C" fn init_gui(
       WindowOptions {
         window_bounds: Some(bounds),
         titlebar: Some(gpui::TitlebarOptions {
-          title: None,
-
+          title: Some("Nyra".into()),
           appears_transparent: true,
           traffic_light_position: Some(point(px(12.0), px(9.0))),
         }),
