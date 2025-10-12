@@ -1,12 +1,13 @@
 /*  SPDX-License-Identifier: Unlicense
     Project: Nyra
-    File: WindowPlatform/src/lib.rs
+    File: WindowPlatform/mod.rs
     Authors: Invra
-    Notes: Entrypoint file for NyraGui
+    Notes: WindowPlatform GUI implementation
 */
 
 mod theme;
 use {
+  crate::bot_launcher::BotLauncher,
   gpui::{
     App,
     KeyBinding,
@@ -20,16 +21,11 @@ use {
     size,
   },
   std::{
-    ffi::{
-      CStr,
-      CString,
+    sync::Arc,
+    sync::atomic::{
+      AtomicBool,
+      Ordering,
     },
-    os::raw::c_char,
-    sync::{
-      Arc,
-      Mutex,
-    },
-    thread,
   },
   theme::{
     Colors,
@@ -37,49 +33,10 @@ use {
   },
 };
 
-#[derive(Default)]
-pub struct NyraGui {
-  config: String,
-  start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
-}
-
-impl NyraGui {
-  fn new(config: String, start_bot: Option<unsafe extern "C" fn(*mut c_char)>) -> Self {
-    Self {
-      config,
-      start_bot,
-      ..Default::default()
-    }
-  }
-
-  fn start_bot(&self) {
-    let Some(start_bot) = self.start_bot else {
-      eprintln!("Error: start_bot function not provided");
-      return;
-    };
-
-    let config = self.config.clone();
-
-    thread::spawn(move || unsafe {
-      _ = CString::new(config)
-        .map(CString::into_raw)
-        .ok()
-        .map(|x| {
-          if x.is_null() {
-            CString::default().into_raw()
-          } else {
-            x
-          }
-        })
-        .inspect(|&x| start_bot(x))
-        .map(|x| CString::from_raw(x))
-    });
-  }
-}
-
 struct NyraView {
-  gui: Arc<Mutex<NyraGui>>,
+  bot_launcher: Arc<BotLauncher>,
   colors: Colors,
+  is_running: Arc<AtomicBool>,
 }
 
 impl gpui::Render for NyraView {
@@ -88,6 +45,13 @@ impl gpui::Render for NyraView {
     _window: &mut gpui::Window,
     _cx: &mut gpui::Context<Self>,
   ) -> impl IntoElement {
+    let is_running = self.is_running.load(Ordering::Relaxed);
+    let button_text = if is_running {
+      "Bot Running..."
+    } else {
+      "Start Bot"
+    };
+
     div()
       .flex()
       .flex_col()
@@ -110,18 +74,46 @@ impl gpui::Render for NyraView {
         div().flex().flex_col().items_center().child(
           div()
             .id("start-bot")
-            .child("Start Bot")
-            .bg(self.colors.surface)
+            .child(button_text)
+            .bg(if is_running {
+              self.colors.overlay
+            } else {
+              self.colors.surface
+            })
             .text_color(self.colors.text)
             .p(px(8.))
             .border(px(1.))
             .rounded(px(4.))
             .mt_16()
             .cursor_pointer()
-            .hover(|style| style.bg(self.colors.overlay))
+            .hover(|style| {
+              if !is_running {
+                style.bg(self.colors.overlay)
+              } else {
+                style
+              }
+            })
             .on_click({
-              let gui = self.gui.clone();
-              move |_event, _cx, _| gui.lock().unwrap().start_bot()
+              let bot_launcher = self.bot_launcher.clone();
+              let is_running = self.is_running.clone();
+              move |_event, _cx, _| {
+                if !is_running.load(Ordering::Relaxed) {
+                  let bot_launcher = bot_launcher.clone();
+                  let is_running = is_running.clone();
+                  std::thread::spawn(move || {
+                    is_running.store(true, Ordering::Relaxed);
+                    crate::utils::info("Starting bot from GUI...");
+                    match tokio::runtime::Runtime::new() {
+                      Ok(rt) => {
+                        rt.block_on(bot_launcher.start_bot());
+                        crate::utils::info("Bot has stopped");
+                      }
+                      Err(e) => crate::utils::error(&format!("Failed to create runtime: {}", e)),
+                    }
+                    is_running.store(false, Ordering::Relaxed);
+                  });
+                }
+              }
             }),
         ),
       )
@@ -130,21 +122,9 @@ impl gpui::Render for NyraView {
 
 actions!(window, [Quit]);
 
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn init_gui(
-  config: *const c_char,
-  start_bot: Option<unsafe extern "C" fn(*mut c_char)>,
-) -> () {
-  let gui = Arc::new(Mutex::new(NyraGui::new(
-    (!config.is_null())
-      .then(|| unsafe { CStr::from_ptr(config) })
-      .map(CStr::to_str)
-      .and_then(Result::ok)
-      .map(String::from)
-      .unwrap_or_default(),
-    start_bot,
-  )));
+pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
   let theme_colors = Colors::from_theme(Theme::RosePine);
+  let is_running = Arc::new(AtomicBool::new(false));
 
   gpui::Application::new().run(move |cx: &mut App| {
     let bounds = WindowBounds::Windowed(gpui::Bounds::centered(None, size(px(400.), px(200.)), cx));
@@ -165,8 +145,9 @@ pub unsafe extern "C" fn init_gui(
       },
       move |_window, cx| {
         cx.new(move |_| NyraView {
-          gui: gui.clone(),
+          bot_launcher: bot_launcher.clone(),
           colors: theme_colors,
+          is_running: is_running.clone(),
         })
       },
     )
