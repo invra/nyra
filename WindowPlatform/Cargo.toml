@@ -4,6 +4,7 @@ libloading = "0.8.9"
 tokio = {version = "1", features = ["rt", "macros"]}
 
 [lib]
+name = "nyra_gui"
 crate-type = ["cdylib"]
 
 [package]
