@@ -35,11 +35,6 @@
     "hash": "sha256-gD880jEO0N+9TOXNqbvnzwxybn6ZFvzUVPfhx2DCfPc="
   },
   {
-    "pname": "Hardware.Info",
-    "version": "101.1.0",
-    "hash": "sha256-kVOIbxKjjt5BGGAC5x697DTDp3bhhtrnUTDZOqsWTCc="
-  },
-  {
     "pname": "Microsoft.Extensions.DependencyInjection",
     "version": "9.0.9",
     "hash": "sha256-UHG/uj9hjCRWmz2LZ4wR721ooZYGtBy4TT+lNeVzyrU="
