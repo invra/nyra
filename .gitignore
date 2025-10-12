@@ -30,6 +30,7 @@ target
 **/*.rs.bk
 
 # Editor related
+.vs/
 .idea/
 .vscode/
 *.session
