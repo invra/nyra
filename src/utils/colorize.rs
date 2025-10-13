@@ -5,8 +5,6 @@
     Notes: Custom colorizing functionality for Nyra logging
 */
 
-use super::Color;
-
 #[allow(dead_code)]
 pub struct ColoredString {
   text: String,
