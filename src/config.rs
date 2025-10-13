@@ -71,7 +71,7 @@ impl Config {
       return Err(ConfigError::FileNotFound(config_path.to_path_buf()));
     }
 
-    let fs_str = fs::read_to_string(&config_path).map_err(ConfigError::ReadError)?;
+    let fs_str = fs::read_to_string(config_path).map_err(ConfigError::ReadError)?;
 
     let config: Self = match toml::from_str(&fs_str) {
       Ok(config) => config,

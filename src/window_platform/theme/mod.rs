@@ -9,6 +9,7 @@
 
 use gpui::Rgba;
 
+#[allow(clippy::enum_variant_names)]
 pub enum Theme {
   RosePine,
   RosePineMoon,

@@ -47,7 +47,7 @@ impl BotLauncher {
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
         prefix_options: poise::PrefixFrameworkOptions {
-          prefix: Some(self.config.general.prefix.to_string().into()),
+          prefix: Some(self.config.general.prefix.to_string()),
           edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
             std::time::Duration::from_secs(3600),
           ))),
@@ -59,19 +59,18 @@ impl BotLauncher {
       })
       .setup(|ctx, ready, framework| {
         Box::pin(async move {
-          if ready.user.id.to_string().len() > 0 {
+          if !ready.user.id.to_string().is_empty() {
             utils::success("The bot has started");
           }
           utils::bot(&format!("Username is {}", ready.user.name));
           utils::bot(&format!("Id is {}", ready.user.id));
-          utils::bot(&format!(
-            "{}",
+          utils::bot(
             if ready.user.bot {
               "Is a bot"
             } else {
               "Is a user"
             }
-          ));
+          );
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           Ok(Data {})
         })
