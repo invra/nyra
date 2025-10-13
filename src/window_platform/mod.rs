@@ -121,7 +121,6 @@ impl gpui::Render for NyraView {
 }
 
 actions!(window, [Quit]);
-
 pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
   let theme_colors = Colors::from_theme(Theme::RosePine);
   let is_running = Arc::new(AtomicBool::new(false));
@@ -135,7 +134,7 @@ pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
         titlebar: Some(gpui::TitlebarOptions {
           title: Some("Nyra".into()),
           appears_transparent: true,
-          traffic_light_position: Some(point(px(12.0), px(9.0))),
+          traffic_light_position: Some(point(px(12.0), px(10.5))),
         }),
         window_min_size: Some(gpui::Size {
           width: px(360.0),
