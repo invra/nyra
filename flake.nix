@@ -60,8 +60,8 @@
             [
               rustc
               cargo
+              bacon
               clippy
-              cargo-watch
               pkg-config
               rust-analyzer
             ]
