@@ -123,7 +123,7 @@
             name = "nyra";
 
             src = ./.;
-            cargoHash = "sha256-/Ao89IxE6ei2HZqg9MiKl6pJwfLw6CnJqe1grOx/TV8=";
+            cargoHash = "sha256-1G7Cy7geM3W0xiB1g0lQPAGUbj2q1jb8Q9Fo+R4MdDs=";
 
             nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
               pkg-config
