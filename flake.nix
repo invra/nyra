@@ -61,6 +61,7 @@
               rustc
               cargo
               clippy
+              cargo-watch
               pkg-config
               rust-analyzer
             ]
