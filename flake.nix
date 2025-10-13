@@ -58,17 +58,20 @@
           buildInputs =
             with pkgs;
             [
-              rust-analyzer
-              clippy
-              cargo
               rustc
+              cargo
+              clippy
+              pkg-config
+              rust-analyzer
             ]
             ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
-              pkg-config
               xorg.libxcb
               xorg.xcbutil
               libxkbcommon
               libxkbcommon_8
+            ]
+            ++ nixpkgs.lib.optionals pkgs.stdenv.isDarwin [
+              apple-sdk_15
             ];
 
           runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
@@ -111,12 +114,6 @@
                   $COMMAND
                   exit
                 fi
-
-                # === macOS dev env adjustments ===
-                export METAL_TOOLCHAIN="XcodeDefault"
-                export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
-
-                echo "[INFO] macOS dev env configured: DEVELOPER_DIR=$DEVELOPER_DIR, SDKROOT=$SDKROOT"
               '';
         };
 
@@ -126,7 +123,7 @@
             name = "nyra";
 
             src = ./.;
-            cargoHash = "sha256-a8yHnmNW/USJmE5/6Qu1e4R6qfAfVGsMFIWaEiv+6Jw=";
+            cargoHash = "sha256-/Ao89IxE6ei2HZqg9MiKl6pJwfLw6CnJqe1grOx/TV8=";
 
             nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
               pkg-config
@@ -156,10 +153,6 @@
             ];
 
             LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
-            installPhase = ''
-              dotnet publish -o $out/bin
-              chmod +x $out/bin/nyra
-            '';
           };
 
         formatter = formatters.wrapper;
