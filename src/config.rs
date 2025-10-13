@@ -144,8 +144,4 @@ impl Config {
         .join("nyra.toml")
     }
   }
-
-  pub fn get_default_config_path() -> PathBuf {
-    Self::get_config_path()
-  }
 }

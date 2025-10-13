@@ -16,6 +16,7 @@ pub enum LogLevel {
   Debug,
 }
 
+#[allow(dead_code)]
 impl LogLevel {
   fn as_str(&self) -> &'static str {
     match self {
@@ -55,26 +56,32 @@ pub fn log(level: LogLevel, message: &str) {
   );
 }
 
+#[allow(dead_code)]
 pub fn info(message: &str) {
   log(LogLevel::Info, message);
 }
 
+#[allow(dead_code)]
 pub fn success(message: &str) {
   log(LogLevel::Success, message);
 }
 
+#[allow(dead_code)]
 pub fn warning(message: &str) {
   log(LogLevel::Warning, message);
 }
 
+#[allow(dead_code)]
 pub fn error(message: &str) {
   log(LogLevel::Error, message);
 }
 
+#[allow(dead_code)]
 pub fn bot(message: &str) {
   log(LogLevel::Bot, message);
 }
 
+#[allow(dead_code)]
 pub fn debug(message: &str) {
   log(LogLevel::Debug, message);
 }
