@@ -47,7 +47,7 @@ impl gpui::Render for NyraView {
   ) -> impl IntoElement {
     let is_running = self.is_running.load(Ordering::Relaxed);
     let button_text = if is_running {
-      "Bot Running..."
+      "Bot Running…"
     } else {
       "Start Bot"
     };
@@ -102,7 +102,7 @@ impl gpui::Render for NyraView {
                   let is_running = is_running.clone();
                   std::thread::spawn(move || {
                     is_running.store(true, Ordering::Relaxed);
-                    crate::utils::info("Starting bot from GUI...");
+                    crate::utils::info("Starting bot from GUI…");
                     match tokio::runtime::Runtime::new() {
                       Ok(rt) => {
                         rt.block_on(bot_launcher.start_bot());

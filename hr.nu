@@ -49,4 +49,4 @@ loop {
   print "reloaded"
 }
 
-print "Exiting..."
+print "Exiting…"

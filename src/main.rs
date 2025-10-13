@@ -59,12 +59,12 @@ async fn main() {
 
   if args.gui {
     // Start GUI mode which won't start the bot directly
-    crate::utils::info("Starting in GUI mode...");
+    crate::utils::info("Starting in GUI mode…");
     let bot_launcher = Arc::new(BotLauncher::new(config));
     init_gui(bot_launcher);
   } else {
     // Start bot directly
-    crate::utils::info("Starting in CLI mode...");
+    crate::utils::info("Starting in CLI mode…");
     let bot_launcher = BotLauncher::new(config);
     bot_launcher.start_bot().await;
   }

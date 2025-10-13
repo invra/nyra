@@ -41,7 +41,7 @@ impl BotLauncher {
       | serenity::GatewayIntents::DIRECT_MESSAGES
       | serenity::GatewayIntents::MESSAGE_CONTENT;
 
-    utils::bot("Starting bot...");
+    utils::bot("Starting bot…");
 
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
