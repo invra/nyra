@@ -7,7 +7,8 @@
 
 use {
   crate::utils,
-  poise::serenity_prelude as serenity, std::sync::Arc,
+  poise::serenity_prelude as serenity,
+  std::sync::Arc,
 };
 
 struct Data {}
@@ -47,7 +48,9 @@ impl BotLauncher {
       .options(poise::FrameworkOptions {
         prefix_options: poise::PrefixFrameworkOptions {
           prefix: Some(self.config.general.prefix.to_string().into()),
-          edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(std::time::Duration::from_secs(3600)))),
+          edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
+            std::time::Duration::from_secs(3600),
+          ))),
           case_insensitive_commands: true,
           ..Default::default()
         },
@@ -61,7 +64,14 @@ impl BotLauncher {
           }
           utils::bot(&format!("Username is {}", ready.user.name));
           utils::bot(&format!("Id is {}", ready.user.id));
-          utils::bot(&format!("Is a bot {}", ready.user.bot));
+          utils::bot(&format!(
+            "{}",
+            if ready.user.bot {
+              "Is a bot"
+            } else {
+              "Is a user"
+            }
+          ));
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           Ok(Data {})
         })
