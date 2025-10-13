@@ -1,11 +1,12 @@
 /*  SPDX-License-Identifier: Unlicense
     Project: Nyra
-    File: utils.rs
+    File: utils/mod.rs
     Authors: Invra
     Notes: Utility functions for Nyra
 */
 
-use colored::*;
+pub mod colorize;
+use colorize::{ColorExt, Color};
 
 pub enum LogLevel {
   Info,

@@ -1,0 +1,79 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: utils/colorize.rs
+    Authors: Invra
+    Notes: Custom colorizing functionality for Nyra logging
+*/
+
+use super::Color;
+
+#[allow(dead_code)]
+pub struct ColoredString {
+  text: String,
+  color: Option<&'static str>,
+  is_bold: bool,
+}
+
+#[allow(dead_code)]
+pub enum Color {
+  Cyan,
+  Green,
+  Yellow,
+  Red,
+  Magenta,
+  Blue,
+}
+
+#[allow(dead_code)]
+impl ColoredString {
+  fn new(text: String) -> Self {
+    ColoredString {
+      text,
+      color: None,
+      is_bold: false,
+    }
+  }
+
+  pub fn color(mut self, color: Color) -> Self {
+    self.color = Some(match color {
+      Color::Cyan => "\x1b[36m",
+      Color::Green => "\x1b[32m",
+      Color::Yellow => "\x1b[33m",
+      Color::Red => "\x1b[31m",
+      Color::Magenta => "\x1b[35m",
+      Color::Blue => "\x1b[34m",
+    });
+    self
+  }
+
+  pub fn bold(mut self) -> Self {
+    self.is_bold = true;
+    self
+  }
+}
+
+impl std::fmt::Display for ColoredString {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    let bold = if self.is_bold { "\x1b[1m" } else { "" };
+    let color = self.color.unwrap_or("");
+    let reset = "\x1b[0m";
+    write!(f, "{}{}{}{}", color, bold, self.text, reset)
+  }
+}
+
+#[allow(dead_code)]
+pub trait ColorExt {
+  fn color(self, color: Color) -> ColoredString;
+  fn bold(self) -> ColoredString;
+}
+
+#[allow(dead_code)]
+impl ColorExt for String {
+  fn color(self, color: Color) -> ColoredString {
+    ColoredString::new(self).color(color)
+  }
+
+  fn bold(self) -> ColoredString {
+    ColoredString::new(self).bold()
+  }
+}
