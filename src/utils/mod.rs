@@ -6,7 +6,10 @@
 */
 
 pub mod colorize;
-use colorize::{ColorExt, Color};
+use colorize::{
+  Color,
+  ColorExt,
+};
 
 pub enum LogLevel {
   Info,

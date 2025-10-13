@@ -14,7 +14,8 @@ use {
   serde::Deserialize,
   std::{
     fs,
-    path::PathBuf, str::FromStr,
+    path::PathBuf,
+    str::FromStr,
   },
 };
 
@@ -132,7 +133,9 @@ impl Config {
 
   pub fn get_config_path() -> PathBuf {
     if cfg!(unix) {
-      std::env::home_dir().unwrap().join(".config")
+      std::env::home_dir()
+        .unwrap()
+        .join(".config")
         .join("nyra")
         .join("nyra.toml")
     } else {
