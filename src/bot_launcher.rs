@@ -6,23 +6,14 @@
 */
 
 use {
-  crate::utils,
-  serde::Deserialize,
+  crate::{
+    config::Config,
+    utils,
+  },
   serenity::async_trait,
   serenity::model::channel::Message,
   serenity::prelude::*,
 };
-
-#[derive(Deserialize, Clone)]
-pub struct Config {
-  pub general: General,
-}
-
-#[derive(Deserialize, Clone)]
-pub struct General {
-  pub token: String,
-  pub prefix: String,
-}
 
 struct Handler {
   config: Config,
@@ -42,11 +33,11 @@ impl EventHandler for Handler {
 }
 
 pub struct BotLauncher {
-  config: Config,
+  config: crate::config::Config,
 }
 
 impl BotLauncher {
-  pub fn new(config: Config) -> Self {
+  pub fn new(config: crate::config::Config) -> Self {
     Self { config }
   }
 

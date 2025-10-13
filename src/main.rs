@@ -6,54 +6,59 @@
 */
 
 mod bot_launcher;
+mod config;
 mod utils;
 mod window_platform;
 
 use {
   crate::{
-    bot_launcher::{
-      BotLauncher,
-      Config,
-    },
+    bot_launcher::BotLauncher,
+    config::Config,
     window_platform::init_gui,
   },
   clap::Parser,
-  std::{
-    fs,
-    sync::Arc,
-  },
+  std::sync::Arc,
 };
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-  /// Start in GUI mode
   #[arg(short, long)]
   gui: bool,
+
+  #[arg(short, long)]
+  config: Option<String>,
 }
 
 #[tokio::main]
 async fn main() {
   let args = Args::parse();
-  let config_location = "/Users/invra/.config/nyra/nyra.toml";
-  let fs_str = match fs::read_to_string(config_location) {
-    Ok(str) => str,
-    Err(e) => {
-      crate::utils::error(&format!("Failed to read config file: {}", e));
-      return;
-    }
+
+  let config = match &args.config {
+    Some(path) => match Config::load_from_path(path) {
+      Ok(config) => {
+        crate::utils::success(&format!("Config loaded successfully from: {}", path));
+        config
+      }
+      Err(e) => {
+        crate::utils::error(&e.to_string());
+        return;
+      }
+    },
+    None => match Config::load() {
+      Ok(config) => {
+        crate::utils::success("Config loaded successfully");
+        config
+      }
+      Err(e) => {
+        crate::utils::error(&e.to_string());
+        return;
+      }
+    },
   };
-  let config: Config = match toml::from_str(&fs_str) {
-    Ok(config) => config,
-    Err(e) => {
-      crate::utils::error(&format!("Failed to parse config file: {}", e));
-      return;
-    }
-  };
-  crate::utils::success("Config loaded successfully");
 
   if args.gui {
-    // Start GUI mode
+    // Start GUI mode which won't start the bot directly
     crate::utils::info("Starting in GUI mode...");
     let bot_launcher = Arc::new(BotLauncher::new(config));
     init_gui(bot_launcher);
