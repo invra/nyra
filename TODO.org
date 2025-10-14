@@ -3,8 +3,11 @@
 ** Porting to Rust and getitng ready to merge
 
 *** Creating the new Command System
-    - [ ] Figure out a way to sort commands kinda like how it was done before
-    - [ ] Add a few commands to the new system to make sure it works
+    - [X] Figure out a way to sort commands kinda like how it was done before
+    - [X] Add a few commands to the new system to make sure it works
+    - [ ] Nest modules to dirs by category (i.e Moderation, Information)
+    - [ ] Sort tested commands
+    - [ ] Add some more for different category to make sure it works
     - [ ] Port all of src/Commands_old to the new system
 
 *** Finish up the GUI
