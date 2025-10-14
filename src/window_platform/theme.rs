@@ -1,6 +1,6 @@
 /*  SPDX-License-Identifier: Unlicense
     Project: Nyra
-    File: WindowPlatform/src/theme/mod.rs
+    File: window_platform/theme.rs
     Authors: Invra
     Notes: Theme system pretty much I guess
 */

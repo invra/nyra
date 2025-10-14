@@ -1,6 +1,6 @@
 /*  SPDX-License-Identifier: Unlicense
     Project: Nyra
-    File: WindowPlatform/mod.rs
+    File: window_platform/mod.rs
     Authors: Invra
     Notes: WindowPlatform GUI implementation
 */
