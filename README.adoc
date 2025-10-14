@@ -23,9 +23,8 @@ Before building Nyra, ensure you have read the setup:
 * link:./docs/setup/configuration.adoc[Configuring Nyra]
 
 === Development
-* link:./docs/development/terminal.adoc[Building on macOS, Linux, or the BSD's]
+* link:./docs/development/terminal.adoc[Building on macOS, Windows, Linux, or the BSD's]
 * link:./docs/development/mwvs.adoc[Building in Visual Studio on Windows]
-* link:./docs/development/wterminal.adoc[Building on Windows]
 
 ---
 
