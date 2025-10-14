@@ -29,11 +29,15 @@ async fn age(
 
 pub struct BotLauncher {
   config: crate::config::Config,
+  shard_manager: tokio::sync::RwLock<Option<Arc<serenity::ShardManager>>>,
 }
 
 impl BotLauncher {
   pub fn new(config: crate::config::Config) -> Self {
-    Self { config }
+    Self {
+      config,
+      shard_manager: tokio::sync::RwLock::new(None),
+    }
   }
 
   pub async fn start_bot(&self) {
@@ -59,27 +63,44 @@ impl BotLauncher {
       })
       .setup(|ctx, ready, framework| {
         Box::pin(async move {
-          if !ready.user.id.to_string().is_empty() {
-            utils::success("The bot has started");
-          }
+          utils::success("The bot has started");
           utils::bot(&format!("Username is {}", ready.user.name));
           utils::bot(&format!("Id is {}", ready.user.id));
-          utils::bot(
-            if ready.user.bot {
-              "Is a bot"
-            } else {
-              "Is a user"
-            }
-          );
+          utils::bot(if ready.user.bot {
+            "Is a bot"
+          } else {
+            "Is a user"
+          });
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           Ok(Data {})
         })
       })
       .build();
 
-    let client = serenity::ClientBuilder::new(token, intents)
+    let mut client = serenity::Client::builder(token, intents)
       .framework(framework)
-      .await;
-    client.unwrap().start().await.unwrap();
+      .await
+      .expect("Error creating client");
+
+    {
+      let mut lock = self.shard_manager.write().await;
+      *lock = Some(client.shard_manager.clone());
+    }
+
+    if let Err(e) = client.start().await {
+      utils::error(&format!("Client exited with error: {}", e));
+    }
+  }
+
+  #[allow(dead_code)]
+  pub async fn stop_bot(&self) {
+    let lock = self.shard_manager.read().await;
+    if let Some(manager) = &*lock {
+      utils::bot("Stopping bot gracefully…");
+      manager.shutdown_all().await;
+      utils::success("Bot has been stopped.");
+    } else {
+      utils::error("Cannot stop bot — shard manager not initialized.");
+    }
   }
 }
