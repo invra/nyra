@@ -8,33 +8,13 @@
 mod theme;
 use {
   crate::bot_launcher::BotLauncher,
-  gpui::{
-    App,
-    KeyBinding,
-    WindowBounds,
-    WindowOptions,
-    actions,
-    div,
-    point,
-    prelude::*,
-    px,
-    size,
-  },
-  std::{
-    sync::Arc,
-    sync::atomic::{
-      AtomicBool,
-      Ordering,
-    },
-  },
-  theme::{
-    Colors,
-    Theme,
-  },
+  gpui::{App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size},
+  std::sync::Arc,
+  std::sync::atomic::{AtomicBool, Ordering},
+  theme::{Colors, Theme},
 };
 
 struct NyraView {
-  bot_launcher: Arc<BotLauncher>,
   colors: Colors,
   is_running: Arc<AtomicBool>,
 }
@@ -94,21 +74,41 @@ impl gpui::Render for NyraView {
               }
             })
             .on_click({
-              let bot_launcher = self.bot_launcher.clone();
               let is_running = self.is_running.clone();
               move |_event, _cx, _| {
                 if !is_running.load(Ordering::Relaxed) {
-                  let bot_launcher = bot_launcher.clone();
                   let is_running = is_running.clone();
                   std::thread::spawn(move || {
                     is_running.store(true, Ordering::Relaxed);
                     crate::utils::info("Starting bot from GUI…");
+
                     match tokio::runtime::Runtime::new() {
                       Ok(rt) => {
-                        rt.block_on(bot_launcher.start_bot());
-                        crate::utils::info("Bot has stopped");
+                        rt.block_on(async {
+                          BotLauncher::start().await;
+                          crate::utils::info("Bot has stopped");
+                        });
                       }
-                      Err(e) => crate::utils::error(&format!("Failed to create runtime: {}", e)),
+                      Err(e) => {
+                        crate::utils::error(&format!("Failed to create runtime: {}", e));
+                      }
+                    }
+
+                    is_running.store(false, Ordering::Relaxed);
+                  });
+                } else {
+                  let is_running = is_running.clone();
+                  std::thread::spawn(move || {
+                    crate::utils::info("Stopping bot from GUI…");
+                    match tokio::runtime::Runtime::new() {
+                      Ok(rt) => {
+                        rt.block_on(async {
+                          BotLauncher::stop().await;
+                        });
+                      }
+                      Err(e) => {
+                        crate::utils::error(&format!("Failed to create runtime: {}", e));
+                      }
                     }
                     is_running.store(false, Ordering::Relaxed);
                   });
@@ -121,7 +121,8 @@ impl gpui::Render for NyraView {
 }
 
 actions!(window, [Quit]);
-pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
+
+pub fn init_gui() {
   let theme_colors = Colors::from_theme(Theme::RosePine);
   let is_running = Arc::new(AtomicBool::new(false));
 
@@ -144,13 +145,13 @@ pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
       },
       move |_window, cx| {
         cx.new(move |_| NyraView {
-          bot_launcher: bot_launcher.clone(),
           colors: theme_colors,
           is_running: is_running.clone(),
         })
       },
     )
     .unwrap();
+
     cx.on_action(|_: &Quit, cx| cx.quit());
     cx.bind_keys([KeyBinding::new("cmd-q", Quit, None)]);
   });

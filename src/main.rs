@@ -4,7 +4,9 @@
     Authors: Invra
     Notes: Main entry point for Nyra
 */
+
 mod bot_launcher;
+mod commands;
 mod config;
 mod utils;
 mod window_platform;
@@ -12,7 +14,6 @@ mod window_platform;
 use {
   crate::{bot_launcher::BotLauncher, config::Config, window_platform::init_gui},
   clap::Parser,
-  std::sync::Arc,
 };
 
 #[derive(Parser, Debug)]
@@ -36,17 +37,18 @@ async fn main() {
     .unwrap_or_else(Config::load)
     .inspect_err(|e| crate::utils::error(&e.to_string()))
   else {
-    return
+    return;
   };
 
   crate::utils::success("Config loaded successfully");
-  let bot_launcher = Arc::new(BotLauncher::new(config));
+
+  BotLauncher::init(config);
 
   if args.gui {
     crate::utils::info("Starting in GUI mode…");
-    init_gui(bot_launcher);
+    init_gui();
   } else {
     crate::utils::info("Starting in CLI mode…");
-    bot_launcher.start_bot().await;
+    BotLauncher::start().await;
   }
 }

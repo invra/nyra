@@ -2,49 +2,58 @@
     Project: Nyra
     File: bot_launcher.rs
     Authors: Invra
-    Notes: Bot launcher functionality
+    Notes: Main launching logic for the Discord bot
 */
 
-use {crate::utils, poise::serenity_prelude as serenity, std::sync::Arc};
+use {
+  crate::commands,
+  std::sync::{Arc, OnceLock},
+  tokio::sync::RwLock,
+};
 
-struct Data;
-
-type Error = Box<dyn std::error::Error + Send + Sync>;
-type Context<'a> = poise::Context<'a, Data, Error>;
-
-/// Returns the age of the user's account
-///
-/// If no user is provided, defaults to the author of the
-/// command
-#[poise::command(slash_command, prefix_command)]
-async fn age(
-  ctx: Context<'_>,
-  #[description = "Selected user"] user: Option<serenity::User>,
-) -> Result<(), Error> {
-  let u = user.as_ref().unwrap_or_else(|| ctx.author());
-  let response = format!("{}'s account was created at {}", u.name, u.created_at());
-  ctx.say(response).await?;
-  Ok(())
-}
-
+#[derive(Debug)]
 pub struct BotLauncher {
   config: crate::config::Config,
-  shard_manager: tokio::sync::RwLock<Option<Arc<serenity::ShardManager>>>,
+  shard_manager: RwLock<Option<Arc<poise::serenity_prelude::ShardManager>>>,
 }
 
+static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
+
 impl BotLauncher {
-  pub fn new(config: crate::config::Config) -> Self {
-    Self {
-      config,
-      shard_manager: tokio::sync::RwLock::new(None),
-    }
+  pub fn init(config: crate::config::Config) {
+    INSTANCE
+      .set(Arc::new(Self {
+        config,
+        shard_manager: RwLock::new(None),
+      }))
+      .expect("BotLauncher::init called more than once");
   }
 
-  pub async fn start_bot(&self) {
+  fn instance() -> Arc<BotLauncher> {
+    INSTANCE
+      .get()
+      .expect("BotLauncher not initialized — call BotLauncher::init() first")
+      .clone()
+  }
+
+  pub async fn start() {
+    let this = Self::instance();
+    this.start_bot().await;
+  }
+
+  pub async fn stop() {
+    let this = Self::instance();
+    this.stop_bot().await;
+  }
+
+  async fn start_bot(&self) {
+    use crate::utils;
+    use poise::serenity_prelude::{Client, GatewayIntents};
+
     let token = self.config.general.token.clone();
-    let intents = serenity::GatewayIntents::GUILD_MESSAGES
-      | serenity::GatewayIntents::DIRECT_MESSAGES
-      | serenity::GatewayIntents::MESSAGE_CONTENT;
+    let intents = GatewayIntents::GUILD_MESSAGES
+      | GatewayIntents::DIRECT_MESSAGES
+      | GatewayIntents::MESSAGE_CONTENT;
 
     utils::bot("Starting bot…");
 
@@ -58,7 +67,7 @@ impl BotLauncher {
           case_insensitive_commands: true,
           ..Default::default()
         },
-        commands: vec![age()],
+        commands: commands::all(),
         ..Default::default()
       })
       .setup(|ctx, ready, framework| {
@@ -66,18 +75,13 @@ impl BotLauncher {
           utils::success("The bot has started");
           utils::bot(&format!("Username: {}", ready.user.name));
           utils::bot(&format!("ID: {}", ready.user.id));
-          utils::bot(if ready.user.bot {
-            "Is a bot"
-          } else {
-            "Is a user"
-          });
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
-          Ok(Data {})
+          Ok(commands::Data {})
         })
       })
       .build();
 
-    let mut client = serenity::Client::builder(token, intents)
+    let mut client = Client::builder(token, intents)
       .framework(framework)
       .await
       .expect("Error creating client");
@@ -92,8 +96,9 @@ impl BotLauncher {
     }
   }
 
-  #[allow(dead_code)]
-  pub async fn stop_bot(&self) {
+  async fn stop_bot(&self) {
+    use crate::utils;
+
     let lock = self.shard_manager.read().await;
     if let Some(manager) = &*lock {
       utils::bot("Stopping bot gracefully…");
