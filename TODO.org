@@ -1,7 +1,13 @@
 * Todo List
 
-** Errors and warnings
+** Porting to Rust and getitng ready to merge
 
-   - [X] Fix warnings with warn CS8632.
-   - [X] Fix a warning with warn NETSDK1128.
-   - [X] Get the Nix derivation to build again
+*** Creating the new Command System
+    - [ ] Figure out a way to sort commands kinda like how it was done before
+    - [ ] Add a few commands to the new system to make sure it works
+    - [ ] Port all of src/Commands_old to the new system
+
+*** Finish up the GUI
+    - [ ] Add titlebar controls
+    - [ ] Add some menubar options
+    - [ ] Implement the Stop Bot button properly
