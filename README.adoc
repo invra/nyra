@@ -1,6 +1,6 @@
 = Nyra
 
-An open-source Discord bot built with Rust and *poise*.
+An open-source Discord bot built with *Rust* and *poise*.
 
 There is a GUI written GUI Zed Editor's *GPUI* framework
 
