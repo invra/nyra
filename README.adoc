@@ -1,6 +1,8 @@
 = Nyra
 
-An open-source Discord bot built with *Discord.Net*.
+An open-source Discord bot built with Rust and *poise*.
+
+There is a GUI written GUI Zed Editor's *GPUI* framework
 
 ---
 
@@ -8,8 +10,8 @@ An open-source Discord bot built with *Discord.Net*.
 
 This project exists for two main reasons:
 
-1. To refresh my C# skills after a ~5–6 year break on it.
-2. To evaluate whether C# is a language I’d enjoy working with again.
+1. So I can learn more stuff about Rust
+2. When it was written with C# and Rust, it was about Interop.
 
 ---
 
