@@ -2,13 +2,6 @@
 
 If the build fails, here are some common issues and solutions.
 
-=== Error: "The current .NET SDK does not support targeting .NET 10.0."
-
-This means your SDK version is out of date or the wrong `dotnet` binary is being used.  
-
-* Ensure .NET 10.0 is installed correctly.  
-* Check your `PATH` and make sure the .NET 10 binary is prioritized.  
-
 === Error: "No BOT_PREFIX variable found in the ENV" or "No DISCORD_TOKEN variable found in the ENV"
 
 These errors indicate Nyra cannot find required environment variables.  
