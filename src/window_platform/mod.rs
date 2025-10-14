@@ -61,9 +61,9 @@ impl gpui::Render for NyraView {
         div()
           .w_full()
           .window_control_area(gpui::WindowControlArea::Drag)
-          .h(px(35.0))
+          .h(px(33.0))
           .border_b_1()
-          .border_color(self.colors.overlay)
+          .border_color(self.colors.surface)
           .flex()
           .items_center()
           .justify_center()
@@ -134,7 +134,7 @@ pub fn init_gui(bot_launcher: Arc<BotLauncher>) {
         titlebar: Some(gpui::TitlebarOptions {
           title: Some("Nyra".into()),
           appears_transparent: true,
-          traffic_light_position: Some(point(px(12.0), px(10.5))),
+          traffic_light_position: Some(point(px(12.0), px(9.0))),
         }),
         window_min_size: Some(gpui::Size {
           width: px(360.0),
