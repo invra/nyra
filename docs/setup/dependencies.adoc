@@ -19,7 +19,6 @@ and then you will have everything.
 The list of prerequisites is:
 
 . link:https://rust-lang.org/tools/install/[The Rust Toolchain]
-. link:https://dotnet.microsoft.com/en-us/download/dotnet/10.0[.NET 10 (10.0.0-rc.1 or later)]
 . link:https://cmake.org/download/[CMake]
 . link:https://releases.llvm.org/download.html[CLang from the LLVM project.]
 
@@ -34,16 +33,3 @@ download Xcode then verify and make sure that the developer target is switched t
 sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 sudo xcodebuild -license accept
 ----
-
-=== Turning on stuff in Visual Studio (Windows only)
-
-. Open **Visual Studio 2022** (or newer)
-. Go to `Tools` > `Options`
-+
-image:../pics/tools.png[Tools,350]
-
-. Expand `Environment` > `Preview Features`
-. Enable **"Use previews of the .NET SDK"**
-. Click **OK** and restart Visual Studio
-+
-image:../pics/options.png[Options,500]
