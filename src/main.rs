@@ -4,18 +4,13 @@
     Authors: Invra
     Notes: Main entry point for Nyra
 */
-
 mod bot_launcher;
 mod config;
 mod utils;
 mod window_platform;
 
 use {
-  crate::{
-    bot_launcher::BotLauncher,
-    config::Config,
-    window_platform::init_gui,
-  },
+  crate::{bot_launcher::BotLauncher, config::Config, window_platform::init_gui},
   clap::Parser,
   std::sync::Arc,
 };
@@ -34,38 +29,24 @@ struct Args {
 async fn main() {
   let args = Args::parse();
 
-  let config = match &args.config {
-    Some(path) => match Config::load_from_path(path) {
-      Ok(config) => {
-        crate::utils::success(&format!("Config loaded successfully from: {}", path));
-        config
-      }
-      Err(e) => {
-        crate::utils::error(&e.to_string());
-        return;
-      }
-    },
-    None => match Config::load() {
-      Ok(config) => {
-        crate::utils::success("Config loaded successfully");
-        config
-      }
-      Err(e) => {
-        crate::utils::error(&e.to_string());
-        return;
-      }
-    },
+  let Ok(config) = args
+    .config
+    .as_ref()
+    .map(Config::load_from_path)
+    .unwrap_or_else(Config::load)
+    .inspect_err(|e| crate::utils::error(&e.to_string()))
+  else {
+    return
   };
 
+  crate::utils::success("Config loaded successfully");
+  let bot_launcher = Arc::new(BotLauncher::new(config));
+
   if args.gui {
-    // Start GUI mode which won't start the bot directly
     crate::utils::info("Starting in GUI mode…");
-    let bot_launcher = Arc::new(BotLauncher::new(config));
     init_gui(bot_launcher);
   } else {
-    // Start bot directly
     crate::utils::info("Starting in CLI mode…");
-    let bot_launcher = BotLauncher::new(config);
     bot_launcher.start_bot().await;
   }
 }

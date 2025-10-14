@@ -5,17 +5,17 @@
     Notes: Bot launcher functionality
 */
 
-use {
-  crate::utils,
-  poise::serenity_prelude as serenity,
-  std::sync::Arc,
-};
+use {crate::utils, poise::serenity_prelude as serenity, std::sync::Arc};
 
-struct Data {}
+struct Data;
 
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
 
+/// Returns the age of the user's account
+///
+/// If no user is provided, defaults to the author of the
+/// command
 #[poise::command(slash_command, prefix_command)]
 async fn age(
   ctx: Context<'_>,
@@ -64,8 +64,8 @@ impl BotLauncher {
       .setup(|ctx, ready, framework| {
         Box::pin(async move {
           utils::success("The bot has started");
-          utils::bot(&format!("Username is {}", ready.user.name));
-          utils::bot(&format!("Id is {}", ready.user.id));
+          utils::bot(&format!("Username: {}", ready.user.name));
+          utils::bot(&format!("ID: {}", ready.user.id));
           utils::bot(if ready.user.bot {
             "Is a bot"
           } else {

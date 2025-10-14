@@ -3760,6 +3760,7 @@ version = "1.0.0"
 dependencies = [
  "clap",
  "gpui",
+ "inventory",
  "poise",
  "serde",
  "tokio",

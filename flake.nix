@@ -12,6 +12,8 @@
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     csharp-ls.url = "github:invra/csharp-language-server";
+    naersk.url = "github:nix-community/naersk";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
   outputs =
@@ -20,6 +22,8 @@
       flake-utils,
       treefmt-nix,
       csharp-ls,
+      rust-overlay,
+      naersk,
       self,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -27,7 +31,7 @@
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ csharp-ls.overlays.default ];
+          overlays = [ csharp-ls.overlays.default (import rust-overlay) ];
         };
 
         formatters =
@@ -58,9 +62,8 @@
           buildInputs =
             with pkgs;
             [
-              rustc
-              cargo
               bacon
+              rust-bin.nightly.latest.default
               clippy
               pkg-config
               rust-analyzer

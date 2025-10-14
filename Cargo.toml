@@ -1,6 +1,7 @@
 [dependencies]
 clap = {version = "4.5.48", features = ["derive"]}
 gpui = "0.2.0"
+inventory = "0.3.21"
 poise = "0.6.1"
 serde = "1.0.228"
 tokio = {version = "1", features = ["rt", "macros", "rt-multi-thread", "sync"]}
