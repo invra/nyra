@@ -7,18 +7,18 @@
 nix develop
 ----
 
-. Restore dependencies:
+. Build the project (release mode):
 +
 [source,shell]
 ----
-dotnet restore
+cargo b -r
 ----
 
-. Run the project:
+. Run the project (release mode):
 +
 [source,shell]
 ----
-dotnet run
+cargo r -r
 ----
 
-The development environment will override your `PATH` and provide the correct .NET 10 SDK, so the build should succeed without extra configuration.
+To run in non-release mode (debug mode), remote the appended argument "-r" in the listed commands. 
