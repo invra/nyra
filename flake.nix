@@ -12,7 +12,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     csharp-ls.url = "github:invra/csharp-language-server";
-    naersk.url = "github:nix-community/naersk";
+    # naersk.url = "github:nix-community/naersk";
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
@@ -23,7 +23,7 @@
       treefmt-nix,
       csharp-ls,
       rust-overlay,
-      naersk,
+      # naersk,
       self,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -31,7 +31,10 @@
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ csharp-ls.overlays.default (import rust-overlay) ];
+          overlays = [
+            csharp-ls.overlays.default
+            (import rust-overlay)
+          ];
         };
 
         formatters =
@@ -127,7 +130,7 @@
             name = "nyra";
 
             src = ./.;
-            cargoHash = "sha256-dd3V/doJJeQrwFRrO4pvJlXd8WZ+KQf0tXgWvCPiR+s=";
+            cargoHash = "sha256-/uVxh1Pf0ZBzoXmmsGtfn22Z8vllaOV2fw6vNuC9qYI=";
 
             nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
               pkg-config
