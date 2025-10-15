@@ -5,10 +5,26 @@
     Notes: Crate for the commands!!!!
 */
 
-use poise::{
-  Command,
-  command,
-  serenity_prelude::User,
+use {
+  chrono::{
+    DateTime,
+    Utc,
+  },
+  poise::{
+    Command,
+    CreateReply,
+    command,
+    serenity_prelude::{
+      CreateMessage,
+      Timestamp,
+      User,
+      builder::{
+        CreateEmbed,
+        CreateEmbedAuthor,
+        CreateEmbedFooter,
+      },
+    },
+  },
 };
 
 #[derive(Debug)]
@@ -20,14 +36,30 @@ pub struct MyCommand(fn() -> Command<Data, Error>);
 
 inventory::collect!(MyCommand);
 
+/// Ping command
 #[command(prefix_command, slash_command)]
 pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
-  ctx.say("Pong! 🏓").await?;
+  let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
+
+  let reply = CreateReply::default().embed(
+    CreateEmbed::new()
+      .title("Gateway latency")
+      .field("Gateway Latency", format!("implement NOWWW",), false)
+      .footer(CreateEmbedFooter::new(format!(
+        "Test by {}",
+        ctx.author().name
+      )))
+      .timestamp(timestamp)
+      .color(0x3498db),
+  );
+
+  ctx.send(reply).await?;
 
   Ok(())
 }
 inventory::submit! { MyCommand(ping) }
 
+/// Gets user join date
 #[command(prefix_command, slash_command)]
 pub async fn age(
   ctx: Context<'_>,

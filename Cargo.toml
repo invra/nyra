@@ -1,4 +1,5 @@
 [dependencies]
+chrono = "0.4.42"
 clap = {version = "4.5.48", features = ["derive"]}
 gpui = "0.2.0"
 inventory = "0.3.21"
