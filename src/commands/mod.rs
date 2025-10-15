@@ -12,11 +12,11 @@ use {
   helper::{
     Data,
     Error,
+    MyCommand,
   },
   poise::Command,
 };
 
-pub(crate) struct MyCommand(fn() -> Command<Data, Error>);
 inventory::collect!(MyCommand);
 
 #[inline(always)]

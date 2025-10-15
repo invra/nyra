@@ -1,8 +1,5 @@
 use {
-  crate::commands::{
-    MyCommand,
-    helper::*,
-  },
+  crate::commands::helper::*,
   poise::{
     command,
     serenity_prelude::User,
