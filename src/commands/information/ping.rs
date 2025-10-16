@@ -22,7 +22,7 @@ use {
 };
 
 /// Ping command
-#[command(prefix_command, slash_command)]
+#[command(prefix_command, slash_command, category = "information")]
 pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
 

@@ -8,7 +8,7 @@
 use crate::commands::helper::*;
 
 /// Show this menu
-#[poise::command(prefix_command, track_edits, slash_command)]
+#[poise::command(prefix_command, track_edits, slash_command, category = "information")]
 pub async fn help(
   ctx: Context<'_>,
   #[description = "Specific command to show help about"] command: Option<String>,

@@ -14,7 +14,7 @@ use {
 };
 
 /// Gets user join date
-#[command(prefix_command, slash_command)]
+#[command(prefix_command, slash_command, category = "information")]
 pub async fn age(
   ctx: Context<'_>,
   #[description = "User to check"] user: Option<User>,
