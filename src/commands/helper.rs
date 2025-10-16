@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: commands/mod.rs
+    Authors: Invra
+    Notes: Commands helper crate
+*/
+
 use poise::Command;
 
 #[derive(Debug)]

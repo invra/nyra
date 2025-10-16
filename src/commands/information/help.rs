@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: commands/mod.rs
+    Authors: Invra
+    Notes: Help command crate
+*/
+
 use crate::commands::helper::*;
 
 /// Show this menu

@@ -1,3 +1,10 @@
+/*  SPDX-License-Identifier: Unlicense
+    Project: Nyra
+    File: commands/mod.rs
+    Authors: Invra
+    Notes: Age command crate
+*/
+
 use {
   crate::commands::helper::*,
   poise::{
