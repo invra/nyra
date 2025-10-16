@@ -12,7 +12,11 @@ mod utils;
 mod window_platform;
 
 use {
-  crate::{bot_launcher::BotLauncher, config::Config, window_platform::init_gui},
+  crate::{
+    bot_launcher::BotLauncher,
+    config::Config,
+    window_platform::init_gui,
+  },
   clap::Parser,
 };
 
