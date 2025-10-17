@@ -8,10 +8,27 @@
 mod theme;
 use {
   crate::bot_launcher::BotLauncher,
-  gpui::{App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size},
+  gpui::{
+    App,
+    KeyBinding,
+    WindowBounds,
+    WindowOptions,
+    actions,
+    div,
+    point,
+    prelude::*,
+    px,
+    size,
+  },
   std::sync::Arc,
-  std::sync::atomic::{AtomicBool, Ordering},
-  theme::{Colors, Theme},
+  std::sync::atomic::{
+    AtomicBool,
+    Ordering,
+  },
+  theme::{
+    Colors,
+    Theme,
+  },
 };
 
 struct NyraView {
@@ -26,11 +43,7 @@ impl gpui::Render for NyraView {
     _cx: &mut gpui::Context<Self>,
   ) -> impl IntoElement {
     let is_running = self.is_running.load(Ordering::Relaxed);
-    let button_text = if is_running {
-      "Bot Running…"
-    } else {
-      "Start Bot"
-    };
+    let button_text = if is_running { "Stop Bot" } else { "Start Bot" };
 
     div()
       .flex()
@@ -53,26 +66,16 @@ impl gpui::Render for NyraView {
       .child(
         div().flex().flex_col().items_center().child(
           div()
-            .id("start-bot")
+            .id("bot-state")
             .child(button_text)
-            .bg(if is_running {
-              self.colors.overlay
-            } else {
-              self.colors.surface
-            })
+            .bg(self.colors.surface)
             .text_color(self.colors.text)
             .p(px(8.))
             .border(px(1.))
             .rounded(px(4.))
             .mt_16()
             .cursor_pointer()
-            .hover(|style| {
-              if !is_running {
-                style.bg(self.colors.overlay)
-              } else {
-                style
-              }
-            })
+            .hover(|style| style.bg(self.colors.overlay))
             .on_click({
               let is_running = self.is_running.clone();
               move |_event, _cx, _| {

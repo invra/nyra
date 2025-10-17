@@ -5,4 +5,4 @@
 *** Finish up the GUI
     - [ ] Add titlebar controls
     - [ ] Add some menubar options
-    - [ ] Implement the Stop Bot button properly
+    - [X] Implement the Stop Bot button properly
