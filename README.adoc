@@ -2,8 +2,6 @@
 
 An open-source Discord bot built with *Rust* and *poise*.
 
-There is a GUI written GUI Zed Editor's *GPUI* framework
-
 ---
 
 == Why Nyra?
@@ -11,7 +9,7 @@ There is a GUI written GUI Zed Editor's *GPUI* framework
 This project exists for two main reasons:
 
 1. So I can learn more stuff about Rust
-2. When it was written with C# and Rust, it was about Interop.
+2. When the bot was written with both C# and Rust, I used this to learn FFI and general interop
 
 ---
 
