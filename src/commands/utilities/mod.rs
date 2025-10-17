@@ -5,6 +5,4 @@
     Notes: Information commands crate
 */
 
-pub mod age;
-pub mod help;
-pub mod host;
+pub mod ping;

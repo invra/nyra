@@ -6,16 +6,28 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  chrono::{DateTime, Utc},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  chrono::{
+    DateTime,
+    Utc,
+  },
   poise::{
-    CreateReply, command,
-    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
+    CreateReply,
+    command,
+    serenity_prelude::{
+      Colour,
+      CreateEmbed,
+      CreateEmbedFooter,
+    },
   },
 };
 
 /// Ping command
-#[command(prefix_command, slash_command, category = "information")]
+#[command(prefix_command, slash_command, category = "Utilities")]
 pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
   let ping_time = ctx.ping().await;
