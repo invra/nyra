@@ -200,3 +200,10 @@ fn get_os_name() -> Box<str> {
 
   result.unwrap_or_else(|_| "Unknown Windows".into()).into()
 }
+
+#[cfg(not(target_os = "macos"))]
+#[cfg(not(target_os = "linux"))]
+#[cfg(not(target_os = "windows"))]
+fn get_os_name() -> Box<str> {
+  "Unknown OS".into()
+}
