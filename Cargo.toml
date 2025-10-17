@@ -6,6 +6,7 @@ inventory = "0.3.21"
 once_cell = "1.21.3"
 os_info = "3.12.0"
 poise = "0.6.1"
+regex = "1.12.2"
 serde = "1.0.228"
 sysinfo = "0.37.2"
 tokio = {version = "1", features = ["rt", "macros", "rt-multi-thread", "sync"]}
@@ -21,4 +22,4 @@ gpui = {version = "0.2.0", features = ["runtime_shaders"]}
 
 [target.'cfg(target_os = "windows")'.dependencies]
 systemd_info = "1.0.0"
-winver = "1"
+wmi = "0.17.3"

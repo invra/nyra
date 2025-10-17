@@ -123,7 +123,7 @@ fn get_os_name() -> String {
       _ => "Unknown",
     };
 
-    format!("macOS {}", codename)
+    return format!("macOS {}", codename);
   }
 
   #[cfg(target_os = "linux")]
@@ -152,13 +152,54 @@ fn get_os_name() -> String {
       .map(|s| s.trim_matches('"'))
       .unwrap_or("Unknown Linux");
 
-    pretty.to_string()
+    return pretty.to_string();
   }
 
   #[cfg(target_os = "windows")]
   {
-    use winver::WindowsVersion;
+    use {
+      regex::Regex,
+      serde::Deserialize,
+      wmi::{
+        COMLibrary,
+        WMIConnection,
+      },
+    };
 
-    WindowsVersion::detect().unwrap().to_string()
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    #[derive(Deserialize)]
+    struct Win32_OperatingSystem {
+      Caption: Option<String>,
+    }
+
+    let result = (|| -> Result<String, Box<dyn std::error::Error>> {
+      let com_con = COMLibrary::new()?;
+      let wmi_con = WMIConnection::new(com_con.into())?;
+
+      let reg = Regex::new(r"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?")?;
+      let results: Vec<Win32_OperatingSystem> =
+        wmi_con.raw_query("SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem")?;
+
+      if let Some(os) = results.first() {
+        let caption = os.Caption.as_deref().unwrap_or("Unknown Windows");
+        let os_string = if let Some(caps) = reg.captures(caption) {
+          caps
+            .get(0)
+            .map(|m| m.as_str().to_string())
+            .unwrap_or(caption.to_string())
+        } else {
+          caption.to_string()
+        };
+        Ok(os_string)
+      } else {
+        Ok("Unknown Windows".to_string())
+      }
+    })();
+
+    return result.unwrap_or_else(|_| "Unknown Windows".to_string());
   }
+
+  #[allow(unreachable_code)]
+  "Unknown OS".to_string()
 }
