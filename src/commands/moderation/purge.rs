@@ -1,9 +1,5 @@
 use {
-  crate::commands::helper::{
-    Context,
-    Error,
-    MyCommand,
-  },
+  crate::commands::helper::{Context, Error, MyCommand},
   poise::CreateReply,
   poise::command,
 };
