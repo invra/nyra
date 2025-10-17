@@ -6,11 +6,23 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  chrono::{DateTime, Utc},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  chrono::{
+    DateTime,
+    Utc,
+  },
   poise::{
-    CreateReply, command,
-    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
+    CreateReply,
+    command,
+    serenity_prelude::{
+      Colour,
+      CreateEmbed,
+      CreateEmbedFooter,
+    },
   },
   sysinfo::System,
 };
@@ -60,7 +72,10 @@ fn get_cpu_model(sys: &System) -> Box<str> {
 fn get_cpu_model(_: &System) -> Box<str> {
   use {
     serde::Deserialize,
-    wmi::{COMLibrary, WMIConnection},
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
   };
 
   #[allow(non_camel_case_types)]
@@ -101,8 +116,18 @@ fn get_mem_used_gb(sys: &System) -> f64 {
 
 #[cfg(target_os = "macos")]
 fn get_os_name() -> Box<str> {
-  let info = os_info::get();
-  let version = info.version().to_string();
+  use serde::Deserialize;
+
+  #[derive(Deserialize)]
+  #[serde(rename_all = "PascalCase")]
+  struct SystemVersion {
+    product_version: String,
+  }
+
+  let reader: SystemVersion = plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
+    .expect("Cannot read SystemVersion.plist");
+
+  let version = reader.product_version;
   let mut parts = version.split('.');
   let major = parts
     .next()
@@ -149,7 +174,11 @@ fn get_os_name() -> Box<str> {
 
 #[cfg(target_os = "linux")]
 fn get_os_name() -> Box<str> {
-  use std::{collections::HashMap, fs::File, io::Read};
+  use std::{
+    collections::HashMap,
+    fs::File,
+    io::Read,
+  };
 
   let mut buf = String::new();
   if File::open("/etc/os-release")
@@ -177,7 +206,10 @@ fn get_os_name() -> Box<str> {
   use {
     regex::Regex,
     serde::Deserialize,
-    wmi::{COMLibrary, WMIConnection},
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
   };
 
   #[allow(non_camel_case_types)]
