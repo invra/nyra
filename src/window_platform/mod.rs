@@ -8,27 +8,10 @@
 mod theme;
 use {
   crate::bot_launcher::BotLauncher,
-  gpui::{
-    App,
-    KeyBinding,
-    WindowBounds,
-    WindowOptions,
-    actions,
-    div,
-    point,
-    prelude::*,
-    px,
-    size,
-  },
+  gpui::{App, KeyBinding, WindowBounds, WindowOptions, actions, div, point, prelude::*, px, size},
   std::sync::Arc,
-  std::sync::atomic::{
-    AtomicBool,
-    Ordering,
-  },
-  theme::{
-    Colors,
-    Theme,
-  },
+  std::sync::atomic::{AtomicBool, Ordering},
+  theme::{Colors, Theme},
 };
 
 struct NyraView {

@@ -6,23 +6,11 @@
 */
 
 use {
-  crate::commands::helper::{
-    Context,
-    Error,
-    MyCommand,
-  },
-  chrono::{
-    DateTime,
-    Utc,
-  },
+  crate::commands::helper::{Context, Error, MyCommand},
+  chrono::{DateTime, Utc},
   poise::{
-    CreateReply,
-    command,
-    serenity_prelude::{
-      Colour,
-      CreateEmbed,
-      CreateEmbedFooter,
-    },
+    CreateReply, command,
+    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
   },
   sysinfo::System,
 };
@@ -72,10 +60,7 @@ fn get_cpu_model(sys: &System) -> Box<str> {
 fn get_cpu_model(_: &System) -> Box<str> {
   use {
     serde::Deserialize,
-    wmi::{
-      COMLibrary,
-      WMIConnection,
-    },
+    wmi::{COMLibrary, WMIConnection},
   };
 
   #[allow(non_camel_case_types)]
@@ -164,11 +149,7 @@ fn get_os_name() -> Box<str> {
 
 #[cfg(target_os = "linux")]
 fn get_os_name() -> Box<str> {
-  use std::{
-    collections::HashMap,
-    fs::File,
-    io::Read,
-  };
+  use std::{collections::HashMap, fs::File, io::Read};
 
   let mut buf = String::new();
   if File::open("/etc/os-release")
@@ -196,10 +177,7 @@ fn get_os_name() -> Box<str> {
   use {
     regex::Regex,
     serde::Deserialize,
-    wmi::{
-      COMLibrary,
-      WMIConnection,
-    },
+    wmi::{COMLibrary, WMIConnection},
   };
 
   #[allow(non_camel_case_types)]
