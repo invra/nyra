@@ -49,8 +49,8 @@
             settings.formatter = {
               rustfmt = {
                 options = [
-                  "--config"
-                  "condense_wildcard_suffixes=true,tab_spaces=2,imports_layout=vertical"
+                  "--config-path"
+                  "${./.rustfmt.toml}"
                   "--style-edition"
                   "2024"
                 ];

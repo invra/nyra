@@ -16,3 +16,6 @@ edition = "2024"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 gpui = {version = "0.2.0", features = ["runtime_shaders"]}
+
+[target.'cfg(target_os = "windows")'.dependencies]
+systemd_info = "1.0.0"

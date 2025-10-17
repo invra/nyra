@@ -3767,6 +3767,7 @@ dependencies = [
  "once_cell",
  "poise",
  "serde",
+ "systemd_info",
  "tokio",
  "toml 0.9.8",
 ]
@@ -5833,6 +5834,15 @@ dependencies = [
  "pkg-config",
  "toml 0.8.23",
  "version-compare",
+]
+
+[[package]]
+name = "systemd_info"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "92524795daf81ac49bb0d8e94222f52fafa9621772cc8af3ad79dd7a7086410e"
+dependencies = [
+ "regex",
 ]
 
 [[package]]

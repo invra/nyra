@@ -12,11 +12,7 @@
 use {
   crate::utils,
   serde::Deserialize,
-  std::{
-    fs,
-    path::PathBuf,
-    str::FromStr,
-  },
+  std::{fs, path::PathBuf, str::FromStr},
 };
 
 #[derive(Debug)]

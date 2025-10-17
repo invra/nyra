@@ -6,16 +6,9 @@
 */
 
 use {
-  crate::commands::helper::{
-    Context,
-    Error,
-    MyCommand,
-  },
+  crate::commands::helper::{Context, Error, MyCommand},
   poise::{
-    builtins::{
-      self,
-      HelpConfiguration,
-    },
+    builtins::{self, HelpConfiguration},
     command,
   },
 };
