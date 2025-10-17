@@ -7,6 +7,7 @@
 
 pub(crate) mod helper;
 pub(crate) mod information;
+pub(crate) mod moderation;
 
 use {
   crate::commands::helper::{
