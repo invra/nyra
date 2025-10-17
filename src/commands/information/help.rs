@@ -1,8 +1,8 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: commands/mod.rs
-    Authors: Invra
-    Notes: Help command crate
+/*
+  SPDX-License-Identifier: Unlicense
+  Project: Nyra
+  File: commands/information/help.rs
+  Authors: Invra, Hiten-Tandon
 */
 
 use crate::commands::helper::*;
@@ -13,11 +13,9 @@ pub async fn help(
   ctx: Context<'_>,
   #[description = "Specific command to show help about"] command: Option<String>,
 ) -> Result<(), Error> {
-  let config = poise::builtins::HelpConfiguration {
-    ..Default::default()
-  };
+  let config = poise::builtins::HelpConfiguration::default();
   poise::builtins::help(ctx, command.as_deref(), config)
     .await
     .map_err(Into::into)
 }
-inventory::submit! { MyCommand(|| help()) }
+inventory::submit! { MyCommand(help) }

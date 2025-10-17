@@ -8,18 +8,11 @@
 pub(crate) mod helper;
 pub(crate) mod information;
 
-use {
-  helper::{
-    Data,
-    Error,
-    MyCommand,
-  },
-  poise::Command,
-};
+use helper::*;
 
 inventory::collect!(MyCommand);
 
 #[inline(always)]
-pub fn all() -> Vec<Command<Data, Error>> {
+pub fn all() -> Vec<poise::Command<Data, Error>> {
   inventory::iter::<MyCommand>().map(|x| (x.0)()).collect()
 }

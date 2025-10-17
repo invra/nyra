@@ -1,8 +1,8 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: commands/mod.rs
-    Authors: Invra
-    Notes: Age command crate
+/*
+  SPDX-License-Identifier: Unlicense
+  Project: Nyra
+  File: commands/information/age.rs
+  Authors: Invra, Hiten-Tandon
 */
 
 use {
@@ -26,4 +26,4 @@ pub async fn age(
 
   Ok(())
 }
-inventory::submit! { MyCommand(|| age()) }
+inventory::submit! { MyCommand(age) }

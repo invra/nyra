@@ -1,8 +1,8 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: commands/mod.rs
-    Authors: Invra
-    Notes: Ping command crate
+/*
+  SPDX-License-Identifier: Unlicense
+  Project: Nyra
+  File: commands/information/ping.rs
+  Authors: Invra, Hiten-Tandon
 */
 
 use {
@@ -25,12 +25,18 @@ use {
 #[command(prefix_command, slash_command, category = "information")]
 pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
+  let ping_time = ctx.ping().await;
 
-  #[allow(clippy::useless_format)]
+  let result = if ping_time.is_zero() {
+    "Unavailable".into()
+  } else {
+    format!("{:#.0?}", ping_time)
+  };
+
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
       .title("Gateway latency")
-      .field("Gateway Latency", format!("implement NOWWW",), false)
+      .field("Gateway Latency", result, false)
       .footer(CreateEmbedFooter::new(format!(
         "Test by {}",
         ctx.author().name
@@ -43,4 +49,5 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
 
   Ok(())
 }
-inventory::submit! { MyCommand(|| ping()) }
+
+inventory::submit! { MyCommand(ping) }
