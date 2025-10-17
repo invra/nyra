@@ -26,7 +26,8 @@ The list of prerequisites is:
 
 Since the window framework is the same as Zed-editor (GPUI) you will need Xcode with
 MetalPlatform. The Metal platform is **NOT** preinstalled with Xcode 26. Use the app-store to
-download Xcode then verify and make sure that the developer target is switched to the Xcode one by doing:
+download Xcode then verify and make sure that the developer target is switched to the Xcode
+toolchain by doing:
 
 [source, shell]
 ----
