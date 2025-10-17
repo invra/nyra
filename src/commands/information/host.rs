@@ -215,7 +215,7 @@ fn get_os_name() -> Box<str> {
 
     let reg = Regex::new(r"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?")?;
     let results: Vec<Win32_OperatingSystem> =
-      wmi_con.raw_query("SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem")?;
+      wmi_con.raw_query("SELECT Caption FROM Win32_OperatingSystem")?;
 
     if let Some(os) = results.first() {
       let caption = os.Caption.as_deref().unwrap_or("Unknown Windows");
