@@ -69,7 +69,7 @@ fn get_cpu_model(sys: &System) -> Box<str> {
 }
 
 #[cfg(target_os = "windows")]
-fn get_cpu_model() -> Box<str> {
+fn get_cpu_model(_: &System) -> Box<str> {
   use {
     serde::Deserialize,
     wmi::{
