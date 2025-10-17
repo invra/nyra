@@ -8,7 +8,7 @@
     - [X] Nest modules to dirs by category (i.e Moderation, Information)
     - [X] Sort tested commands
     - [X] Add some more for different category to make sure it works
-    - [ ] Port all of src/Commands_old to the new system
+    - [X] Port all of src/Commands_old to the new system
 
 *** Finish up the GUI
     - [ ] Add titlebar controls
