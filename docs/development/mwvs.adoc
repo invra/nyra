@@ -1,6 +1,0 @@
-= Building Nyra for Windows in Visual Studio
-
-. Open the solution file: link:../../nyra.slnx[`nyra.slnx`]
-. Click the **Run** button in Visual Studio
-
-This will compile and launch Nyra. If everything is set up correctly, the bot should start without issues.
