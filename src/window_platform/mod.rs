@@ -83,7 +83,6 @@ impl gpui::Render for NyraView {
                   let is_running = is_running.clone();
                   std::thread::spawn(move || {
                     is_running.store(true, Ordering::Relaxed);
-                    crate::utils::info("Starting bot from GUI…");
 
                     match tokio::runtime::Runtime::new() {
                       Ok(rt) => {
@@ -102,7 +101,6 @@ impl gpui::Render for NyraView {
                 } else {
                   let is_running = is_running.clone();
                   std::thread::spawn(move || {
-                    crate::utils::info("Stopping bot from GUI…");
                     match tokio::runtime::Runtime::new() {
                       Ok(rt) => {
                         rt.block_on(async {
