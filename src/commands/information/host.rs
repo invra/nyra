@@ -79,22 +79,23 @@ fn get_mem_used_gb(sys: &System) -> f64 {
   sys.used_memory() as f64 / 1024.0_f64.powi(3)
 }
 
-fn get_os_name() -> String {
-  #[cfg(target_os = "macos")]
-  {
-    let info = os_info::get();
-    let version = info.version().to_string();
-    let mut parts = version.split('.');
-    let major = parts
-      .next()
-      .and_then(|s| s.parse::<u32>().ok())
-      .unwrap_or(0);
-    let minor = parts
-      .next()
-      .and_then(|s| s.parse::<u32>().ok())
-      .unwrap_or(0);
+#[cfg(target_os = "macos")]
+fn get_os_name() -> Box<str> {
+  let info = os_info::get();
+  let version = info.version().to_string();
+  let mut parts = version.split('.');
+  let major = parts
+    .next()
+    .and_then(|s| s.parse::<u32>().ok())
+    .unwrap_or(0);
+  let minor = parts
+    .next()
+    .and_then(|s| s.parse::<u32>().ok())
+    .unwrap_or(0);
 
-    let codename = match major {
+  format!(
+    "macOS {}",
+    match major {
       10 => match minor {
         0 => "Cheetah",
         1 => "Puma",
@@ -121,85 +122,81 @@ fn get_os_name() -> String {
       15 => "Sequoia",
       16 | 26 => "Tahoe",
       _ => "Unknown",
-    };
+    }
+  )
+  .into()
+}
 
-    return format!("macOS {}", codename);
+#[cfg(target_os = "linux")]
+fn get_os_name() -> Box<str> {
+  use std::{
+    collections::HashMap,
+    fs::File,
+    io::Read,
+  };
+
+  let mut buf = String::new();
+  if File::open("/etc/os-release")
+    .and_then(|mut f| f.read_to_string(&mut buf))
+    .is_err()
+  {
+    return "Unknown Linux".into();
   }
 
-  #[cfg(target_os = "linux")]
-  {
-    use std::{
-      collections::HashMap,
-      fs::File,
-      io::Read,
-    };
+  let os_data = buf
+    .lines()
+    .filter_map(|x| x.split_once('='))
+    .collect::<HashMap<_, _>>();
 
-    let mut buf = String::new();
-    if File::open("/etc/os-release")
-      .and_then(|mut f| f.read_to_string(&mut buf))
-      .is_err()
-    {
-      return "Unknown Linux".to_string();
-    }
+  let pretty = os_data
+    .get("PRETTY_NAME")
+    .map(|s| s.trim_matches('"'))
+    .unwrap_or("Unknown Linux");
 
-    let os_data = buf
-      .lines()
-      .filter_map(|x| x.split_once('='))
-      .collect::<HashMap<_, _>>();
+  pretty.into()
+}
 
-    let pretty = os_data
-      .get("PRETTY_NAME")
-      .map(|s| s.trim_matches('"'))
-      .unwrap_or("Unknown Linux");
+#[cfg(target_os = "windows")]
+fn get_os_name() -> Box<str> {
+  use {
+    regex::Regex,
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
 
-    return pretty.to_string();
+  #[allow(non_camel_case_types)]
+  #[allow(non_snake_case)]
+  #[derive(Deserialize)]
+  struct Win32_OperatingSystem {
+    Caption: Option<String>,
   }
 
-  #[cfg(target_os = "windows")]
-  {
-    use {
-      regex::Regex,
-      serde::Deserialize,
-      wmi::{
-        COMLibrary,
-        WMIConnection,
-      },
-    };
+  let result = (|| -> Result<String, Box<dyn std::error::Error>> {
+    let com_con = COMLibrary::new()?;
+    let wmi_con = WMIConnection::new(com_con.into())?;
 
-    #[allow(non_camel_case_types)]
-    #[allow(non_snake_case)]
-    #[derive(Deserialize)]
-    struct Win32_OperatingSystem {
-      Caption: Option<String>,
-    }
+    let reg = Regex::new(r"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?")?;
+    let results: Vec<Win32_OperatingSystem> =
+      wmi_con.raw_query("SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem")?;
 
-    let result = (|| -> Result<String, Box<dyn std::error::Error>> {
-      let com_con = COMLibrary::new()?;
-      let wmi_con = WMIConnection::new(com_con.into())?;
-
-      let reg = Regex::new(r"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?")?;
-      let results: Vec<Win32_OperatingSystem> =
-        wmi_con.raw_query("SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem")?;
-
-      if let Some(os) = results.first() {
-        let caption = os.Caption.as_deref().unwrap_or("Unknown Windows");
-        let os_string = if let Some(caps) = reg.captures(caption) {
-          caps
-            .get(0)
-            .map(|m| m.as_str().to_string())
-            .unwrap_or(caption.to_string())
-        } else {
-          caption.to_string()
-        };
-        Ok(os_string)
+    if let Some(os) = results.first() {
+      let caption = os.Caption.as_deref().unwrap_or("Unknown Windows");
+      let os_string = if let Some(caps) = reg.captures(caption) {
+        caps
+          .get(0)
+          .map(|m| m.as_str().to_string())
+          .unwrap_or(caption.to_string())
       } else {
-        Ok("Unknown Windows".to_string())
-      }
-    })();
+        caption.to_string()
+      };
+      Ok(os_string)
+    } else {
+      Ok("Unknown Windows".to_string())
+    }
+  })();
 
-    return result.unwrap_or_else(|_| "Unknown Windows".to_string());
-  }
-
-  #[allow(unreachable_code)]
-  "Unknown OS".to_string()
+  result.unwrap_or_else(|_| "Unknown Windows".into()).into()
 }
