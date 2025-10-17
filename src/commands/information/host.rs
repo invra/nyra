@@ -6,11 +6,23 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  chrono::{DateTime, Utc},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  chrono::{
+    DateTime,
+    Utc,
+  },
   poise::{
-    CreateReply, command,
-    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
+    CreateReply,
+    command,
+    serenity_prelude::{
+      Colour,
+      CreateEmbed,
+      CreateEmbedFooter,
+    },
   },
   sysinfo::System,
 };
@@ -60,11 +72,11 @@ fn get_cpu_count(sys: &System) -> usize {
 }
 
 fn get_mem_heap_gb(sys: &System) -> f64 {
-  sys.total_memory() as f64 / 1024.0 / 1024.0 / 1024.0
+  sys.total_memory() as f64 / 1024.0_f64.powi(3)
 }
 
 fn get_mem_used_gb(sys: &System) -> f64 {
-  sys.used_memory() as f64 / 1024.0 / 1024.0 / 1024.0
+  sys.used_memory() as f64 / 1024.0_f64.powi(3)
 }
 
 fn get_os_name() -> String {
@@ -116,7 +128,11 @@ fn get_os_name() -> String {
 
   #[cfg(target_os = "linux")]
   {
-    use std::{collections::HashMap, fs::File, io::Read};
+    use std::{
+      collections::HashMap,
+      fs::File,
+      io::Read,
+    };
 
     let mut buf = String::new();
     if File::open("/etc/os-release")
