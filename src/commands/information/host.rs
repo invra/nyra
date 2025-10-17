@@ -6,11 +6,23 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  chrono::{DateTime, Utc},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  chrono::{
+    DateTime,
+    Utc,
+  },
   poise::{
-    CreateReply, command,
-    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
+    CreateReply,
+    command,
+    serenity_prelude::{
+      Colour,
+      CreateEmbed,
+      CreateEmbedFooter,
+    },
   },
   sysinfo::System,
 };
@@ -51,8 +63,43 @@ pub async fn host(ctx: Context<'_>) -> Result<(), Error> {
 }
 inventory::submit! { MyCommand(host) }
 
-fn get_cpu_model(sys: &System) -> &str {
-  sys.cpus()[0].brand()
+#[cfg(not(target_os = "windows"))]
+fn get_cpu_model(sys: &System) -> Box<str> {
+  sys.cpus()[0].brand().into()
+}
+
+#[cfg(target_os = "windows")]
+fn get_cpu_model() -> Box<str> {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
+  #[allow(non_camel_case_types)]
+  #[allow(non_snake_case)]
+  #[derive(Deserialize)]
+  struct Win32_Proccessor {
+    Name: Option<String>,
+  }
+
+  let result = (|| -> Result<String, Box<dyn std::error::Error>> {
+    let com_con = COMLibrary::new()?;
+    let wmi_con = WMIConnection::new(com_con.into())?;
+
+    let results: Vec<Win32_Proccessor> = wmi_con.raw_query("SELECT Name, FROM Win32_Processor")?;
+
+    if let Some(cpu) = results.first() {
+      let cpu_model = cpu.Name.as_deref().unwrap_or("Unknown CPU");
+      Ok(cpu_model.into())
+    } else {
+      Ok("Unknown CPU".into())
+    }
+  })();
+
+  result.unwrap_or_else(|_| "Unknown CPU".into()).into()
 }
 
 fn get_cpu_count(sys: &System) -> usize {
@@ -117,7 +164,11 @@ fn get_os_name() -> Box<str> {
 
 #[cfg(target_os = "linux")]
 fn get_os_name() -> Box<str> {
-  use std::{collections::HashMap, fs::File, io::Read};
+  use std::{
+    collections::HashMap,
+    fs::File,
+    io::Read,
+  };
 
   let mut buf = String::new();
   if File::open("/etc/os-release")
@@ -145,7 +196,10 @@ fn get_os_name() -> Box<str> {
   use {
     regex::Regex,
     serde::Deserialize,
-    wmi::{COMLibrary, WMIConnection},
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
   };
 
   #[allow(non_camel_case_types)]
