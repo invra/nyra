@@ -6,7 +6,11 @@
 */
 
 use {
-  crate::commands::helper::*,
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
   poise::{
     command,
     serenity_prelude::User,
