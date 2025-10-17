@@ -15,6 +15,7 @@ use {
     CreateReply,
     command,
     serenity_prelude::{
+      Colour,
       CreateEmbed,
       CreateEmbedFooter,
     },
@@ -42,7 +43,7 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
         ctx.author().name
       )))
       .timestamp(timestamp)
-      .color(0x3498db),
+      .color(Colour::PURPLE),
   );
 
   ctx.send(reply).await?;
