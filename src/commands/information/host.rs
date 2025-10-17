@@ -89,7 +89,7 @@ fn get_cpu_model(_: &System) -> Box<str> {
     let com_con = COMLibrary::new()?;
     let wmi_con = WMIConnection::new(com_con.into())?;
 
-    let results: Vec<Win32_Proccessor> = wmi_con.raw_query("SELECT Name, FROM Win32_Processor")?;
+    let results: Vec<Win32_Proccessor> = wmi_con.raw_query("SELECT Name FROM Win32_Processor")?;
 
     if let Some(cpu) = results.first() {
       let cpu_model = cpu.Name.as_deref().unwrap_or("Unknown CPU");
