@@ -6,23 +6,11 @@
 */
 
 use {
-  crate::commands::helper::{
-    Context,
-    Error,
-    MyCommand,
-  },
-  chrono::{
-    DateTime,
-    Utc,
-  },
+  crate::commands::helper::{Context, Error, MyCommand},
+  chrono::{DateTime, Utc},
   poise::{
-    CreateReply,
-    command,
-    serenity_prelude::{
-      Colour,
-      CreateEmbed,
-      CreateEmbedFooter,
-    },
+    CreateReply, command,
+    serenity_prelude::{Colour, CreateEmbed, CreateEmbedFooter},
   },
   sysinfo::System,
 };
@@ -128,11 +116,7 @@ fn get_os_name() -> String {
 
   #[cfg(target_os = "linux")]
   {
-    use std::{
-      collections::HashMap,
-      fs::File,
-      io::Read,
-    };
+    use std::{collections::HashMap, fs::File, io::Read};
 
     let mut buf = String::new();
     if File::open("/etc/os-release")
