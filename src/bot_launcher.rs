@@ -7,7 +7,11 @@
 
 use {
   crate::commands,
-  std::sync::{Arc, OnceLock},
+  poise::PrefixFrameworkOptions,
+  std::sync::{
+    Arc,
+    OnceLock,
+  },
   tokio::sync::RwLock,
 };
 
@@ -48,7 +52,10 @@ impl BotLauncher {
 
   async fn start_bot(&self) {
     use crate::utils;
-    use poise::serenity_prelude::{Client, GatewayIntents};
+    use poise::serenity_prelude::{
+      Client,
+      GatewayIntents,
+    };
 
     let token = self.config.general.token.clone();
     let intents = GatewayIntents::GUILD_MESSAGES
