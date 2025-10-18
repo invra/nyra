@@ -6,8 +6,15 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  poise::{command, serenity_prelude::User},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  poise::{
+    command,
+    serenity_prelude::User,
+  },
 };
 
 /// Gets user join date

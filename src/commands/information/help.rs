@@ -8,13 +8,26 @@
 use {
   crate::commands::{
     self,
-    helper::{Context, Error, MyCommand},
+    helper::{
+      Context,
+      Error,
+      MyCommand,
+    },
   },
   poise::{
-    CreateReply, command,
+    CreateReply,
+    command,
     serenity_prelude::{
-      self, Colour, CreateActionRow, CreateEmbed, CreateEmbedAuthor, CreateEmbedFooter,
-      CreateSelectMenu, CreateSelectMenuKind, CreateSelectMenuOption, EditMessage,
+      self,
+      Colour,
+      CreateActionRow,
+      CreateEmbed,
+      CreateEmbedAuthor,
+      CreateEmbedFooter,
+      CreateSelectMenu,
+      CreateSelectMenuKind,
+      CreateSelectMenuOption,
+      EditMessage,
     },
   },
 };
