@@ -7,7 +7,6 @@
 
 use {
   crate::commands,
-  poise::PrefixFrameworkOptions,
   std::sync::{
     Arc,
     OnceLock,

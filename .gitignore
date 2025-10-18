@@ -16,7 +16,7 @@ target
 *.session
 .windsurf/
 *.sublime-workspace
-!.vscode/extensions.json
+!.vscode/{extensions,tasks}.json
 
 # Git related
 *.patch

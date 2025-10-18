@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Nyra (No GUI)",
+      "type": "shell",
+      "command": "~/.cargo/bin/cargo",
+      "args": [
+        "run",
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Nyra (GUI)",
+      "type": "shell",
+      "command": "~/.cargo/bin/cargo",
+      "args": [
+        "run",
+        "--",
+        "--gui"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
