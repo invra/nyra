@@ -11,11 +11,7 @@ pub(crate) mod moderation;
 pub(crate) mod utilities;
 
 use {
-  crate::commands::helper::{
-    Data,
-    Error,
-    MyCommand,
-  },
+  crate::commands::helper::{Data, Error, MyCommand},
   poise::Command,
 };
 
