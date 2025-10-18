@@ -16,15 +16,14 @@ use {
   },
   poise::{
     CreateReply,
-    builtins::{
-      self,
-      HelpConfiguration,
-    },
     command,
     serenity_prelude::{
       self,
+      Colour,
       CreateActionRow,
       CreateEmbed,
+      CreateEmbedAuthor,
+      CreateEmbedFooter,
       CreateSelectMenu,
       CreateSelectMenuKind,
       CreateSelectMenuOption,
@@ -33,33 +32,43 @@ use {
   },
 };
 
-/// Show a better help menu
-#[command(prefix_command, track_edits, slash_command, category = "information")]
-pub async fn new_help(ctx: Context<'_>) -> Result<(), Error> {
-  let timestamp: chrono::DateTime<chrono::Utc> = chrono::offset::Utc::now();
-  let reply = CreateReply::default()
-    .embed(
-      CreateEmbed::new()
-        .title("help")
-        .colour(serenity_prelude::Colour::PURPLE)
-        .timestamp(timestamp),
-    )
-    .components(vec![CreateActionRow::SelectMenu(CreateSelectMenu::new(
-      "Select category",
+/// Shows this menu
+#[command(prefix_command, track_edits, slash_command, category = "Information")]
+pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
+  let timestamp = chrono::Utc::now();
+
+  let embed = CreateEmbed::new()
+    .title("Help")
+    .description("Select a category below to view its commands.")
+    .colour(Colour::PURPLE)
+    .timestamp(timestamp)
+    .footer(CreateEmbedFooter::new("Nyra Help Menu"))
+    .author(CreateEmbedAuthor::new("Nyra Bot"));
+
+  let select_menu = CreateActionRow::SelectMenu(
+    CreateSelectMenu::new(
+      "select_category",
       CreateSelectMenuKind::String {
         options: vec![
-          CreateSelectMenuOption::new("Information", "information")
-            .description("The commands related to getting information about something."),
-          CreateSelectMenuOption::new("Moderation", "Moderation")
-            .description("The commands related to server moderation."),
+          CreateSelectMenuOption::new("📖 Information", "Information")
+            .description("Commands related to information and stats."),
+          CreateSelectMenuOption::new("📌 Moderation", "Moderation")
+            .description("Commands related to moderation and management."),
+          CreateSelectMenuOption::new("🔨 Utilities", "Utilities").description("Debuggers &c."),
         ],
       },
-    ))]);
+    )
+    .placeholder("📚 Command Categories"),
+  );
 
-  let v = ctx.send(reply.clone()).await?;
-  let temp = v.message().await?;
+  let reply = CreateReply::default()
+    .embed(embed)
+    .components(vec![select_menu]);
+  let sent_msg = ctx.send(reply).await?;
+  let msg = sent_msg.message().await?;
+
   loop {
-    let Some(mut ci) = temp
+    let Some(mut ci) = msg
       .await_component_interaction(ctx.serenity_context())
       .await
     else {
@@ -72,40 +81,38 @@ pub async fn new_help(ctx: Context<'_>) -> Result<(), Error> {
     )
     .await?;
 
-    match ci.data.kind {
-      serenity_prelude::ComponentInteractionDataKind::StringSelect { values } => {
-        let new_data = commands::all()
-          .into_iter()
-          .filter(|x| x.category.as_ref() == values.get(0))
-          .map(|x| format!("{}\n  {}", x.name, x.description.unwrap_or_default()))
-          .fold(String::new(), |acc, x| acc + "\n\n" + &x);
-        ci.message
-          .edit(ctx, EditMessage::new().content(new_data))
-          .await?;
+    if let serenity_prelude::ComponentInteractionDataKind::StringSelect { values } = &ci.data.kind {
+      let selected = values.get(0).cloned().unwrap_or_default();
+
+      let cmds = commands::all()
+        .into_iter()
+        .filter(|x| x.category.as_ref() == Some(&selected))
+        .collect::<Vec<_>>();
+
+      let mut new_embed = CreateEmbed::new()
+        .title(format!("{} Commands", selected))
+        .colour(Colour::PURPLE)
+        .timestamp(timestamp);
+
+      if cmds.is_empty() {
+        new_embed = new_embed.description("No commands found in this category.");
+      } else {
+        for cmd in cmds {
+          new_embed = new_embed.field(
+            cmd.name,
+            cmd
+              .description
+              .unwrap_or("No description available.".into()),
+            false,
+          );
+        }
       }
-      _ => todo!(),
+
+      ci.message
+        .edit(ctx, EditMessage::new().embed(new_embed))
+        .await?;
     }
   }
 }
-inventory::submit! {MyCommand(new_help)}
 
-/// Show this menu
-#[command(prefix_command, track_edits, slash_command, category = "information")]
-pub async fn help(
-  ctx: Context<'_>,
-  #[description = "Specific command to show help about"] command: Option<String>,
-) -> Result<(), Error> {
-  builtins::help(
-    ctx,
-    command.as_deref(),
-    HelpConfiguration {
-      ephemeral: true,
-      show_subcommands: true,
-      show_context_menu_commands: true,
-      ..Default::default()
-    },
-  )
-  .await
-  .map_err(Into::into)
-}
 inventory::submit! { MyCommand(help) }

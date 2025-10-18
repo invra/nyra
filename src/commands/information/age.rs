@@ -6,12 +6,19 @@
 */
 
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
-  poise::{command, serenity_prelude::User},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
+  poise::{
+    command,
+    serenity_prelude::User,
+  },
 };
 
 /// Gets user join date
-#[command(prefix_command, slash_command, category = "information")]
+#[command(prefix_command, slash_command, category = "Information")]
 pub async fn age(
   ctx: Context<'_>,
   #[description = "User to check"] user: Option<User>,

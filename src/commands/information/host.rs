@@ -28,7 +28,7 @@ use {
 };
 
 /// Host information command
-#[command(prefix_command, slash_command, category = "information")]
+#[command(prefix_command, slash_command, category = "Information")]
 pub async fn host(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
   let mut sys = System::new_all();

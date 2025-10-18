@@ -1,8 +1,13 @@
 use {
-  crate::commands::helper::{Context, Error, MyCommand},
+  crate::commands::helper::{
+    Context,
+    Error,
+    MyCommand,
+  },
   poise::command,
 };
 
+/// Purges messages
 #[command(
   prefix_command,
   slash_command,
