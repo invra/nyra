@@ -58,8 +58,11 @@ pub struct General {
 }
 
 impl Config {
-  pub fn load() -> Result<Self, ConfigError> {
-    let config_path = Self::get_config_path();
+  pub fn load(config: Option<String>) -> Result<Self, ConfigError> {
+    let config_path = config
+      .map(PathBuf::from)
+      .unwrap_or_else(Self::get_config_path);
+
     Self::load_from_path(&config_path)
   }
 

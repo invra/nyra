@@ -34,17 +34,16 @@ struct Args {
 async fn main() {
   let args = Args::parse();
 
-  let Ok(config) = args
-    .config
-    .as_ref()
-    .map(Config::load_from_path)
-    .unwrap_or_else(Config::load)
-    .inspect_err(|e| crate::utils::error(&e.to_string()))
-  else {
-    return;
+  let config = match Config::load(args.config) {
+    Ok(cfg) => {
+      crate::utils::success("Config loaded successfully");
+      cfg
+    }
+    Err(e) => {
+      crate::utils::error(&format!("{}", e));
+      return;
+    }
   };
-
-  crate::utils::success("Config loaded successfully");
 
   BotLauncher::init(config);
 
