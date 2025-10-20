@@ -204,7 +204,6 @@ fn get_os_name() -> Box<str> {
 #[cfg(target_os = "windows")]
 fn get_os_name() -> Box<str> {
   use {
-    regex::Regex,
     serde::Deserialize,
     wmi::{
       COMLibrary,
@@ -219,31 +218,50 @@ fn get_os_name() -> Box<str> {
     Caption: Option<String>,
   }
 
-  let result = (|| -> Result<String, Box<dyn std::error::Error>> {
-    let com_con = COMLibrary::new()?;
-    let wmi_con = WMIConnection::new(com_con.into())?;
+  let caption = (|| -> Option<String> {
+    let com_con = COMLibrary::new().ok()?;
+    let wmi_con = WMIConnection::new(com_con.into()).ok()?;
+    let results: Vec<Win32_OperatingSystem> = wmi_con
+      .raw_query("SELECT Caption FROM Win32_OperatingSystem")
+      .ok()?;
+    results.first()?.Caption.clone()
+  })()
+  .unwrap_or_else(|| "Unknown Windows".to_string());
 
-    let reg = Regex::new(r"Windows\s+(?:[A-Za-z]+)?(\s*\d+(\.\d*)?)?")?;
-    let results: Vec<Win32_OperatingSystem> =
-      wmi_con.raw_query("SELECT Caption FROM Win32_OperatingSystem")?;
+  let words: Vec<&str> = caption.split_whitespace().collect();
+  let mut result = Vec::new();
+  let mut i = 0;
 
-    if let Some(os) = results.first() {
-      let caption = os.Caption.as_deref().unwrap_or("Unknown Windows");
-      let os_string = if let Some(caps) = reg.captures(caption) {
-        caps
-          .get(0)
-          .map(|m| m.as_str().to_string())
-          .unwrap_or(caption.to_string())
-      } else {
-        caption.to_string()
-      };
-      Ok(os_string)
-    } else {
-      Ok("Unknown Windows".to_string())
+  while i < words.len() {
+    if words[i] == "Windows" {
+      result.push("Windows");
+
+      if i + 1 < words.len() {
+        let next = words[i + 1];
+        if !next.chars().next().unwrap_or('0').is_ascii_digit() {
+          result.push(next);
+
+          if i + 2 < words.len() {
+            let next2 = words[i + 2];
+            if next2.chars().next().unwrap_or('a').is_ascii_digit() {
+              result.push(next2);
+            }
+          }
+        } else {
+          result.push(next);
+        }
+      }
+
+      break;
     }
-  })();
+    i += 1;
+  }
 
-  result.unwrap_or_else(|_| "Unknown Windows".into()).into()
+  if result.is_empty() {
+    "Unknown Windows".into()
+  } else {
+    result.join(" ").into_boxed_str()
+  }
 }
 
 #[cfg(not(target_os = "macos"))]
