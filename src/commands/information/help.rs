@@ -82,7 +82,7 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
     .await?;
 
     if let serenity_prelude::ComponentInteractionDataKind::StringSelect { values } = &ci.data.kind {
-      let selected = values.get(0).cloned().unwrap_or_default();
+      let selected = values.first().cloned().unwrap_or_default();
 
       let cmds = commands::all()
         .into_iter()
