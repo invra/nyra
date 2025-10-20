@@ -32,7 +32,7 @@ impl BotLauncher {
       .expect("BotLauncher::init called more than once");
   }
 
-  fn instance() -> Arc<BotLauncher> {
+  fn instance() -> Arc<Self> {
     INSTANCE
       .get()
       .expect("BotLauncher not initialized — call BotLauncher::init() first")
@@ -66,7 +66,7 @@ impl BotLauncher {
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
         prefix_options: poise::PrefixFrameworkOptions {
-          prefix: Some(self.config.general.prefix.to_string()),
+          prefix: Some(self.config.general.prefix.clone()),
           edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
             std::time::Duration::from_secs(3600),
           ))),
@@ -98,7 +98,7 @@ impl BotLauncher {
     }
 
     if let Err(e) = client.start().await {
-      utils::error(&format!("Client exited with error: {}", e));
+      utils::error(&format!("Client exited with error: {e}"));
     }
   }
 

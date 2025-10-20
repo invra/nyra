@@ -90,7 +90,7 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
         .collect::<Vec<_>>();
 
       let mut new_embed = CreateEmbed::new()
-        .title(format!("{} Commands", selected))
+        .title(format!("{selected} Commands"))
         .colour(Colour::PURPLE)
         .timestamp(timestamp);
 
@@ -102,7 +102,7 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
             cmd.name,
             cmd
               .description
-              .unwrap_or("No description available.".into()),
+              .unwrap_or_else(|| "No description available.".into()),
             false,
           );
         }

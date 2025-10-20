@@ -35,7 +35,7 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
   let result = if ping_time.is_zero() {
     "Unavailable".into()
   } else {
-    format!("{:#.0?}", ping_time)
+    format!("{ping_time:#.0?}")
   };
 
   let reply = CreateReply::default().embed(

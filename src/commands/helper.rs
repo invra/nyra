@@ -8,8 +8,8 @@
 use poise::Command;
 
 #[derive(Debug)]
-pub(crate) struct Data;
+pub struct Data;
 
-pub(crate) type Error = Box<dyn std::error::Error + Send + Sync>;
-pub(crate) type Context<'a> = poise::Context<'a, Data, Error>;
-pub(crate) struct MyCommand(pub fn() -> Command<Data, Error>);
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+pub type Context<'a> = poise::Context<'a, Data, Error>;
+pub struct MyCommand(pub fn() -> Command<Data, Error>);

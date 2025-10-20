@@ -58,7 +58,7 @@ pub async fn unban(
   );
 
   if let Err(err) = ctx.http().remove_ban(guild, user.id, r.as_deref()).await {
-    return Err(format!("Failed to unban user: {:?}", err).into());
+    return Err(format!("Failed to unban user: {err:?}").into());
   }
 
   ctx.send(reply).await?;

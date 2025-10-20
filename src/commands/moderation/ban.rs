@@ -62,7 +62,7 @@ pub async fn ban(
   }
 
   if let Err(err) = ctx.http().ban_user(guild, user.id, 1, r.as_deref()).await {
-    return Err(format!("Failed to ban user: {:?}", err).into());
+    return Err(format!("Failed to ban user: {err:?}").into());
   }
 
   ctx.send(reply).await?;

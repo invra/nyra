@@ -62,7 +62,7 @@ pub async fn kick(
   }
 
   if let Err(err) = ctx.http().kick_member(guild, user.id, r.as_deref()).await {
-    return Err(format!("Failed to kick user: {:?}", err).into());
+    return Err(format!("Failed to kick user: {err:?}").into());
   }
 
   ctx.send(reply).await?;

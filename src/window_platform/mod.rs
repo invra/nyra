@@ -79,10 +79,24 @@ impl gpui::Render for NyraView {
             .on_click({
               let is_running = self.is_running.clone();
               move |_event, _cx, _| {
-                if !is_running.load(Ordering::Relaxed) {
-                  let is_running = is_running.clone();
+                let is_running_clone = is_running.clone();
+                if is_running.load(Ordering::Relaxed) {
                   std::thread::spawn(move || {
-                    is_running.store(true, Ordering::Relaxed);
+                    match tokio::runtime::Runtime::new() {
+                      Ok(rt) => {
+                        rt.block_on(async {
+                          BotLauncher::stop().await;
+                        });
+                      }
+                      Err(e) => {
+                        crate::utils::error(&format!("Failed to create runtime: {e}"));
+                      }
+                    }
+                    is_running_clone.store(false, Ordering::Relaxed);
+                  });
+                } else {
+                  std::thread::spawn(move || {
+                    is_running_clone.store(true, Ordering::Relaxed);
 
                     match tokio::runtime::Runtime::new() {
                       Ok(rt) => {
@@ -92,26 +106,11 @@ impl gpui::Render for NyraView {
                         });
                       }
                       Err(e) => {
-                        crate::utils::error(&format!("Failed to create runtime: {}", e));
+                        crate::utils::error(&format!("Failed to create runtime: {e}"));
                       }
                     }
 
-                    is_running.store(false, Ordering::Relaxed);
-                  });
-                } else {
-                  let is_running = is_running.clone();
-                  std::thread::spawn(move || {
-                    match tokio::runtime::Runtime::new() {
-                      Ok(rt) => {
-                        rt.block_on(async {
-                          BotLauncher::stop().await;
-                        });
-                      }
-                      Err(e) => {
-                        crate::utils::error(&format!("Failed to create runtime: {}", e));
-                      }
-                    }
-                    is_running.store(false, Ordering::Relaxed);
+                    is_running_clone.store(false, Ordering::Relaxed);
                   });
                 }
               }
@@ -124,7 +123,7 @@ impl gpui::Render for NyraView {
 actions!(window, [Quit]);
 
 pub fn init_gui() {
-  let theme_colors = Colors::from_theme(Theme::RosePine);
+  let theme_colors = Colors::from_theme(&Theme::RosePine);
   let is_running = Arc::new(AtomicBool::new(false));
 
   gpui::Application::new().run(move |cx: &mut App| {
@@ -147,7 +146,7 @@ pub fn init_gui() {
       move |_window, cx| {
         cx.new(move |_| NyraView {
           colors: theme_colors,
-          is_running: is_running.clone(),
+          is_running,
         })
       },
     )

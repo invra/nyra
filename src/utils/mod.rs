@@ -22,30 +22,30 @@ pub enum LogLevel {
 
 #[allow(dead_code)]
 impl LogLevel {
-  fn as_str(&self) -> &'static str {
+  const fn as_str(&self) -> &'static str {
     match self {
-      LogLevel::Info => "inf",
-      LogLevel::Success => "suc",
-      LogLevel::Warning => "wrn",
-      LogLevel::Error => "err",
-      LogLevel::Bot => "bot",
-      LogLevel::Debug => "dbg",
+      Self::Info => "inf",
+      Self::Success => "suc",
+      Self::Warning => "wrn",
+      Self::Error => "err",
+      Self::Bot => "bot",
+      Self::Debug => "dbg",
     }
   }
 
-  fn get_color(&self) -> Color {
+  const fn get_color(&self) -> Color {
     match self {
-      LogLevel::Info => Color::Cyan,
-      LogLevel::Success => Color::Green,
-      LogLevel::Warning => Color::Yellow,
-      LogLevel::Error => Color::Red,
-      LogLevel::Bot => Color::Magenta,
-      LogLevel::Debug => Color::Blue,
+      Self::Info => Color::Cyan,
+      Self::Success => Color::Green,
+      Self::Warning => Color::Yellow,
+      Self::Error => Color::Red,
+      Self::Bot => Color::Magenta,
+      Self::Debug => Color::Blue,
     }
   }
 }
 
-pub fn log(level: LogLevel, message: &str) {
+pub fn log(level: &LogLevel, message: &str) {
   let (stream, color) = match level {
     LogLevel::Error => ("STDERR", level.get_color()),
     _ => ("STDOUT", level.get_color()),
@@ -62,32 +62,32 @@ pub fn log(level: LogLevel, message: &str) {
 
 #[allow(dead_code)]
 pub fn info(message: &str) {
-  log(LogLevel::Info, message);
+  log(&LogLevel::Info, message);
 }
 
 #[allow(dead_code)]
 pub fn success(message: &str) {
-  log(LogLevel::Success, message);
+  log(&LogLevel::Success, message);
 }
 
 #[allow(dead_code)]
 pub fn warning(message: &str) {
-  log(LogLevel::Warning, message);
+  log(&LogLevel::Warning, message);
 }
 
 #[allow(dead_code)]
 pub fn error(message: &str) {
-  log(LogLevel::Error, message);
+  log(&LogLevel::Error, message);
 }
 
 #[allow(dead_code)]
 pub fn bot(message: &str) {
-  log(LogLevel::Bot, message);
+  log(&LogLevel::Bot, message);
 }
 
 #[allow(dead_code)]
 pub fn debug(message: &str) {
-  log(LogLevel::Debug, message);
+  log(&LogLevel::Debug, message);
 }
 
 #[cfg(test)]

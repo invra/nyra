@@ -30,15 +30,15 @@ pub enum ConfigError {
 impl std::fmt::Display for ConfigError {
   fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
     match self {
-      ConfigError::FileNotFound(path) => {
+      Self::FileNotFound(path) => {
         write!(f, "Config file not found at: {}.", path.display(),)
       }
-      ConfigError::ReadError(e) => write!(f, "Failed to read config file: {}", e),
-      ConfigError::ParseError(e) => write!(f, "Failed to parse TOML: {}", e),
-      ConfigError::ValidationErrors(errors) => {
+      Self::ReadError(e) => write!(f, "Failed to read config file: {e}"),
+      Self::ParseError(e) => write!(f, "Failed to parse TOML: {e}"),
+      Self::ValidationErrors(errors) => {
         writeln!(f, "Config validation failed:")?;
         for error in errors {
-          writeln!(f, "- {}", error)?;
+          writeln!(f, "- {error}")?;
         }
         Ok(())
       }
@@ -59,9 +59,7 @@ pub struct General {
 
 impl Config {
   pub fn load(config: Option<String>) -> Result<Self, ConfigError> {
-    let config_path = config
-      .map(PathBuf::from)
-      .unwrap_or_else(Self::get_config_path);
+    let config_path = config.map_or_else(Self::get_config_path, PathBuf::from);
 
     Self::load_from_path(&config_path)
   }
@@ -104,7 +102,7 @@ impl Config {
         } else if err_str.contains("unquoted string") {
           "Invalid syntax: string value must be quoted".to_string()
         } else {
-          format!("Invalid TOML syntax: {}", e)
+          format!("Invalid TOML syntax: {e}")
         };
 
         return Err(ConfigError::ParseError(error_msg));

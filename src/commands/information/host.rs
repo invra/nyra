@@ -106,10 +106,12 @@ fn get_cpu_count(sys: &System) -> usize {
   sys.cpus().len()
 }
 
+#[allow(clippy::cast_precision_loss)]
 fn get_mem_heap_gb(sys: &System) -> f64 {
   sys.total_memory() as f64 / 1024.0_f64.powi(3)
 }
 
+#[allow(clippy::cast_precision_loss)]
 fn get_mem_used_gb(sys: &System) -> f64 {
   sys.used_memory() as f64 / 1024.0_f64.powi(3)
 }
@@ -133,10 +135,9 @@ fn get_os_name() -> Box<str> {
 
 #[allow(dead_code)]
 fn get_pretty_macos(ver: &str) -> Box<str> {
-  let (major, minor): (u8, u8) = ver
-    .split_once('.')
-    .map(|(x, y)| (x.parse::<u8>().unwrap_or(0), y.parse::<u8>().unwrap_or(0)))
-    .unwrap_or((0, 0));
+  let (major, minor): (u8, u8) = ver.split_once('.').map_or((0, 0), |(x, y)| {
+    (x.parse::<u8>().unwrap_or(0), y.parse::<u8>().unwrap_or(0))
+  });
 
   format!(
     "macOS {}",

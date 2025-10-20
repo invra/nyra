@@ -24,15 +24,15 @@ pub enum Color {
 
 #[allow(dead_code)]
 impl ColoredString {
-  fn new(text: String) -> Self {
-    ColoredString {
+  const fn new(text: String) -> Self {
+    Self {
       text,
       color: None,
       is_bold: false,
     }
   }
 
-  pub fn color(mut self, color: Color) -> Self {
+  pub const fn color(mut self, color: &Color) -> Self {
     self.color = Some(match color {
       Color::Cyan => "\x1b[36m",
       Color::Green => "\x1b[32m",
@@ -44,7 +44,7 @@ impl ColoredString {
     self
   }
 
-  pub fn bold(mut self) -> Self {
+  pub const fn bold(mut self) -> Self {
     self.is_bold = true;
     self
   }
@@ -68,7 +68,7 @@ pub trait ColorExt {
 #[allow(dead_code)]
 impl ColorExt for String {
   fn color(self, color: Color) -> ColoredString {
-    ColoredString::new(self).color(color)
+    ColoredString::new(self).color(&color)
   }
 
   fn bold(self) -> ColoredString {
