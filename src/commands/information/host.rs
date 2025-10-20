@@ -212,7 +212,7 @@ fn get_os_name() -> Box<str> {
     let results: Vec<Win32OperatingSystem> = wmi_con
       .raw_query("SELECT Caption FROM Win32_OperatingSystem")
       .ok()?;
-    results.first()?.Caption.clone()
+    results.first()?.caption.clone()
   })()
   .unwrap_or_else(|| "Unknown Windows".to_string());
 
