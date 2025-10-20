@@ -128,8 +128,12 @@ fn get_os_name() -> Box<str> {
     plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
       .expect("Cannot read from PLIST!");
 
-  let (major, minor): (u8, u8) = file_buf
-    .product_version
+  get_pretty_macos(&file_buf.product_version)
+}
+
+#[allow(dead_code)]
+fn get_pretty_macos(ver: &str) -> Box<str> {
+  let (major, minor): (u8, u8) = ver
     .split_once('.')
     .map(|(x, y)| (x.parse::<u8>().unwrap_or(0), y.parse::<u8>().unwrap_or(0)))
     .unwrap_or((0, 0));
@@ -256,6 +260,8 @@ fn normalize_windows_name(caption: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+  use crate::commands::information::host::get_pretty_macos;
+
   use super::normalize_windows_name;
 
   #[test]
@@ -284,5 +290,33 @@ mod tests {
     let input = "Microsoft Windows 10 Pro";
     let output = normalize_windows_name(input);
     assert_eq!(output, "Windows 10");
+  }
+
+  #[test]
+  fn macos_before_rehaul() {
+    let input = "10.15";
+    let output = get_pretty_macos(input);
+    assert_eq!(output, "macOS Catalina".into());
+  }
+
+  #[test]
+  fn macos_after_rehaul() {
+    let input = "11.0";
+    let output = get_pretty_macos(input);
+    assert_eq!(output, "macOS Big Sur".into());
+  }
+
+  #[test]
+  fn macos_tahoe_beta() {
+    let input = "16.0";
+    let output = get_pretty_macos(input);
+    assert_eq!(output, "macOS Tahoe".into());
+  }
+
+  #[test]
+  fn macos_tahoe_main() {
+    let input = "26.0";
+    let output = get_pretty_macos(input);
+    assert_eq!(output, "macOS Tahoe".into());
   }
 }
