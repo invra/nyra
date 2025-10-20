@@ -124,13 +124,15 @@ fn get_os_name() -> Box<str> {
     product_version: String,
   }
 
-  let (major, minor): (u8, u8) =
+  let file_buf: SystemVersion =
     plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
-      .expect("Cannot read SystemVersion.plist")
-      .product_version
-      .split_once('.')
-      .map(|(x, y)| unsafe { (x.parse().unwrap_unchecked(), y.parse().unwrap_unchecked()) })
-      .unwrap_or_default();
+      .expect("Cannot read from PLIST!");
+
+  let (major, minor): (u8, u8) = file_buf
+    .product_version
+    .split_once('.')
+    .map(|(x, y)| (x.parse::<u8>().unwrap_or(0), y.parse::<u8>().unwrap_or(0)))
+    .unwrap_or((0, 0));
 
   format!(
     "macOS {}",
