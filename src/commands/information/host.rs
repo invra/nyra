@@ -124,18 +124,13 @@ fn get_os_name() -> Box<str> {
     product_version: String,
   }
 
-  let reader: SystemVersion = plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
-    .expect("Cannot read SystemVersion.plist");
-  let mut ver_split = reader.product_version.split('.');
-
-  let major = ver_split
-    .next()
-    .and_then(|s| s.parse::<u32>().ok())
-    .unwrap_or(0);
-  let minor = ver_split
-    .next()
-    .and_then(|s| s.parse::<u32>().ok())
-    .unwrap_or(0);
+  let (major, minor): (u8, u8) =
+    plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
+      .expect("Cannot read SystemVersion.plist")
+      .product_version
+      .split_once('.')
+      .map(|(x, y)| unsafe { (x.parse().unwrap_unchecked(), y.parse().unwrap_unchecked()) })
+      .unwrap_or_default();
 
   format!(
     "macOS {}",
@@ -229,32 +224,32 @@ fn get_os_name() -> Box<str> {
 
 #[allow(dead_code)]
 fn normalize_windows_name(caption: &str) -> String {
-  let mut words = caption.split_whitespace().skip_while(|&w| w != "Windows");
-  let mut result = Vec::new();
+  let mut words = caption
+    .split_whitespace()
+    .skip_while(|&w| w != "Windows")
+    .skip(1);
 
-  if let Some(windows) = words.next() {
-    result.push(windows);
+  let mut result = vec!["Windows"];
 
-    if let Some(next) = words.next() {
-      if next.chars().next().unwrap_or('a').is_ascii_digit() {
-        result.push(next);
-      } else {
-        result.push(next);
+  let Some(version_name) = words.next() else {
+    return "Unknown Windows".into()
+  };
 
-        if let Some(next2) = words.next() {
-          if next2.chars().next().unwrap_or('a').is_ascii_digit() {
-            result.push(next2);
-          }
-        }
-      }
-    }
+  result.push(version_name);
+
+  if version_name.starts_with(|x: char| x.is_ascii_digit()) {
+    return result.join(" ")
   }
 
-  if result.is_empty() {
-    "Unknown Windows".to_string()
-  } else {
-    result.join(" ")
+  let Some(sub_version) = words.next() else {
+    return result.join(" ")
+  };
+
+  if sub_version.starts_with(|x: char| x.is_ascii_digit()) {
+    result.push(sub_version);
   }
+
+  result.join(" ")
 }
 
 #[cfg(test)]
