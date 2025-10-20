@@ -40,7 +40,7 @@ async fn main() {
       cfg
     }
     Err(e) => {
-      crate::utils::error(&format!("{}", e));
+      crate::utils::error(&e.to_string());
       return;
     }
   };
