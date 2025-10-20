@@ -126,14 +126,13 @@ fn get_os_name() -> Box<str> {
 
   let reader: SystemVersion = plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
     .expect("Cannot read SystemVersion.plist");
+  let mut ver_split = reader.product_version.split('.');
 
-  let version = reader.product_version;
-  let mut parts = version.split('.');
-  let major = parts
+  let major = ver_split
     .next()
     .and_then(|s| s.parse::<u32>().ok())
     .unwrap_or(0);
-  let minor = parts
+  let minor = ver_split
     .next()
     .and_then(|s| s.parse::<u32>().ok())
     .unwrap_or(0);
@@ -142,13 +141,6 @@ fn get_os_name() -> Box<str> {
     "macOS {}",
     match major {
       10 => match minor {
-        0 => "Cheetah",
-        1 => "Puma",
-        2 => "Jaguar",
-        3 => "Panther",
-        4 => "Tiger",
-        5 => "Leopard",
-        6 => "Snow Leopard",
         7 => "Lion",
         8 => "Mountain Lion",
         9 => "Mavericks",
@@ -211,17 +203,16 @@ fn get_os_name() -> Box<str> {
     },
   };
 
-  #[allow(non_camel_case_types)]
-  #[allow(non_snake_case)]
   #[derive(Deserialize)]
-  struct Win32_OperatingSystem {
-    Caption: Option<String>,
+  #[serde(rename_all = "PascalCase")]
+  struct Win32OperatingSystem {
+    caption: Option<String>,
   }
 
   let caption = (|| -> Option<String> {
     let com_con = COMLibrary::new().ok()?;
     let wmi_con = WMIConnection::new(com_con.into()).ok()?;
-    let results: Vec<Win32_OperatingSystem> = wmi_con
+    let results: Vec<Win32OperatingSystem> = wmi_con
       .raw_query("SELECT Caption FROM Win32_OperatingSystem")
       .ok()?;
     results.first()?.Caption.clone()
