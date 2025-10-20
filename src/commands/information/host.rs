@@ -228,40 +228,7 @@ fn get_os_name() -> Box<str> {
   })()
   .unwrap_or_else(|| "Unknown Windows".to_string());
 
-  let words: Vec<&str> = caption.split_whitespace().collect();
-  let mut result = Vec::new();
-  let mut i = 0;
-
-  while i < words.len() {
-    if words[i] == "Windows" {
-      result.push("Windows");
-
-      if i + 1 < words.len() {
-        let next = words[i + 1];
-        if !next.chars().next().unwrap_or('0').is_ascii_digit() {
-          result.push(next);
-
-          if i + 2 < words.len() {
-            let next2 = words[i + 2];
-            if next2.chars().next().unwrap_or('a').is_ascii_digit() {
-              result.push(next2);
-            }
-          }
-        } else {
-          result.push(next);
-        }
-      }
-
-      break;
-    }
-    i += 1;
-  }
-
-  if result.is_empty() {
-    "Unknown Windows".into()
-  } else {
-    result.join(" ").into_boxed_str()
-  }
+  normalize_windows_name(&caption).into_boxed_str()
 }
 
 #[cfg(not(target_os = "macos"))]
@@ -269,4 +236,97 @@ fn get_os_name() -> Box<str> {
 #[cfg(not(target_os = "windows"))]
 fn get_os_name() -> Box<str> {
   "Unknown OS".into()
+}
+
+#[cfg(target_os = "windows")]
+fn get_os_name() -> Box<str> {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
+  #[allow(non_camel_case_types)]
+  #[allow(non_snake_case)]
+  #[derive(Deserialize)]
+  struct Win32_OperatingSystem {
+    Caption: Option<String>,
+  }
+
+  let caption = (|| -> Option<String> {
+    let com_con = COMLibrary::new().ok()?;
+    let wmi_con = WMIConnection::new(com_con.into()).ok()?;
+    let results: Vec<Win32_OperatingSystem> = wmi_con
+      .raw_query("SELECT Caption FROM Win32_OperatingSystem")
+      .ok()?;
+    results.first()?.Caption.clone()
+  })()
+  .unwrap_or_else(|| "Unknown Windows".to_string());
+
+  normalize_windows_name(&caption).into_boxed_str()
+}
+
+#[allow(dead_code)]
+fn normalize_windows_name(caption: &str) -> String {
+  let mut words = caption.split_whitespace().skip_while(|&w| w != "Windows");
+  let mut result = Vec::new();
+
+  if let Some(windows) = words.next() {
+    result.push(windows);
+
+    if let Some(next) = words.next() {
+      if next.chars().next().unwrap_or('a').is_ascii_digit() {
+        result.push(next);
+      } else {
+        result.push(next);
+
+        if let Some(next2) = words.next() {
+          if next2.chars().next().unwrap_or('a').is_ascii_digit() {
+            result.push(next2);
+          }
+        }
+      }
+    }
+  }
+
+  if result.is_empty() {
+    "Unknown Windows".to_string()
+  } else {
+    result.join(" ")
+  }
+}
+
+#[cfg(test)]
+mod tests {
+  use super::normalize_windows_name;
+
+  #[test]
+  fn windows_unknown() {
+    let input = "Microsoft Garry 420";
+    let output = normalize_windows_name(input);
+    assert_eq!(output, "Unknown Windows");
+  }
+
+  #[test]
+  fn windows_word_and_number() {
+    let input = "Microsoft Windows Server 2022 Datacenter";
+    let output = normalize_windows_name(input);
+    assert_eq!(output, "Windows Server 2022");
+  }
+
+  #[test]
+  fn windows_word() {
+    let input = "Microsoft Windows XP Professional SP2";
+    let output = normalize_windows_name(input);
+    assert_eq!(output, "Windows XP");
+  }
+
+  #[test]
+  fn windows_number() {
+    let input = "Microsoft Windows 10 Pro";
+    let output = normalize_windows_name(input);
+    assert_eq!(output, "Windows 10");
+  }
 }

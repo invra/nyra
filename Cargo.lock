@@ -3766,7 +3766,6 @@ dependencies = [
  "inventory",
  "plist",
  "poise",
- "regex",
  "serde",
  "sysinfo 0.37.2",
  "systemd_info",
