@@ -231,41 +231,9 @@ fn get_os_name() -> Box<str> {
   normalize_windows_name(&caption).into_boxed_str()
 }
 
-#[cfg(not(target_os = "macos"))]
-#[cfg(not(target_os = "linux"))]
-#[cfg(not(target_os = "windows"))]
+#[cfg(not(any(target_os = "macos", target_os = "linux", target_os = "windows")))]
 fn get_os_name() -> Box<str> {
   "Unknown OS".into()
-}
-
-#[cfg(target_os = "windows")]
-fn get_os_name() -> Box<str> {
-  use {
-    serde::Deserialize,
-    wmi::{
-      COMLibrary,
-      WMIConnection,
-    },
-  };
-
-  #[allow(non_camel_case_types)]
-  #[allow(non_snake_case)]
-  #[derive(Deserialize)]
-  struct Win32_OperatingSystem {
-    Caption: Option<String>,
-  }
-
-  let caption = (|| -> Option<String> {
-    let com_con = COMLibrary::new().ok()?;
-    let wmi_con = WMIConnection::new(com_con.into()).ok()?;
-    let results: Vec<Win32_OperatingSystem> = wmi_con
-      .raw_query("SELECT Caption FROM Win32_OperatingSystem")
-      .ok()?;
-    results.first()?.Caption.clone()
-  })()
-  .unwrap_or_else(|| "Unknown Windows".to_string());
-
-  normalize_windows_name(&caption).into_boxed_str()
 }
 
 #[allow(dead_code)]
