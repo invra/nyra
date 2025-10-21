@@ -1,0 +1,10 @@
+= Poise
+
+This is a fork of Poise to be reworked to work better
+
+== License
+
+Currently this is still licensed under MIT.
+
+This will move to Unlicense after every file that
+useful has been touched. 

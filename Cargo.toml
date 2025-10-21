@@ -3,7 +3,7 @@ chrono = "0.4.42"
 clap = {version = "4.5.48", features = ["derive"]}
 gpui = "0.2.0"
 inventory = "0.3.21"
-poise = "0.6.1"
+poise = {path= "./poise"}
 serde = "1.0.228"
 sysinfo = "0.37.2"
 tokio = {version = "1", features = ["rt", "macros", "rt-multi-thread", "sync"]}
