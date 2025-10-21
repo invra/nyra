@@ -186,22 +186,22 @@ exact desugaring
 */
 #[proc_macro_attribute]
 pub fn command(args: TokenStream, function: TokenStream) -> TokenStream {
-    let args = match darling::ast::NestedMeta::parse_meta_list(args.into()) {
-        Ok(x) => x,
-        Err(e) => return e.into_compile_error().into(),
-    };
+  let args = match darling::ast::NestedMeta::parse_meta_list(args.into()) {
+    Ok(x) => x,
+    Err(e) => return e.into_compile_error().into(),
+  };
 
-    let args = match <command::CommandArgs as darling::FromMeta>::from_list(&args) {
-        Ok(x) => x,
-        Err(e) => return e.write_errors().into(),
-    };
+  let args = match <command::CommandArgs as darling::FromMeta>::from_list(&args) {
+    Ok(x) => x,
+    Err(e) => return e.write_errors().into(),
+  };
 
-    let function = syn::parse_macro_input!(function as syn::ItemFn);
+  let function = syn::parse_macro_input!(function as syn::ItemFn);
 
-    match command::command(args, function) {
-        Ok(x) => x,
-        Err(e) => e.write_errors().into(),
-    }
+  match command::command(args, function) {
+    Ok(x) => x,
+    Err(e) => e.write_errors().into(),
+  }
 }
 /**
 Use this derive macro on an enum to easily generate a choice parameter type. A choice parameter
@@ -251,31 +251,31 @@ You can also set localized choice names programmatically; see `CommandParameter:
 */
 #[proc_macro_derive(ChoiceParameter, attributes(name, name_localized))]
 pub fn choice_parameter(input: TokenStream) -> TokenStream {
-    let enum_ = syn::parse_macro_input!(input as syn::DeriveInput);
+  let enum_ = syn::parse_macro_input!(input as syn::DeriveInput);
 
-    match choice_parameter::choice_parameter(enum_) {
-        Ok(x) => x,
-        Err(e) => e.write_errors().into(),
-    }
+  match choice_parameter::choice_parameter(enum_) {
+    Ok(x) => x,
+    Err(e) => e.write_errors().into(),
+  }
 }
 
 /// See [`ChoiceParameter`]
 #[deprecated = "renamed to ChoiceParameter"]
 #[proc_macro_derive(SlashChoiceParameter, attributes(name))]
 pub fn slash_choice_parameter(input: TokenStream) -> TokenStream {
-    choice_parameter(input)
+  choice_parameter(input)
 }
 
 /// See `Modal` trait documentation
 #[proc_macro_derive(
-    Modal,
-    attributes(name, placeholder, min_length, max_length, paragraph)
+  Modal,
+  attributes(name, placeholder, min_length, max_length, paragraph)
 )]
 pub fn modal(input: TokenStream) -> TokenStream {
-    let struct_ = syn::parse_macro_input!(input as syn::DeriveInput);
+  let struct_ = syn::parse_macro_input!(input as syn::DeriveInput);
 
-    match modal::modal(struct_) {
-        Ok(x) => x,
-        Err(e) => e.write_errors().into(),
-    }
+  match modal::modal(struct_) {
+    Ok(x) => x,
+    Err(e) => e.write_errors().into(),
+  }
 }

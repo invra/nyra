@@ -245,51 +245,51 @@ macro_rules! parse_prefix_args {
 
 #[cfg(test)]
 mod test {
-    use super::*;
+  use super::*;
 
-    #[tokio::test]
-    #[cfg(not(test))] // Cannot fake serenity Context anymore
-    async fn test_parse_args() {
-        use crate::serenity_prelude as serenity;
+  #[tokio::test]
+  #[cfg(not(test))] // Cannot fake serenity Context anymore
+  async fn test_parse_args() {
+    use crate::serenity_prelude as serenity;
 
-        // Create dummy discord context; it will not be accessed in this test
-        let ctx = serenity::Context {
-            data: std::sync::Arc::new(serenity::prelude::RwLock::new(
-                serenity::prelude::TypeMap::new(),
-            )),
-            shard: serenity::ShardMessenger::new(futures::channel::mpsc::unbounded().0),
-            shard_id: Default::default(),
-            http: std::sync::Arc::new(::serenity::http::Http::new("example")),
-            #[cfg(feature = "cache")]
-            cache: Default::default(),
-        };
-        let msg = serenity::CustomMessage::new().build();
+    // Create dummy discord context; it will not be accessed in this test
+    let ctx = serenity::Context {
+      data: std::sync::Arc::new(serenity::prelude::RwLock::new(
+        serenity::prelude::TypeMap::new(),
+      )),
+      shard: serenity::ShardMessenger::new(futures::channel::mpsc::unbounded().0),
+      shard_id: Default::default(),
+      http: std::sync::Arc::new(::serenity::http::Http::new("example")),
+      #[cfg(feature = "cache")]
+      cache: Default::default(),
+    };
+    let msg = serenity::CustomMessage::new().build();
 
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "hello", 0 => (Option<String>), (String))
-                .await
-                .unwrap(),
-            (None, "hello".into()),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "a b c", 0 => (Vec<String>), (String))
-                .await
-                .unwrap(),
-            (vec!["a".into(), "b".into()], "c".into()),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "a b c", 0 => (Vec<String>), (Vec<String>))
-                .await
-                .unwrap(),
-            (vec!["a".into(), "b".into(), "c".into()], vec![]),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "a b 8 c", 0 => (Vec<String>), (u32), (Vec<String>))
-                .await
-                .unwrap(),
-            (vec!["a".into(), "b".into()], 8, vec!["c".into()]),
-        );
-        assert_eq!(
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "hello", 0 => (Option<String>), (String))
+        .await
+        .unwrap(),
+      (None, "hello".into()),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "a b c", 0 => (Vec<String>), (String))
+        .await
+        .unwrap(),
+      (vec!["a".into(), "b".into()], "c".into()),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "a b c", 0 => (Vec<String>), (Vec<String>))
+        .await
+        .unwrap(),
+      (vec!["a".into(), "b".into(), "c".into()], vec![]),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "a b 8 c", 0 => (Vec<String>), (u32), (Vec<String>))
+        .await
+        .unwrap(),
+      (vec!["a".into(), "b".into()], 8, vec!["c".into()]),
+    );
+    assert_eq!(
             parse_prefix_args!(&ctx, &msg, "yoo `that's cool` !", 0 => (String), (crate::CodeBlock), (String))
                 .await
                 .unwrap(),
@@ -303,36 +303,36 @@ mod test {
                 "!".into()
             ),
         );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "hi", 0 => #[lazy] (Option<String>), (Option<String>))
-                .await
-                .unwrap(),
-            (None, Some("hi".into())),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "a b c", 0 => (String), #[rest] (String))
-                .await
-                .unwrap(),
-            ("a".into(), "b c".into()),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "a b c", 0 => (String), #[rest] (String))
-                .await
-                .unwrap(),
-            ("a".into(), "b c".into()),
-        );
-        assert!(
-            parse_prefix_args!(&ctx, &msg, "hello", 0 => #[flag] ("hello"), #[rest] (String))
-                .await
-                .unwrap_err()
-                .0
-                .is::<crate::TooFewArguments>(),
-        );
-        assert_eq!(
-            parse_prefix_args!(&ctx, &msg, "helloo", 0 => #[flag] ("hello"), #[rest] (String))
-                .await
-                .unwrap(),
-            (false, "helloo".into())
-        );
-    }
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "hi", 0 => #[lazy] (Option<String>), (Option<String>))
+        .await
+        .unwrap(),
+      (None, Some("hi".into())),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "a b c", 0 => (String), #[rest] (String))
+        .await
+        .unwrap(),
+      ("a".into(), "b c".into()),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "a b c", 0 => (String), #[rest] (String))
+        .await
+        .unwrap(),
+      ("a".into(), "b c".into()),
+    );
+    assert!(
+      parse_prefix_args!(&ctx, &msg, "hello", 0 => #[flag] ("hello"), #[rest] (String))
+        .await
+        .unwrap_err()
+        .0
+        .is::<crate::TooFewArguments>(),
+    );
+    assert_eq!(
+      parse_prefix_args!(&ctx, &msg, "helloo", 0 => #[flag] ("hello"), #[rest] (String))
+        .await
+        .unwrap(),
+      (false, "helloo".into())
+    );
+  }
 }

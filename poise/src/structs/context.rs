@@ -2,43 +2,46 @@
 
 use std::borrow::Cow;
 
-use crate::{serenity_prelude as serenity, CommandInteractionType};
+use crate::{
+  CommandInteractionType,
+  serenity_prelude as serenity,
+};
 
 // needed for proc macro
 #[doc(hidden)]
 pub trait _GetGenerics {
-    type U;
-    type E;
+  type U;
+  type E;
 }
 impl<U, E> _GetGenerics for Context<'_, U, E> {
-    type U = U;
-    type E = E;
+  type U = U;
+  type E = E;
 }
 
 /// Wrapper around either [`crate::ApplicationContext`] or [`crate::PrefixContext`]
 #[derive(Debug)]
 pub enum Context<'a, U, E> {
-    /// Application command context
-    Application(crate::ApplicationContext<'a, U, E>),
-    /// Prefix command context
-    Prefix(crate::PrefixContext<'a, U, E>),
-    // Not non_exhaustive.. adding a whole new category of commands would justify breakage lol
+  /// Application command context
+  Application(crate::ApplicationContext<'a, U, E>),
+  /// Prefix command context
+  Prefix(crate::PrefixContext<'a, U, E>),
+  // Not non_exhaustive.. adding a whole new category of commands would justify breakage lol
 }
 impl<U, E> Clone for Context<'_, U, E> {
-    fn clone(&self) -> Self {
-        *self
-    }
+  fn clone(&self) -> Self {
+    *self
+  }
 }
 impl<U, E> Copy for Context<'_, U, E> {}
 impl<'a, U, E> From<crate::ApplicationContext<'a, U, E>> for Context<'a, U, E> {
-    fn from(x: crate::ApplicationContext<'a, U, E>) -> Self {
-        Self::Application(x)
-    }
+  fn from(x: crate::ApplicationContext<'a, U, E>) -> Self {
+    Self::Application(x)
+  }
 }
 impl<'a, U, E> From<crate::PrefixContext<'a, U, E>> for Context<'a, U, E> {
-    fn from(x: crate::PrefixContext<'a, U, E>) -> Self {
-        Self::Prefix(x)
-    }
+  fn from(x: crate::PrefixContext<'a, U, E>) -> Self {
+    Self::Prefix(x)
+  }
 }
 /// Macro to generate Context methods and also PrefixContext and ApplicationContext methods that
 /// delegate to Context
@@ -533,68 +536,68 @@ context_methods! {
 }
 
 impl<'a, U, E> Context<'a, U, E> {
-    /// Actual implementation of rerun() that returns `FrameworkError` for implementation convenience
-    async fn rerun_inner(self) -> Result<(), crate::FrameworkError<'a, U, E>> {
-        match self {
-            Self::Application(ctx) => {
-                // Skip autocomplete interactions
-                if ctx.interaction_type == CommandInteractionType::Autocomplete {
-                    return Ok(());
-                }
-
-                // Check slash command
-                if ctx.interaction.data.kind == serenity::CommandType::ChatInput {
-                    return if let Some(action) = ctx.command.slash_action {
-                        action(ctx).await
-                    } else {
-                        Ok(())
-                    };
-                }
-
-                // Check context menu command
-                if let (Some(action), Some(target)) = (
-                    ctx.command.context_menu_action,
-                    &ctx.interaction.data.target(),
-                ) {
-                    return match action {
-                        crate::ContextMenuCommandAction::User(action) => {
-                            if let serenity::ResolvedTarget::User(user, _) = target {
-                                action(ctx, (*user).clone()).await
-                            } else {
-                                Ok(())
-                            }
-                        }
-                        crate::ContextMenuCommandAction::Message(action) => {
-                            if let serenity::ResolvedTarget::Message(message) = target {
-                                action(ctx, (*message).clone()).await
-                            } else {
-                                Ok(())
-                            }
-                        }
-                        crate::ContextMenuCommandAction::__NonExhaustive => unreachable!(),
-                    };
-                }
-            }
-            Self::Prefix(ctx) => {
-                if let Some(action) = ctx.command.prefix_action {
-                    return action(ctx).await;
-                }
-            }
+  /// Actual implementation of rerun() that returns `FrameworkError` for implementation convenience
+  async fn rerun_inner(self) -> Result<(), crate::FrameworkError<'a, U, E>> {
+    match self {
+      Self::Application(ctx) => {
+        // Skip autocomplete interactions
+        if ctx.interaction_type == CommandInteractionType::Autocomplete {
+          return Ok(());
         }
 
-        // Fallback if the Command doesn't have the action it needs to execute this context
-        // (This should never happen, because if this context cannot be executed, how could this
-        // method have been called)
-        Ok(())
+        // Check slash command
+        if ctx.interaction.data.kind == serenity::CommandType::ChatInput {
+          return if let Some(action) = ctx.command.slash_action {
+            action(ctx).await
+          } else {
+            Ok(())
+          };
+        }
+
+        // Check context menu command
+        if let (Some(action), Some(target)) = (
+          ctx.command.context_menu_action,
+          &ctx.interaction.data.target(),
+        ) {
+          return match action {
+            crate::ContextMenuCommandAction::User(action) => {
+              if let serenity::ResolvedTarget::User(user, _) = target {
+                action(ctx, (*user).clone()).await
+              } else {
+                Ok(())
+              }
+            }
+            crate::ContextMenuCommandAction::Message(action) => {
+              if let serenity::ResolvedTarget::Message(message) = target {
+                action(ctx, (*message).clone()).await
+              } else {
+                Ok(())
+              }
+            }
+            crate::ContextMenuCommandAction::__NonExhaustive => unreachable!(),
+          };
+        }
+      }
+      Self::Prefix(ctx) => {
+        if let Some(action) = ctx.command.prefix_action {
+          return action(ctx).await;
+        }
+      }
     }
 
-    /// Returns the raw type erased invocation data
-    fn invocation_data_raw(self) -> &'a tokio::sync::Mutex<Box<dyn std::any::Any + Send + Sync>> {
-        match self {
-            Context::Application(ctx) => ctx.invocation_data,
-            Context::Prefix(ctx) => ctx.invocation_data,
-        }
+    // Fallback if the Command doesn't have the action it needs to execute this context
+    // (This should never happen, because if this context cannot be executed, how could this
+    // method have been called)
+    Ok(())
+  }
+
+  /// Returns the raw type erased invocation data
+  fn invocation_data_raw(self) -> &'a tokio::sync::Mutex<Box<dyn std::any::Any + Send + Sync>> {
+    match self {
+      Context::Application(ctx) => ctx.invocation_data,
+      Context::Prefix(ctx) => ctx.invocation_data,
     }
+  }
 }
 
 /// Forwards for serenity::Context's impls. With these, poise's Context types can be passed in as-is
@@ -642,40 +645,40 @@ context_trait_impls!(crate::PrefixContext);
 
 /// Trimmed down, more general version of [`Context`]
 pub struct PartialContext<'a, U, E> {
-    /// ID of the guild, if not invoked in DMs
-    pub guild_id: Option<serenity::GuildId>,
-    /// ID of the invocation channel
-    pub channel_id: serenity::ChannelId,
-    /// ID of the invocation author
-    pub author: &'a serenity::User,
-    /// Serenity's context, like HTTP or cache
-    pub serenity_context: &'a serenity::Context,
-    /// Useful if you need the list of commands, for example for a custom help command
-    pub framework: crate::FrameworkContext<'a, U, E>,
-    /// Your custom user data
-    // TODO: redundant with framework
-    pub data: &'a U,
-    #[doc(hidden)]
-    pub __non_exhaustive: (),
+  /// ID of the guild, if not invoked in DMs
+  pub guild_id: Option<serenity::GuildId>,
+  /// ID of the invocation channel
+  pub channel_id: serenity::ChannelId,
+  /// ID of the invocation author
+  pub author: &'a serenity::User,
+  /// Serenity's context, like HTTP or cache
+  pub serenity_context: &'a serenity::Context,
+  /// Useful if you need the list of commands, for example for a custom help command
+  pub framework: crate::FrameworkContext<'a, U, E>,
+  /// Your custom user data
+  // TODO: redundant with framework
+  pub data: &'a U,
+  #[doc(hidden)]
+  pub __non_exhaustive: (),
 }
 
 impl<U, E> Copy for PartialContext<'_, U, E> {}
 impl<U, E> Clone for PartialContext<'_, U, E> {
-    fn clone(&self) -> Self {
-        *self
-    }
+  fn clone(&self) -> Self {
+    *self
+  }
 }
 
 impl<'a, U, E> From<Context<'a, U, E>> for PartialContext<'a, U, E> {
-    fn from(ctx: Context<'a, U, E>) -> Self {
-        Self {
-            guild_id: ctx.guild_id(),
-            channel_id: ctx.channel_id(),
-            author: ctx.author(),
-            serenity_context: ctx.serenity_context(),
-            framework: ctx.framework(),
-            data: ctx.data(),
-            __non_exhaustive: (),
-        }
+  fn from(ctx: Context<'a, U, E>) -> Self {
+    Self {
+      guild_id: ctx.guild_id(),
+      channel_id: ctx.channel_id(),
+      author: ctx.author(),
+      serenity_context: ctx.serenity_context(),
+      framework: ctx.framework(),
+      data: ctx.data(),
+      __non_exhaustive: (),
     }
+  }
 }

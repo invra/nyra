@@ -4,10 +4,10 @@
 #![allow(clippy::manual_non_exhaustive)]
 #![allow(clippy::type_complexity)]
 #![warn(
-    clippy::missing_docs_in_private_items,
-    clippy::unused_async,
-    rust_2018_idioms,
-    missing_docs
+  clippy::missing_docs_in_private_items,
+  clippy::unused_async,
+  rust_2018_idioms,
+  missing_docs
 )]
 /*!
 Poise is an opinionated Discord bot framework with a few distinctive features:
@@ -400,25 +400,37 @@ pub mod slash_argument;
 pub mod structs;
 pub mod track_edits;
 pub mod macros {
-    //! Procedural macros used in poise, like [`command`]
-    #[doc(inline)]
-    pub use poise_macros::*;
+  //! Procedural macros used in poise, like [`command`]
+  #[doc(inline)]
+  pub use poise_macros::*;
 }
 
 #[doc(no_inline)]
 pub use {
-    choice_parameter::*, cooldown::*, dispatch::*, framework::*, macros::*, modal::*,
-    prefix_argument::*, reply::*, slash_argument::*, structs::*, track_edits::*,
+  choice_parameter::*,
+  cooldown::*,
+  dispatch::*,
+  framework::*,
+  macros::*,
+  modal::*,
+  prefix_argument::*,
+  reply::*,
+  slash_argument::*,
+  structs::*,
+  track_edits::*,
 };
 
 /// See [`builtins`]
 #[deprecated = "`samples` module was renamed to `builtins`"]
 pub mod samples {
-    pub use crate::builtins::*;
+  pub use crate::builtins::*;
 }
 
 #[doc(hidden)]
-pub use {async_trait::async_trait, futures_util};
+pub use {
+  async_trait::async_trait,
+  futures_util,
+};
 
 /// This module re-exports a bunch of items from all over serenity. Useful if you can't
 /// remember the full paths of serenity items.
@@ -428,7 +440,7 @@ pub use {async_trait::async_trait, futures_util};
 /// use poise::serenity_prelude as serenity;
 /// ```
 pub mod serenity_prelude {
-    pub use serenity::all::*;
+  pub use serenity::all::*;
 }
 use serenity_prelude as serenity; // private alias for crate root docs intradoc-links
 
@@ -439,30 +451,30 @@ pub type BoxFuture<'a, T> = std::pin::Pin<Box<dyn std::future::Future<Output = T
 
 /// Internal wrapper function for catch_unwind that respects the `handle_panics` feature flag
 async fn catch_unwind_maybe<T>(
-    fut: impl std::future::Future<Output = T>,
+  fut: impl std::future::Future<Output = T>,
 ) -> Result<T, Option<String>> {
-    #[cfg(feature = "handle_panics")]
-    let res = futures_util::FutureExt::catch_unwind(std::panic::AssertUnwindSafe(fut))
-        .await
-        .map_err(|e| {
-            if let Some(s) = e.downcast_ref::<&str>() {
-                Some(s.to_string())
-            } else if let Ok(s) = e.downcast::<String>() {
-                Some(*s)
-            } else {
-                None
-            }
-        });
-    #[cfg(not(feature = "handle_panics"))]
-    let res = Ok(fut.await);
-    res
+  #[cfg(feature = "handle_panics")]
+  let res = futures_util::FutureExt::catch_unwind(std::panic::AssertUnwindSafe(fut))
+    .await
+    .map_err(|e| {
+      if let Some(s) = e.downcast_ref::<&str>() {
+        Some(s.to_string())
+      } else if let Ok(s) = e.downcast::<String>() {
+        Some(*s)
+      } else {
+        None
+      }
+    });
+  #[cfg(not(feature = "handle_panics"))]
+  let res = Ok(fut.await);
+  res
 }
 
 #[cfg(test)]
 mod tests {
-    fn _assert_send_sync<T: Send + Sync>() {}
+  fn _assert_send_sync<T: Send + Sync>() {}
 
-    fn _test_framework_error_send_sync<U: Send + Sync + 'static, E: Send + Sync + 'static>() {
-        _assert_send_sync::<crate::FrameworkError<'_, U, E>>();
-    }
+  fn _test_framework_error_send_sync<U: Send + Sync + 'static, E: Send + Sync + 'static>() {
+    _assert_send_sync::<crate::FrameworkError<'_, U, E>>();
+  }
 }

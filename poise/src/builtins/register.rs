@@ -17,32 +17,32 @@ use crate::serenity_prelude as serenity;
 /// # Ok(()) }
 /// ```
 pub fn create_application_commands<U, E>(
-    commands: &[crate::Command<U, E>],
+  commands: &[crate::Command<U, E>],
 ) -> Vec<serenity::CreateCommand> {
-    /// We decided to extract context menu commands recursively, despite the subcommand hierarchy
-    /// not being preserved. Because it's more confusing to just silently discard context menu
-    /// commands if they're not top-level commands.
-    /// https://discord.com/channels/381880193251409931/919310428344029265/947970605985189989
-    fn recursively_add_context_menu_commands<U, E>(
-        builder: &mut Vec<serenity::CreateCommand>,
-        command: &crate::Command<U, E>,
-    ) {
-        if let Some(context_menu_command) = command.create_as_context_menu_command() {
-            builder.push(context_menu_command);
-        }
-        for subcommand in &command.subcommands {
-            recursively_add_context_menu_commands(builder, subcommand);
-        }
+  /// We decided to extract context menu commands recursively, despite the subcommand hierarchy
+  /// not being preserved. Because it's more confusing to just silently discard context menu
+  /// commands if they're not top-level commands.
+  /// https://discord.com/channels/381880193251409931/919310428344029265/947970605985189989
+  fn recursively_add_context_menu_commands<U, E>(
+    builder: &mut Vec<serenity::CreateCommand>,
+    command: &crate::Command<U, E>,
+  ) {
+    if let Some(context_menu_command) = command.create_as_context_menu_command() {
+      builder.push(context_menu_command);
     }
+    for subcommand in &command.subcommands {
+      recursively_add_context_menu_commands(builder, subcommand);
+    }
+  }
 
-    let mut commands_builder = Vec::with_capacity(commands.len());
-    for command in commands {
-        if let Some(slash_command) = command.create_as_slash_command() {
-            commands_builder.push(slash_command);
-        }
-        recursively_add_context_menu_commands(&mut commands_builder, command);
+  let mut commands_builder = Vec::with_capacity(commands.len());
+  for command in commands {
+    if let Some(slash_command) = command.create_as_slash_command() {
+      commands_builder.push(slash_command);
     }
-    commands_builder
+    recursively_add_context_menu_commands(&mut commands_builder, command);
+  }
+  commands_builder
 }
 
 /// Registers the given list of application commands to Discord as global commands.
@@ -50,12 +50,12 @@ pub fn create_application_commands<U, E>(
 /// Thin wrapper around [`create_application_commands`] that funnels the returned builder into
 /// [`serenity::Command::set_global_commands`].
 pub async fn register_globally<U, E>(
-    http: impl AsRef<serenity::Http>,
-    commands: &[crate::Command<U, E>],
+  http: impl AsRef<serenity::Http>,
+  commands: &[crate::Command<U, E>],
 ) -> Result<(), serenity::Error> {
-    let builder = create_application_commands(commands);
-    serenity::Command::set_global_commands(http, builder).await?;
-    Ok(())
+  let builder = create_application_commands(commands);
+  serenity::Command::set_global_commands(http, builder).await?;
+  Ok(())
 }
 
 /// Registers the given list of application commands to Discord as guild-specific commands.
@@ -63,13 +63,13 @@ pub async fn register_globally<U, E>(
 /// Thin wrapper around [`create_application_commands`] that funnels the returned builder into
 /// [`serenity::GuildId::set_commands`].
 pub async fn register_in_guild<U, E>(
-    http: impl AsRef<serenity::Http>,
-    commands: &[crate::Command<U, E>],
-    guild_id: serenity::GuildId,
+  http: impl AsRef<serenity::Http>,
+  commands: &[crate::Command<U, E>],
+  guild_id: serenity::GuildId,
 ) -> Result<(), serenity::Error> {
-    let builder = create_application_commands(commands);
-    guild_id.set_commands(http, builder).await?;
-    Ok(())
+  let builder = create_application_commands(commands);
+  guild_id.set_commands(http, builder).await?;
+  Ok(())
 }
 
 /// _Note: you probably want [`register_application_commands_buttons`] instead; it's easier and more
@@ -86,39 +86,41 @@ pub async fn register_in_guild<U, E>(
 /// Run with no arguments to register in guild, run with argument "global" to register globally.
 /// ```
 pub async fn register_application_commands<U, E>(
-    ctx: crate::Context<'_, U, E>,
-    global: bool,
+  ctx: crate::Context<'_, U, E>,
+  global: bool,
 ) -> Result<(), serenity::Error> {
-    let is_bot_owner = ctx.framework().options().owners.contains(&ctx.author().id);
-    if !is_bot_owner {
-        ctx.say("Can only be used by bot owner").await?;
+  let is_bot_owner = ctx.framework().options().owners.contains(&ctx.author().id);
+  if !is_bot_owner {
+    ctx.say("Can only be used by bot owner").await?;
+    return Ok(());
+  }
+
+  let commands_builder = create_application_commands(&ctx.framework().options().commands);
+  let num_commands = commands_builder.len();
+
+  if global {
+    ctx
+      .say(format!("Registering {num_commands} commands...",))
+      .await?;
+    serenity::Command::set_global_commands(ctx, commands_builder).await?;
+  } else {
+    let guild_id = match ctx.guild_id() {
+      Some(x) => x,
+      None => {
+        ctx.say("Must be called in guild").await?;
         return Ok(());
-    }
+      }
+    };
 
-    let commands_builder = create_application_commands(&ctx.framework().options().commands);
-    let num_commands = commands_builder.len();
+    ctx
+      .say(format!("Registering {num_commands} commands..."))
+      .await?;
+    guild_id.set_commands(ctx, commands_builder).await?;
+  }
 
-    if global {
-        ctx.say(format!("Registering {num_commands} commands...",))
-            .await?;
-        serenity::Command::set_global_commands(ctx, commands_builder).await?;
-    } else {
-        let guild_id = match ctx.guild_id() {
-            Some(x) => x,
-            None => {
-                ctx.say("Must be called in guild").await?;
-                return Ok(());
-            }
-        };
+  ctx.say("Done!").await?;
 
-        ctx.say(format!("Registering {num_commands} commands..."))
-            .await?;
-        guild_id.set_commands(ctx, commands_builder).await?;
-    }
-
-    ctx.say("Done!").await?;
-
-    Ok(())
+  Ok(())
 }
 
 /// Spawns four buttons to register or delete application commands globally or in the current guild
@@ -149,117 +151,121 @@ pub async fn register_application_commands<U, E>(
 ///
 /// Which you can call like any prefix command, for example `@your_bot register`.
 pub async fn register_application_commands_buttons<U, E>(
-    ctx: crate::Context<'_, U, E>,
+  ctx: crate::Context<'_, U, E>,
 ) -> Result<(), serenity::Error> {
-    let create_commands = create_application_commands(&ctx.framework().options().commands);
-    let num_commands = create_commands.len();
+  let create_commands = create_application_commands(&ctx.framework().options().commands);
+  let num_commands = create_commands.len();
 
-    let is_bot_owner = ctx.framework().options().owners.contains(&ctx.author().id);
-    if !is_bot_owner {
-        ctx.say("Can only be used by bot owner").await?;
-        return Ok(());
+  let is_bot_owner = ctx.framework().options().owners.contains(&ctx.author().id);
+  if !is_bot_owner {
+    ctx.say("Can only be used by bot owner").await?;
+    return Ok(());
+  }
+
+  let components = serenity::CreateActionRow::Buttons(vec![
+    serenity::CreateButton::new("register.guild")
+      .label("Register in guild")
+      .style(serenity::ButtonStyle::Primary)
+      .emoji('📋'),
+    serenity::CreateButton::new("unregister.guild")
+      .label("Delete in guild")
+      .style(serenity::ButtonStyle::Danger)
+      .emoji('🗑'),
+    serenity::CreateButton::new("register.global")
+      .label("Register globally")
+      .style(serenity::ButtonStyle::Primary)
+      .emoji('📋'),
+    serenity::CreateButton::new("unregister.global")
+      .label("Unregister globally")
+      .style(serenity::ButtonStyle::Danger)
+      .emoji('🗑'),
+  ]);
+
+  let builder = crate::CreateReply::default()
+    .content("Choose what to do with the commands:")
+    .components(vec![components]);
+
+  let reply = ctx.send(builder).await?;
+
+  let interaction = reply
+    .message()
+    .await?
+    .await_component_interaction(ctx)
+    .author_id(ctx.author().id)
+    .await;
+
+  reply
+    .edit(
+      ctx,
+      crate::CreateReply::default()
+        .components(vec![])
+        .content("Processing... Please wait."),
+    )
+    .await?; // remove buttons after button press and edit message
+  let pressed_button_id = match &interaction {
+    Some(m) => &m.data.custom_id,
+    None => {
+      ctx
+        .say(":warning: You didn't interact in time - please run the command again.")
+        .await?;
+      return Ok(());
     }
+  };
 
-    let components = serenity::CreateActionRow::Buttons(vec![
-        serenity::CreateButton::new("register.guild")
-            .label("Register in guild")
-            .style(serenity::ButtonStyle::Primary)
-            .emoji('📋'),
-        serenity::CreateButton::new("unregister.guild")
-            .label("Delete in guild")
-            .style(serenity::ButtonStyle::Danger)
-            .emoji('🗑'),
-        serenity::CreateButton::new("register.global")
-            .label("Register globally")
-            .style(serenity::ButtonStyle::Primary)
-            .emoji('📋'),
-        serenity::CreateButton::new("unregister.global")
-            .label("Unregister globally")
-            .style(serenity::ButtonStyle::Danger)
-            .emoji('🗑'),
-    ]);
+  let (register, global) = match &**pressed_button_id {
+    "register.global" => (true, true),
+    "unregister.global" => (false, true),
+    "register.guild" => (true, false),
+    "unregister.guild" => (false, false),
+    other => {
+      tracing::warn!("unknown register button ID: {:?}", other);
+      return Ok(());
+    }
+  };
 
-    let builder = crate::CreateReply::default()
-        .content("Choose what to do with the commands:")
-        .components(vec![components]);
+  let start_time = std::time::Instant::now();
 
-    let reply = ctx.send(builder).await?;
-
-    let interaction = reply
-        .message()
-        .await?
-        .await_component_interaction(ctx)
-        .author_id(ctx.author().id)
-        .await;
-
-    reply
-        .edit(
-            ctx,
-            crate::CreateReply::default()
-                .components(vec![])
-                .content("Processing... Please wait."),
-        )
-        .await?; // remove buttons after button press and edit message
-    let pressed_button_id = match &interaction {
-        Some(m) => &m.data.custom_id,
-        None => {
-            ctx.say(":warning: You didn't interact in time - please run the command again.")
-                .await?;
-            return Ok(());
-        }
-    };
-
-    let (register, global) = match &**pressed_button_id {
-        "register.global" => (true, true),
-        "unregister.global" => (false, true),
-        "register.guild" => (true, false),
-        "unregister.guild" => (false, false),
-        other => {
-            tracing::warn!("unknown register button ID: {:?}", other);
-            return Ok(());
-        }
-    };
-
-    let start_time = std::time::Instant::now();
-
-    if global {
-        if register {
-            ctx.say(format!(
-                ":gear: Registering {num_commands} global commands...",
-            ))
-            .await?;
-            serenity::Command::set_global_commands(ctx, create_commands).await?;
-        } else {
-            ctx.say(":gear: Unregistering global commands...").await?;
-            serenity::Command::set_global_commands(ctx, vec![]).await?;
-        }
+  if global {
+    if register {
+      ctx
+        .say(format!(
+          ":gear: Registering {num_commands} global commands...",
+        ))
+        .await?;
+      serenity::Command::set_global_commands(ctx, create_commands).await?;
     } else {
-        let guild_id = match ctx.guild_id() {
-            Some(x) => x,
-            None => {
-                ctx.say(":x: Must be called in guild").await?;
-                return Ok(());
-            }
-        };
-        if register {
-            ctx.say(format!(
-                ":gear: Registering {num_commands} guild commands...",
-            ))
-            .await?;
-            guild_id.set_commands(ctx, create_commands).await?;
-        } else {
-            ctx.say(":gear: Unregistering guild commands...").await?;
-            guild_id.set_commands(ctx, vec![]).await?;
-        }
+      ctx.say(":gear: Unregistering global commands...").await?;
+      serenity::Command::set_global_commands(ctx, vec![]).await?;
     }
+  } else {
+    let guild_id = match ctx.guild_id() {
+      Some(x) => x,
+      None => {
+        ctx.say(":x: Must be called in guild").await?;
+        return Ok(());
+      }
+    };
+    if register {
+      ctx
+        .say(format!(
+          ":gear: Registering {num_commands} guild commands...",
+        ))
+        .await?;
+      guild_id.set_commands(ctx, create_commands).await?;
+    } else {
+      ctx.say(":gear: Unregistering guild commands...").await?;
+      guild_id.set_commands(ctx, vec![]).await?;
+    }
+  }
 
-    // Calulate time taken and send message
-    let time_taken = start_time.elapsed();
-    ctx.say(format!(
-        ":white_check_mark: Done! Took {}ms",
-        time_taken.as_millis()
+  // Calulate time taken and send message
+  let time_taken = start_time.elapsed();
+  ctx
+    .say(format!(
+      ":white_check_mark: Done! Took {}ms",
+      time_taken.as_millis()
     ))
     .await?;
 
-    Ok(())
+  Ok(())
 }
