@@ -82,6 +82,15 @@ impl BotLauncher {
           utils::bot(&format!("Username: {}", ready.user.name));
           utils::bot(&format!("ID: {}", ready.user.id));
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
+          for command in &framework.options().commands {
+            let category = match &command.category {
+              Some(cat) => &format!("from {}", cat.as_str()),
+              None => "",
+            };
+
+            utils::bot(&format!("Loaded command: {} {}", command.name, category));
+          }
+
           Ok(crate::commands::helper::Data {})
         })
       })
