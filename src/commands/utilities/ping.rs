@@ -49,7 +49,6 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
       .timestamp(timestamp)
       .color(Colour::PURPLE),
   );
-
   ctx.send(reply).await?;
 
   Ok(())
