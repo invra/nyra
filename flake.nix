@@ -11,7 +11,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    csharp-ls.url = "github:invra/csharp-language-server";
     # naersk.url = "github:nix-community/naersk";
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
@@ -21,7 +20,6 @@
       nixpkgs,
       flake-utils,
       treefmt-nix,
-      csharp-ls,
       rust-overlay,
       # naersk,
       self,
@@ -32,7 +30,6 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            csharp-ls.overlays.default
             (import rust-overlay)
           ];
         };
