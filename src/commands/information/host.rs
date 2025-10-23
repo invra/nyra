@@ -239,17 +239,17 @@ fn normalize_windows_name(caption: &str) -> String {
   let mut result = vec!["Windows"];
 
   let Some(version_name) = words.next() else {
-    return "Unknown Windows".into()
+    return "Unknown Windows".into();
   };
 
   result.push(version_name);
 
   if version_name.starts_with(|x: char| x.is_ascii_digit()) {
-    return result.join(" ")
+    return result.join(" ");
   }
 
   let Some(sub_version) = words.next() else {
-    return result.join(" ")
+    return result.join(" ");
   };
 
   if sub_version.starts_with(|x: char| x.is_ascii_digit()) {
