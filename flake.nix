@@ -11,7 +11,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    # naersk.url = "github:nix-community/naersk";
+    naersk.url = "github:nix-community/naersk";
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
@@ -21,7 +21,7 @@
       flake-utils,
       treefmt-nix,
       rust-overlay,
-      # naersk,
+      naersk,
       self,
     }:
     flake-utils.lib.eachDefaultSystem (
@@ -33,6 +33,8 @@
             (import rust-overlay)
           ];
         };
+
+        naersk' = pkgs.callPackage naersk { };
 
         formatters =
           (treefmt-nix.lib.evalModule pkgs (_: {
@@ -54,52 +56,62 @@
               };
             };
           })).config.build;
+
+        buildInputs =
+          with pkgs;
+          [
+            bacon
+            rust-bin.nightly.latest.default
+            clippy
+            pkg-config
+            rust-analyzer
+          ]
+          ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
+            xorg.libxcb
+            xorg.xcbutil
+            libxkbcommon
+            libxkbcommon_8
+          ]
+          ++ nixpkgs.lib.optionals pkgs.stdenv.isDarwin [
+            apple-sdk_15
+          ];
+
+        nativeBuildInputs =
+          with pkgs;
+          lib.optionals pkgs.stdenv.isLinux [
+            pkg-config
+            xorg.libxcb
+            xorg.xcbutil
+            libxkbcommon
+            libxkbcommon_8
+          ];
+
+        runtimeLibs =
+          with pkgs;
+          lib.optionals pkgs.stdenv.isLinux [
+            expat
+            fontconfig
+            freetype
+            freetype.dev
+            libGL
+            vulkan-loader
+            wayland
+            xorg.libXi
+            xorg.libX11
+            xorg.xcbutil
+            xorg.libXrandr
+            xorg.libXcursor
+            xorg.libxcb
+            xorg.xcbutil
+            libxkbcommon
+          ];
+
+        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
       in
       {
-        devShells.default = pkgs.mkShell rec {
+        devShells.default = pkgs.mkShell {
           meta.license = pkgs.lib.licenses.unlicense;
-
-          buildInputs =
-            with pkgs;
-            [
-              bacon
-              rust-bin.nightly.latest.default
-              clippy
-              pkg-config
-              rust-analyzer
-            ]
-            ++ nixpkgs.lib.optionals pkgs.stdenv.isLinux [
-              xorg.libxcb
-              xorg.xcbutil
-              libxkbcommon
-              libxkbcommon_8
-            ]
-            ++ nixpkgs.lib.optionals pkgs.stdenv.isDarwin [
-              apple-sdk_15
-            ];
-
-          runtimeLibs = nixpkgs.lib.optionals pkgs.stdenv.isLinux (
-            with pkgs;
-            [
-              expat
-              fontconfig
-              freetype
-              freetype.dev
-              libGL
-              vulkan-loader
-              wayland
-              xorg.libXi
-              xorg.libX11
-              xorg.xcbutil
-              xorg.libXrandr
-              xorg.libXcursor
-              xorg.libxcb
-              xorg.xcbutil
-              libxkbcommon
-            ]
-          );
-
-          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
+          inherit nativeBuildInputs buildInputs LD_LIBRARY_PATH;
 
           shellHook =
             if !pkgs.stdenv.isDarwin then
@@ -122,47 +134,12 @@
               '';
         };
 
-        packages.default =
-          with pkgs;
-          rustPlatform.buildRustPackage rec {
-            name = "nyra";
+        packages.default = naersk'.buildPackage {
+          name = "nyra";
+          src = ./.;
 
-            src = ./.;
-            cargoHash = "sha256-Q9//qZlncWBMRNcEm6h17R5F1tHHDtMU/qI+++1AMxo=";
-
-            nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
-              pkg-config
-              xorg.libxcb
-              xorg.xcbutil
-              libxkbcommon
-              libxkbcommon_8
-            ];
-
-            buildInputs = [
-              libiconv
-            ];
-
-            runtimeLibs = nixpkgs.lib.optionals stdenv.isLinux [
-              expat
-              fontconfig
-              freetype
-              freetype.dev
-              libGL
-              pkg-config
-              xorg.libXi
-              xorg.libX11
-              xorg.xcbutil
-              xorg.libXrandr
-              xorg.libXcursor
-              xorg.libxcb
-              xorg.xcbutil
-              vulkan-loader
-              wayland
-              libxkbcommon
-            ];
-
-            LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
-          };
+          inherit nativeBuildInputs buildInputs LD_LIBRARY_PATH;
+        };
 
         formatter = formatters.wrapper;
         checks.formatting = formatters.check self;
