@@ -89,6 +89,7 @@
               freetype
               freetype.dev
               libGL
+              vulkan-loader
               wayland
               xorg.libXi
               xorg.libX11
@@ -101,7 +102,7 @@
             ]
           );
 
-          LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
 
           shellHook =
             if !pkgs.stdenv.isDarwin then
@@ -130,7 +131,7 @@
             name = "nyra";
 
             src = ./.;
-            cargoHash = "sha256-XV7o3gld5xnB+y6h04eKwmSYC3vt34K40gcOCkyBKUw=";
+            cargoHash = "sha256-Q9//qZlncWBMRNcEm6h17R5F1tHHDtMU/qI+++1AMxo=";
 
             nativeBuildInputs = nixpkgs.lib.optionals pkgs.stdenv.isLinux [
               pkg-config
@@ -151,15 +152,19 @@
               freetype.dev
               libGL
               pkg-config
-              xorg.libX11
-              xorg.libXcursor
               xorg.libXi
+              xorg.libX11
+              xorg.xcbutil
               xorg.libXrandr
+              xorg.libXcursor
+              xorg.libxcb
+              xorg.xcbutil
+              vulkan-loader
               wayland
               libxkbcommon
             ];
 
-            LD_LIBRARY_PATH = builtins.foldl' (a: b: "${a}:${b}/lib") "${pkgs.vulkan-loader}/lib" runtimeLibs;
+            LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath runtimeLibs;
           };
 
         formatter = formatters.wrapper;
