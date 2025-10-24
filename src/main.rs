@@ -18,10 +18,7 @@ use crate::{
 
 #[tokio::main]
 async fn main() {
-  let args = get_args();
-  if utils::clap::handle_common_args(&args) {
-    return;
+  if !utils::clap::handle_common_args(&get_args()) {
+    BotLauncher::init(&get_args()).await;
   }
-
-  BotLauncher::init(args.config, args.gui).await;
 }

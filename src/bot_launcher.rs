@@ -9,7 +9,10 @@ use {
   crate::{
     commands,
     config::Config,
-    utils::log,
+    utils::{
+      clap::Args,
+      log,
+    },
   },
   std::sync::{
     Arc,
@@ -27,10 +30,10 @@ pub struct BotLauncher {
 static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
 
 impl BotLauncher {
-  pub async fn init(config: Option<String>, allow_gui: bool) {
-    BotLauncher::init_instance(config);
+  pub async fn init(args: &Args) {
+    BotLauncher::init_instance(args.config.clone());
 
-    let None = allow_gui.then(crate::window_platform::init_gui) else {
+    let None = args.gui.then(crate::window_platform::init_gui) else {
       return
     };
     BotLauncher::start().await;
