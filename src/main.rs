@@ -20,7 +20,12 @@ use {
 };
 
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(
+  author,
+  version,
+  about = "A Discord bot written in Rust.",
+  long_about = "Nyra is a Discord bot which is written with Rust."
+)]
 struct Args {
   #[arg(short, long)]
   gui: bool,
