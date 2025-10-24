@@ -23,7 +23,7 @@ use {
 #[command(
   author,
   version,
-  about = "A Discord bot written in Rust.",
+  about = "A Discord bot.",
   long_about = "Nyra is a Discord bot which is written with Rust."
 )]
 struct Args {
