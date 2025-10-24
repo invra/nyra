@@ -93,16 +93,16 @@ impl BotLauncher {
       .setup(|ctx, ready, framework| {
         Box::pin(async move {
           utils::success("The bot has started");
-          utils::bot(&format!("Username: {}", ready.user.name));
-          utils::bot(&format!("ID: {}", ready.user.id));
+          utils::bot(format!("Username: {}", ready.user.name));
+          utils::bot(format!("ID: {}", ready.user.id));
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           for command in &framework.options().commands {
             let category = match &command.category {
-              Some(cat) => &format!("from {}", cat.as_str()),
-              None => "",
+              Some(cat) => format!("from {}", cat.as_str()),
+              None => "".into(),
             };
 
-            utils::bot(&format!("Loaded command: {} {}", command.name, category));
+            utils::bot(format!("Loaded command: {} {}", command.name, category));
           }
 
           Ok(crate::commands::helper::Data {})
@@ -121,7 +121,7 @@ impl BotLauncher {
     }
 
     if let Err(e) = client.start().await {
-      utils::error(&format!("Client exited with error: {e}"));
+      utils::error(format!("Client exited with error: {e}"));
     }
   }
 

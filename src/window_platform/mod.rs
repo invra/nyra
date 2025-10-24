@@ -89,7 +89,7 @@ impl gpui::Render for NyraView {
                         });
                       }
                       Err(e) => {
-                        crate::utils::error(&format!("Failed to create runtime: {e}"));
+                        crate::utils::error(format!("Failed to create runtime: {e}"));
                       }
                     }
                     is_running_clone.store(false, Ordering::Relaxed);
@@ -106,7 +106,7 @@ impl gpui::Render for NyraView {
                         });
                       }
                       Err(e) => {
-                        crate::utils::error(&format!("Failed to create runtime: {e}"));
+                        crate::utils::error(format!("Failed to create runtime: {e}"));
                       }
                     }
 

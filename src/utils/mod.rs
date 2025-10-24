@@ -61,33 +61,33 @@ pub fn log(level: &LogLevel, message: &str) {
 }
 
 #[allow(dead_code)]
-pub fn info(message: &str) {
-  log(&LogLevel::Info, message);
+pub fn info(message: impl AsRef<str>) {
+  log(&LogLevel::Info, message.as_ref());
 }
 
 #[allow(dead_code)]
-pub fn success(message: &str) {
-  log(&LogLevel::Success, message);
+pub fn success(message: impl AsRef<str>) {
+  log(&LogLevel::Success, message.as_ref());
 }
 
 #[allow(dead_code)]
-pub fn warning(message: &str) {
-  log(&LogLevel::Warning, message);
+pub fn warning(message: impl AsRef<str>) {
+  log(&LogLevel::Warning, message.as_ref());
 }
 
 #[allow(dead_code)]
-pub fn error(message: &str) {
-  log(&LogLevel::Error, message);
+pub fn error(message: impl AsRef<str>) {
+  log(&LogLevel::Error, message.as_ref());
 }
 
 #[allow(dead_code)]
-pub fn bot(message: &str) {
-  log(&LogLevel::Bot, message);
+pub fn bot(message: impl AsRef<str>) {
+  log(&LogLevel::Bot, message.as_ref());
 }
 
 #[allow(dead_code)]
-pub fn debug(message: &str) {
-  log(&LogLevel::Debug, message);
+pub fn debug(message: impl AsRef<str>) {
+  log(&LogLevel::Debug, message.as_ref());
 }
 
 #[cfg(test)]

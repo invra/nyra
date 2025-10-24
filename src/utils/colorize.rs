@@ -61,27 +61,31 @@ impl std::fmt::Display for ColoredString {
 
 #[allow(dead_code)]
 pub trait ColorExt {
-  fn color(self, color: Color) -> ColoredString;
-  fn bold(self) -> ColoredString;
+  fn color(self, color: Color) -> String;
+  fn bold(self) -> String;
 }
 
 #[allow(dead_code)]
 impl ColorExt for String {
-  fn color(self, color: Color) -> ColoredString {
-    ColoredString::new(self).color(&color)
+  fn color(self, color: Color) -> String {
+    let colored = ColoredString::new(self).color(&color);
+    format!("{}", colored)
   }
 
-  fn bold(self) -> ColoredString {
-    ColoredString::new(self).bold()
+  fn bold(self) -> String {
+    let bolded = ColoredString::new(self).bold();
+    format!("{}", bolded)
   }
 }
 
 impl ColorExt for &str {
-  fn color(self, color: Color) -> ColoredString {
-    ColoredString::new(self.to_string()).color(&color)
+  fn color(self, color: Color) -> String {
+    let colored = ColoredString::new(self.to_string()).color(&color);
+    format!("{}", colored)
   }
 
-  fn bold(self) -> ColoredString {
-    ColoredString::new(self.to_string()).bold()
+  fn bold(self) -> String {
+    let bolded = ColoredString::new(self.to_string()).bold();
+    format!("{}", bolded)
   }
 }

@@ -66,7 +66,7 @@ impl Config {
 
   pub fn load_from_path<P: AsRef<std::path::Path>>(path: P) -> Result<Self, ConfigError> {
     let config_path = path.as_ref();
-    utils::info(&format!("Loading config from: {}", config_path.display()));
+    utils::info(format!("Loading config from: {}", config_path.display()));
 
     if !config_path.exists() {
       return Err(ConfigError::FileNotFound(config_path.to_path_buf()));
