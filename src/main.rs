@@ -14,6 +14,7 @@ mod window_platform;
 use {
   crate::{
     bot_launcher::BotLauncher,
+    utils::log,
     window_platform::init_gui,
   },
   clap::Parser,
@@ -40,10 +41,10 @@ async fn main() {
   BotLauncher::init(args.config);
 
   if args.gui {
-    crate::utils::info("Starting in GUI mode…");
+    log::info!("Starting in GUI mode…");
     init_gui();
   } else {
-    crate::utils::info("Starting in CLI mode…");
+    log::info!("Starting in CLI mode…");
     BotLauncher::start().await;
   }
 }

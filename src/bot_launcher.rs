@@ -9,6 +9,7 @@ use {
   crate::{
     commands,
     config::Config,
+    utils::log,
   },
   std::sync::{
     Arc,
@@ -29,11 +30,11 @@ impl BotLauncher {
   pub fn init(config_arg: Option<String>) {
     let config = match Config::load(config_arg) {
       Ok(cfg) => {
-        crate::utils::success("Config loaded successfully");
+        log::success!("Config loaded successfully");
         cfg
       }
       Err(e) => {
-        crate::utils::error(&e.to_string());
+        log::error!("{}", &e.to_string());
         return;
       }
     };
@@ -64,7 +65,6 @@ impl BotLauncher {
   }
 
   async fn start_bot(&self) {
-    use crate::utils;
     use poise::serenity_prelude::{
       Client,
       GatewayIntents,
@@ -75,7 +75,7 @@ impl BotLauncher {
       | GatewayIntents::DIRECT_MESSAGES
       | GatewayIntents::MESSAGE_CONTENT;
 
-    utils::bot("Starting bot…");
+    log::bot!("Starting bot…");
 
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
@@ -92,9 +92,9 @@ impl BotLauncher {
       })
       .setup(|ctx, ready, framework| {
         Box::pin(async move {
-          utils::success("The bot has started");
-          utils::bot(format!("Username: {}", ready.user.name));
-          utils::bot(format!("ID: {}", ready.user.id));
+          log::success!("The bot has started");
+          log::bot!("Username: {}", ready.user.name);
+          log::bot!("ID: {}", ready.user.id);
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           for command in &framework.options().commands {
             let category = match &command.category {
@@ -102,7 +102,7 @@ impl BotLauncher {
               None => "".into(),
             };
 
-            utils::bot(format!("Loaded command: {} {}", command.name, category));
+            log::bot!("Loaded command: {} {}", command.name, category);
           }
 
           Ok(crate::commands::helper::Data {})
@@ -121,20 +121,18 @@ impl BotLauncher {
     }
 
     if let Err(e) = client.start().await {
-      utils::error(format!("Client exited with error: {e}"));
+      log::error!("Client exited with error: {e}");
     }
   }
 
   async fn stop_bot(&self) {
-    use crate::utils;
-
     let lock = self.shard_manager.read().await;
     if let Some(manager) = &*lock {
-      utils::bot("Stopping bot gracefully…");
+      log::bot!("Stopping bot gracefully…");
       manager.shutdown_all().await;
-      utils::success("Bot has been stopped.");
+      log::success!("Bot has been stopped.");
     } else {
-      utils::error("Cannot stop bot — shard manager not initialized.");
+      log::error!("Cannot stop bot — shard manager not initialized.");
     }
   }
 }

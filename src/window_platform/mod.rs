@@ -7,7 +7,10 @@
 
 mod theme;
 use {
-  crate::bot_launcher::BotLauncher,
+  crate::{
+    bot_launcher::BotLauncher,
+    utils::log,
+  },
   gpui::{
     App,
     KeyBinding,
@@ -89,7 +92,7 @@ impl gpui::Render for NyraView {
                         });
                       }
                       Err(e) => {
-                        crate::utils::error(format!("Failed to create runtime: {e}"));
+                        log::error!("Failed to create runtime: {e}");
                       }
                     }
                     is_running_clone.store(false, Ordering::Relaxed);
@@ -102,11 +105,11 @@ impl gpui::Render for NyraView {
                       Ok(rt) => {
                         rt.block_on(async {
                           BotLauncher::start().await;
-                          crate::utils::info("Bot has stopped");
+                          log::info!("Bot has stopped");
                         });
                       }
                       Err(e) => {
-                        crate::utils::error(format!("Failed to create runtime: {e}"));
+                        log::error!("Failed to create runtime: {e}");
                       }
                     }
 

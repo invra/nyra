@@ -10,7 +10,7 @@
 */
 
 use {
-  crate::utils,
+  crate::utils::log,
   serde::Deserialize,
   std::{
     fs,
@@ -66,7 +66,7 @@ impl Config {
 
   pub fn load_from_path<P: AsRef<std::path::Path>>(path: P) -> Result<Self, ConfigError> {
     let config_path = path.as_ref();
-    utils::info(format!("Loading config from: {}", config_path.display()));
+    log::info!("Loading config from: {}", config_path.display());
 
     if !config_path.exists() {
       return Err(ConfigError::FileNotFound(config_path.to_path_buf()));
@@ -120,7 +120,7 @@ impl Config {
     }
 
     if config.general.prefix.chars().count() > 2 {
-      utils::warning(
+      log::warning!(
         "The prefix length is over 2 characters, which can cause impaired usage with the bot.",
       );
     }
