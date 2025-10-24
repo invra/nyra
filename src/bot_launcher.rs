@@ -27,7 +27,16 @@ pub struct BotLauncher {
 static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
 
 impl BotLauncher {
-  pub fn init(config_arg: Option<String>) {
+  pub async fn init(config: Option<String>, allow_gui: bool) {
+    BotLauncher::init_instance(config);
+
+    let None = allow_gui.then(crate::window_platform::init_gui) else {
+      return
+    };
+    BotLauncher::start().await;
+  }
+
+  fn init_instance(config_arg: Option<String>) {
     let config = match Config::load(config_arg) {
       Ok(cfg) => {
         log::success!("Config loaded successfully");
