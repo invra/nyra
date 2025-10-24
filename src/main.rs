@@ -14,23 +14,21 @@ mod window_platform;
 use {
   crate::{
     bot_launcher::BotLauncher,
-    utils::log,
+    utils::clap_prints,
     window_platform::init_gui,
   },
   clap::Parser,
 };
 
 #[derive(Parser, Debug)]
-#[command(
-  author,
-  version,
-  about = "A Discord bot.",
-  long_about = "Nyra is a Discord bot which is written with Rust."
-)]
+#[command(author, version, disable_help_flag = true, disable_version_flag = true)]
 struct Args {
   #[arg(short, long)]
   gui: bool,
-
+  #[arg(short, long)]
+  help: bool,
+  #[arg(short, long)]
+  version: bool,
   #[arg(short, long)]
   config: Option<String>,
 }
@@ -38,13 +36,22 @@ struct Args {
 #[tokio::main]
 async fn main() {
   let args = Args::parse();
+
+  if args.help {
+    clap_prints::print_help();
+    return;
+  }
+
+  if args.version {
+    clap_prints::print_version();
+    return;
+  }
+
   BotLauncher::init(args.config);
 
   if args.gui {
-    log::info!("Starting in GUI mode…");
     init_gui();
   } else {
-    log::info!("Starting in CLI mode…");
     BotLauncher::start().await;
   }
 }
