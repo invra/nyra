@@ -1,7 +1,31 @@
-use crate::utils::colorize::{
-  Color,
-  ColorExt,
+use {
+  crate::utils::colorize::{
+    Color,
+    ColorExt,
+  },
+  clap::Parser,
 };
+
+#[derive(Parser, Debug)]
+#[command(author, version, disable_help_flag = true, disable_version_flag = true)]
+pub struct Args {
+  #[arg(short, long)]
+  pub gui: bool,
+  #[arg(short, long)]
+  pub help: bool,
+  #[arg(short, long)]
+  pub version: bool,
+  #[arg(short, long)]
+  pub config: Option<String>,
+}
+
+pub fn get_args() -> Args {
+  Args::parse()
+}
+
+pub fn handle_common_args(args: &Args) -> bool {
+  args.help.then(print_help).is_some() || args.version.then(print_version).is_some()
+}
 
 pub fn print_help() {
   let help_msg = r#"

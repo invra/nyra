@@ -11,41 +11,17 @@ mod config;
 mod utils;
 mod window_platform;
 
-use {
-  crate::{
-    bot_launcher::BotLauncher,
-    utils::clap_prints::{
-      print_help,
-      print_version,
-    },
-  },
-  clap::Parser,
+use crate::{
+  bot_launcher::BotLauncher,
+  utils::clap::get_args,
 };
-
-#[derive(Parser, Debug)]
-#[command(author, version, disable_help_flag = true, disable_version_flag = true)]
-struct Args {
-  #[arg(short, long)]
-  gui: bool,
-  #[arg(short, long)]
-  help: bool,
-  #[arg(short, long)]
-  version: bool,
-  #[arg(short, long)]
-  config: Option<String>,
-}
 
 #[tokio::main]
 async fn main() {
-  let args = Args::parse();
-
-  let None = args.help.then(print_help) else {
-    return
-  };
-
-  let None = args.version.then(print_version) else {
-    return
-  };
+  let args = get_args();
+  if utils::clap::handle_common_args(&args) {
+    return;
+  }
 
   BotLauncher::init(args.config, args.gui).await;
 }
