@@ -75,3 +75,13 @@ impl ColorExt for String {
     ColoredString::new(self).bold()
   }
 }
+
+impl ColorExt for &str {
+  fn color(self, color: Color) -> ColoredString {
+    ColoredString::new(self.to_string()).color(&color)
+  }
+
+  fn bold(self) -> ColoredString {
+    ColoredString::new(self.to_string()).bold()
+  }
+}
