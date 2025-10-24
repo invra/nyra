@@ -14,7 +14,6 @@ mod window_platform;
 use {
   crate::{
     bot_launcher::BotLauncher,
-    config::Config,
     window_platform::init_gui,
   },
   clap::Parser,
@@ -33,19 +32,7 @@ struct Args {
 #[tokio::main]
 async fn main() {
   let args = Args::parse();
-
-  let config = match Config::load(args.config) {
-    Ok(cfg) => {
-      crate::utils::success("Config loaded successfully");
-      cfg
-    }
-    Err(e) => {
-      crate::utils::error(&e.to_string());
-      return;
-    }
-  };
-
-  BotLauncher::init(config);
+  BotLauncher::init(args.config);
 
   if args.gui {
     crate::utils::info("Starting in GUI mode…");

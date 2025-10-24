@@ -6,7 +6,10 @@
 */
 
 use {
-  crate::commands,
+  crate::{
+    commands,
+    config::Config,
+  },
   std::sync::{
     Arc,
     OnceLock,
@@ -23,7 +26,18 @@ pub struct BotLauncher {
 static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
 
 impl BotLauncher {
-  pub fn init(config: crate::config::Config) {
+  pub fn init(config_arg: Option<String>) {
+    let config = match Config::load(config_arg) {
+      Ok(cfg) => {
+        crate::utils::success("Config loaded successfully");
+        cfg
+      }
+      Err(e) => {
+        crate::utils::error(&e.to_string());
+        return;
+      }
+    };
+
     INSTANCE
       .set(Arc::new(Self {
         config,
