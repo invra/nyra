@@ -19,10 +19,15 @@ pub struct Args {
   pub config: Option<String>,
 }
 
+/// Literally just returns the Arguments as
+/// I didn't want to have to importa a whole bunch of
+/// stuff to just get the args (in effort to make main file cleaner)
 pub fn get_args() -> Args {
   Args::parse()
 }
 
+/// Executes the arg which is passed, and returns true
+/// for if a arg *was* passed
 pub fn handle_common_args(args: &Args) -> bool {
   args.help.then(print_help).is_some() || args.version.then(print_version).is_some()
 }
