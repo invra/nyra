@@ -33,10 +33,11 @@ impl BotLauncher {
   pub async fn init(args: &Args) {
     BotLauncher::init_instance(args.config.clone());
 
-    let None = args.gui.then(crate::window_platform::init_gui) else {
-      return;
-    };
-    BotLauncher::start().await;
+    if args.gui.then(|| true).is_some() {
+      crate::window_platform::init_gui();
+    } else {
+      BotLauncher::start().await;
+    }
   }
 
   fn init_instance(config_arg: Option<String>) {
