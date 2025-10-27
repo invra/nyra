@@ -1,7 +1,4 @@
-use {
-  memory_stats::memory_stats,
-  sysctl::Sysctl,
-};
+use sysctl::Sysctl;
 
 #[cfg(target_os = "macos")]
 pub fn get_cpu_model() -> Box<str> {
@@ -52,12 +49,56 @@ pub fn get_cpu_count() -> usize {
   num_cpus::get()
 }
 
+#[cfg(target_os = "macos")]
 #[allow(clippy::cast_precision_loss)]
 pub fn get_mem() -> (f64, f64) {
-  if let Some(usage) = memory_stats() {
-    (usage.physical_mem as f64, usage.physical_mem as f64)
-  } else {
-    (0.0, 0.0)
+  use libc::{
+    _SC_PAGESIZE,
+    HOST_VM_INFO64,
+    host_statistics64,
+    mach_host_self,
+    sysconf,
+    vm_statistics64_data_t,
+  };
+
+  unsafe {
+    let host = mach_host_self();
+    let mut stats: vm_statistics64_data_t = std::mem::zeroed();
+    let mut count = std::mem::size_of::<vm_statistics64_data_t>() / std::mem::size_of::<i32>();
+
+    if host_statistics64(
+      host,
+      HOST_VM_INFO64,
+      &mut stats as *mut _ as *mut i32,
+      &mut count as *mut _ as *mut u32,
+    ) != 0
+    {
+      return (0.0, 0.0);
+    }
+
+    let page_size = sysconf(_SC_PAGESIZE) as u64;
+
+    let used_pages = stats.active_count + stats.wire_count + stats.compressor_page_count;
+    let used_bytes = used_pages as u64 * page_size;
+
+    let total_bytes = match sysctl::Ctl::new("hw.memsize") {
+      Ok(ctl) => match ctl.value() {
+        Ok(val) => match val {
+          sysctl::CtlValue::Int(i) => i as u64,
+          sysctl::CtlValue::Uint(u) => u as u64,
+          sysctl::CtlValue::S64(i) => i as u64,
+          sysctl::CtlValue::U64(u) => u,
+          _ => 0,
+        },
+        Err(_) => 0,
+      },
+      Err(_) => 0,
+    };
+
+    (
+      used_bytes as f64 / 1024.0f64.powi(3),
+      total_bytes as f64 / 1024.0f64.powi(3),
+    )
   }
 }
 
