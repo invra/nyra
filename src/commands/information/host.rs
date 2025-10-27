@@ -15,6 +15,7 @@ use {
     DateTime,
     Utc,
   },
+  memory_stats::memory_stats,
   poise::{
     CreateReply,
     command,
@@ -24,30 +25,20 @@ use {
       CreateEmbedFooter,
     },
   },
-  sysinfo::System,
 };
 
 /// Host information command
 #[command(prefix_command, slash_command, category = "Information")]
 pub async fn host(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
-  let mut sys = System::new_all();
-  sys.refresh_all();
+  let (used, total) = get_mem();
 
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
       .title("Host Info")
-      .field("CPU Model", get_cpu_model(&sys), false)
-      .field("Processors", get_cpu_count(&sys).to_string(), false)
-      .field(
-        "Memory",
-        format!(
-          "{:.2} GB/{:.2} GB",
-          get_mem_used_gb(&sys),
-          get_mem_heap_gb(&sys)
-        ),
-        false,
-      )
+      .field("CPU Model", get_cpu_model(), false)
+      .field("Processors", get_cpu_count().to_string(), false)
+      .field("Memory", format!("{used:.2} GB/{total:.2} GB"), false)
       .field("OS", get_os_name(), false)
       .footer(CreateEmbedFooter::new(format!(
         "Host requested by {}",
@@ -63,13 +54,21 @@ pub async fn host(ctx: Context<'_>) -> Result<(), Error> {
 }
 inventory::submit! { MyCommand(host) }
 
-#[cfg(not(target_os = "windows"))]
-fn get_cpu_model(sys: &System) -> Box<str> {
-  sys.cpus()[0].brand().into()
+use sysctl::Sysctl;
+
+#[cfg(target_os = "macos")]
+fn get_cpu_model() -> Box<str> {
+  match sysctl::Ctl::new("machdep.cpu.brand_string") {
+    Ok(ctl) => match ctl.value_string() {
+      Ok(s) if !s.is_empty() => s.into_boxed_str(),
+      _ => "Unknown CPU".into(),
+    },
+    Err(_) => "Unknown CPU".into(),
+  }
 }
 
 #[cfg(target_os = "windows")]
-fn get_cpu_model(_: &System) -> Box<str> {
+fn get_cpu_model() -> Box<str> {
   use {
     serde::Deserialize,
     wmi::{
@@ -102,18 +101,17 @@ fn get_cpu_model(_: &System) -> Box<str> {
   result.unwrap_or_else(|_| "Unknown CPU".into()).into()
 }
 
-fn get_cpu_count(sys: &System) -> usize {
-  sys.cpus().len()
+fn get_cpu_count() -> usize {
+  num_cpus::get()
 }
 
 #[allow(clippy::cast_precision_loss)]
-fn get_mem_heap_gb(sys: &System) -> f64 {
-  sys.total_memory() as f64 / 1024.0_f64.powi(3)
-}
-
-#[allow(clippy::cast_precision_loss)]
-fn get_mem_used_gb(sys: &System) -> f64 {
-  sys.used_memory() as f64 / 1024.0_f64.powi(3)
+fn get_mem() -> (f64, f64) {
+  if let Some(usage) = memory_stats() {
+    (usage.physical_mem as f64, usage.physical_mem as f64)
+  } else {
+    (0.0, 0.0)
+  }
 }
 
 #[cfg(target_os = "macos")]
