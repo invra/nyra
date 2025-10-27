@@ -1,7 +1,6 @@
-use sysctl::Sysctl;
-
 #[cfg(target_os = "macos")]
 pub fn get_cpu_model() -> Box<str> {
+  use sysctl::Sysctl;
   match sysctl::Ctl::new("machdep.cpu.brand_string") {
     Ok(ctl) => match ctl.value_string() {
       Ok(s) if !s.is_empty() => s.into_boxed_str(),
@@ -52,13 +51,16 @@ pub fn get_cpu_count() -> usize {
 #[cfg(target_os = "macos")]
 #[allow(clippy::cast_precision_loss)]
 pub fn get_mem() -> (f64, f64) {
-  use libc::{
-    _SC_PAGESIZE,
-    HOST_VM_INFO64,
-    host_statistics64,
-    mach_host_self,
-    sysconf,
-    vm_statistics64_data_t,
+  use {
+    libc::{
+      _SC_PAGESIZE,
+      HOST_VM_INFO64,
+      host_statistics64,
+      mach_host_self,
+      sysconf,
+      vm_statistics64_data_t,
+    },
+    sysctl::Sysctl,
   };
 
   unsafe {
@@ -247,7 +249,7 @@ fn normalize_windows_name(caption: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-  use crate::commands::information::host::get_pretty_macos;
+  use crate::commands::information::host::host_helper::get_pretty_macos;
 
   use super::normalize_windows_name;
 
