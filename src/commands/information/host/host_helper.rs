@@ -22,7 +22,7 @@ pub fn get_cpu_model() -> Box<str> {
 
   #[serde(rename_all = "PascalCase")]
   #[derive(Deserialize)]
-  struct Win32_Proccessor {
+  struct Win32Proccessor {
     name: Option<String>,
   }
 
@@ -30,7 +30,7 @@ pub fn get_cpu_model() -> Box<str> {
     let com_con = COMLibrary::new()?;
     let wmi_con = WMIConnection::new(com_con.into())?;
 
-    let results: Vec<Win32_Proccessor> = wmi_con.raw_query("SELECT Name FROM Win32_Processor")?;
+    let results: Vec<Win32Proccessor> = wmi_con.raw_query("SELECT Name FROM Win32_Processor")?;
 
     if let Some(cpu) = results.first() {
       let cpu_model = cpu.name.as_deref().unwrap_or("Unknown CPU");
@@ -115,13 +115,13 @@ pub fn get_mem() -> (f64, f64) {
 
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
-  struct Win32_ComputerSystem {
+  struct Win32ComputerSystem {
     total_physical_memory: Option<u64>,
   }
 
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
-  struct Win32_PerfFormattedData_PerfOS_Memory {
+  struct Win32PerfFormattedDataPerfOSMemory {
     available_bytes: Option<u64>,
   }
 
@@ -130,13 +130,13 @@ pub fn get_mem() -> (f64, f64) {
 
   if let Some(wmi_con) = wmi_con {
     let total: u64 = wmi_con
-      .raw_query::<Win32_ComputerSystem>("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem")
+      .raw_query::<Win32ComputerSystem>("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem")
       .ok()
       .and_then(|v| v.first().and_then(|x| x.total_physical_memory))
       .unwrap_or(0);
 
     let free: u64 = wmi_con
-      .raw_query::<Win32_PerfFormattedData_PerfOS_Memory>(
+      .raw_query::<Win32PerfFormattedDataPerfOSMemory>(
         "SELECT AvailableBytes FROM Win32_PerfFormattedData_PerfOS_Memory",
       )
       .ok()
