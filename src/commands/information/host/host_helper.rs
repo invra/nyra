@@ -33,7 +33,7 @@ pub fn get_cpu_model() -> Box<str> {
     let results: Vec<Win32_Proccessor> = wmi_con.raw_query("SELECT Name FROM Win32_Processor")?;
 
     if let Some(cpu) = results.first() {
-      let cpu_model = cpu.Name.as_deref().unwrap_or("Unknown CPU");
+      let cpu_model = cpu.name.as_deref().unwrap_or("Unknown CPU");
       Ok(cpu_model.into())
     } else {
       Ok("Unknown CPU".into())
@@ -132,7 +132,7 @@ pub fn get_mem() -> (f64, f64) {
     let total: u64 = wmi_con
       .raw_query::<Win32_ComputerSystem>("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem")
       .ok()
-      .and_then(|v| v.first().and_then(|x| x.TotalPhysicalMemory))
+      .and_then(|v| v.first().and_then(|x| x.total_physical_memory))
       .unwrap_or(0);
 
     let free: u64 = wmi_con
@@ -140,7 +140,7 @@ pub fn get_mem() -> (f64, f64) {
         "SELECT AvailableBytes FROM Win32_PerfFormattedData_PerfOS_Memory",
       )
       .ok()
-      .and_then(|v| v.first().and_then(|x| x.AvailableBytes))
+      .and_then(|v| v.first().and_then(|x| x.available_bytes))
       .unwrap_or(0);
 
     let used = total.saturating_sub(free);
