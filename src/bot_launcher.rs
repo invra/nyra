@@ -34,7 +34,7 @@ impl BotLauncher {
     BotLauncher::init_instance(args.config.clone());
 
     let None = args.gui.then(crate::window_platform::init_gui) else {
-      return
+      return;
     };
     BotLauncher::start().await;
   }
