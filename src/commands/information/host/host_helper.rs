@@ -20,11 +20,10 @@ pub fn get_cpu_model() -> Box<str> {
     },
   };
 
-  #[allow(non_camel_case_types)]
-  #[allow(non_snake_case)]
+  #[serde(rename_all = "PascalCase")]
   #[derive(Deserialize)]
   struct Win32_Proccessor {
-    Name: Option<String>,
+    name: Option<String>,
   }
 
   let result = (|| -> Result<String, Box<dyn std::error::Error>> {
@@ -115,15 +114,15 @@ pub fn get_mem() -> (f64, f64) {
   };
 
   #[derive(Deserialize)]
-  #[allow(non_camel_case_types)]
+  #[serde(rename_all = "PascalCase")]
   struct Win32_ComputerSystem {
-    TotalPhysicalMemory: Option<u64>,
+    total_physical_memory: Option<u64>,
   }
 
   #[derive(Deserialize)]
-  #[allow(non_camel_case_types)]
+  #[serde(rename_all = "PascalCase")]
   struct Win32_PerfFormattedData_PerfOS_Memory {
-    AvailableBytes: Option<u64>,
+    available_bytes: Option<u64>,
   }
 
   let com_con = COMLibrary::new().ok();
