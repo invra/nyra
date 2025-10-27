@@ -104,6 +104,57 @@ pub fn get_mem() -> (f64, f64) {
   }
 }
 
+#[cfg(target_os = "windows")]
+pub fn get_mem() -> (f64, f64) {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
+  #[derive(Deserialize)]
+  #[allow(non_camel_case_types)]
+  struct Win32_ComputerSystem {
+    TotalPhysicalMemory: Option<u64>,
+  }
+
+  #[derive(Deserialize)]
+  #[allow(non_camel_case_types)]
+  struct Win32_PerfFormattedData_PerfOS_Memory {
+    AvailableBytes: Option<u64>,
+  }
+
+  let com_con = COMLibrary::new().ok();
+  let wmi_con = com_con.and_then(|c| WMIConnection::new(c.into()).ok());
+
+  if let Some(wmi_con) = wmi_con {
+    let total: u64 = wmi_con
+      .raw_query::<Win32_ComputerSystem>("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem")
+      .ok()
+      .and_then(|v| v.first().and_then(|x| x.TotalPhysicalMemory))
+      .unwrap_or(0);
+
+    let free: u64 = wmi_con
+      .raw_query::<Win32_PerfFormattedData_PerfOS_Memory>(
+        "SELECT AvailableBytes FROM Win32_PerfFormattedData_PerfOS_Memory",
+      )
+      .ok()
+      .and_then(|v| v.first().and_then(|x| x.AvailableBytes))
+      .unwrap_or(0);
+
+    let used = total.saturating_sub(free);
+
+    return (
+      used as f64 / 1024.0_f64.powi(3),
+      total as f64 / 1024.0_f64.powi(3),
+    );
+  }
+
+  (0.0, 0.0)
+}
+
 #[cfg(target_os = "macos")]
 pub fn get_os_name() -> Box<str> {
   use serde::Deserialize;
