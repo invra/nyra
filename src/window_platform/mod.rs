@@ -83,39 +83,23 @@ impl gpui::Render for NyraView {
               let is_running = self.is_running.clone();
               move |_event, _cx, _| {
                 let is_running_clone = is_running.clone();
-                if is_running.load(Ordering::Relaxed) {
-                  std::thread::spawn(move || {
-                    match tokio::runtime::Runtime::new() {
-                      Ok(rt) => {
-                        rt.block_on(async {
-                          BotLauncher::stop().await;
-                        });
-                      }
-                      Err(e) => {
-                        log::error!("Failed to create runtime: {e}");
-                      }
+                std::thread::spawn(move || {
+                  let running = is_running_clone.swap(true, Ordering::Relaxed);
+                  let fut = async {
+                    if running {
+                      BotLauncher::stop().await;
+                    } else {
+                      BotLauncher::start().await;
+                      log::info!("Bot has stopped");
                     }
-                    is_running_clone.store(false, Ordering::Relaxed);
-                  });
-                } else {
-                  std::thread::spawn(move || {
-                    is_running_clone.store(true, Ordering::Relaxed);
-
-                    match tokio::runtime::Runtime::new() {
-                      Ok(rt) => {
-                        rt.block_on(async {
-                          BotLauncher::start().await;
-                          log::info!("Bot has stopped");
-                        });
-                      }
-                      Err(e) => {
-                        log::error!("Failed to create runtime: {e}");
-                      }
-                    }
-
-                    is_running_clone.store(false, Ordering::Relaxed);
-                  });
-                }
+                  };
+                  if let Ok(rt) = tokio::runtime::Runtime::new() {
+                    rt.block_on(fut);
+                  } else {
+                    log::error!("Failed to create runtime");
+                  }
+                  is_running_clone.store(false, Ordering::Relaxed);
+                });
               }
             }),
         ),
