@@ -20,8 +20,8 @@ pub fn get_cpu_model() -> Box<str> {
     },
   };
 
-  #[serde(rename_all = "PascalCase")]
   #[derive(Deserialize)]
+  #[serde(rename_all = "PascalCase")]
   struct Win32Proccessor {
     name: Option<String>,
   }
