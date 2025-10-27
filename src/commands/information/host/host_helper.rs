@@ -55,10 +55,10 @@ pub fn get_mem() -> (f64, f64) {
       _SC_PAGESIZE,
       HOST_VM_INFO64,
       host_statistics64,
-      mach_host_self,
       sysconf,
       vm_statistics64_data_t,
     },
+    mach2::mach_init::mach_host_self,
     sysctl::Sysctl,
   };
 
