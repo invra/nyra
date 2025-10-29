@@ -17,15 +17,11 @@ pub fn get_args() -> Args {
 }
 
 pub fn handle_common_args(args: &Args) -> bool {
-  if args.help {
-    print_help();
-    true
-  } else if args.version {
-    print_version();
-    true
-  } else {
-    false
-  }
+  args
+    .help
+    .then(print_help)
+    .or_else(|| args.version.then(print_version))
+    .is_some()
 }
 
 /// Internal: parse Vec<String> into an Args struct.
@@ -36,10 +32,10 @@ fn parse_args(raw_args: &Vec<String>) -> Args {
 
   while let Some(arg) = iter.next() {
     match arg.as_str() {
-      "-g" | "--gui" => parsed.gui = true,
-      "-h" | "--help" => parsed.help = true,
-      "-v" | "--version" => parsed.version = true,
-      "-c" | "--config" => {
+      "--gui" => parsed.gui = true,
+      "--help" => parsed.help = true,
+      "--version" => parsed.version = true,
+      "--config" => {
         if let Some(path) = iter.next() {
           parsed.config = Some(path.clone());
         } else {
@@ -51,12 +47,41 @@ fn parse_args(raw_args: &Vec<String>) -> Args {
           std::process::exit(1);
         }
       }
+      x if x.starts_with('-') && !x.starts_with("--") => x.chars().skip(1).for_each(|c| match c {
+        'h' => parsed.help = true,
+        'g' => parsed.gui = true,
+        'v' => parsed.version = true,
+        'c' => {
+          if let Some(path) = iter.next() {
+            parsed.config = Some(path.clone());
+          } else {
+            eprintln!(
+              "{} Missing argument for flag {}",
+              "[stderr/nyra]:".color(Color::Red).bold(),
+              "--config".color(Color::Yellow)
+            );
+            std::process::exit(1);
+          }
+        }
+        unknown => {
+          eprintln!(
+            "{} Unknown flag: {}",
+            "[stderr/nyra]:".color(Color::Red).bold(),
+            format!("-{unknown}").color(Color::Yellow)
+          );
+          eprintln!(
+            "Try running {} for a list of valid options.",
+            "--help".color(Color::Cyan)
+          );
+          std::process::exit(1);
+        }
+      }),
 
-      unknown if unknown.starts_with('-') => {
+      x => {
         eprintln!(
-          "{} Unknown argument: {}",
+          "{} Unknown flag: {}",
           "[stderr/nyra]:".color(Color::Red).bold(),
-          unknown.color(Color::Yellow)
+          x.color(Color::Yellow)
         );
         eprintln!(
           "Try running {} for a list of valid options.",
@@ -64,8 +89,6 @@ fn parse_args(raw_args: &Vec<String>) -> Args {
         );
         std::process::exit(1);
       }
-
-      _ => {}
     }
   }
 
