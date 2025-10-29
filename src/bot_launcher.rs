@@ -10,7 +10,7 @@ use {
     commands,
     config::Config,
     utils::{
-      clap::Args,
+      arg_parser::Args,
       log,
     },
   },

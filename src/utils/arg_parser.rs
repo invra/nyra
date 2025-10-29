@@ -1,35 +1,75 @@
-use {
-  crate::utils::colorize::{
-    Color,
-    ColorExt,
-  },
-  clap::Parser,
+use crate::utils::colorize::{
+  Color,
+  ColorExt,
 };
 
-#[derive(Parser, Debug)]
-#[command(author, version, disable_help_flag = true, disable_version_flag = true)]
+#[derive(Debug, Default)]
 pub struct Args {
-  #[arg(short, long)]
   pub gui: bool,
-  #[arg(short, long)]
   pub help: bool,
-  #[arg(short, long)]
   pub version: bool,
-  #[arg(short, long)]
   pub config: Option<String>,
 }
 
-/// Literally just returns the Arguments as
-/// I didn't want to have to importa a whole bunch of
-/// stuff to just get the args (in effort to make main file cleaner)
 pub fn get_args() -> Args {
-  Args::parse()
+  let raw_args: Vec<String> = std::env::args().collect();
+  parse_args(&raw_args)
 }
 
-/// Executes the arg which is passed, and returns true
-/// for if a arg *was* passed
 pub fn handle_common_args(args: &Args) -> bool {
-  args.help.then(print_help).is_some() || args.version.then(print_version).is_some()
+  if args.help {
+    print_help();
+    true
+  } else if args.version {
+    print_version();
+    true
+  } else {
+    false
+  }
+}
+
+/// Internal: parse Vec<String> into an Args struct.
+/// Exits if any invalid or unknown arguments are passed.
+fn parse_args(raw_args: &Vec<String>) -> Args {
+  let mut parsed = Args::default();
+  let mut iter = raw_args.iter().skip(1);
+
+  while let Some(arg) = iter.next() {
+    match arg.as_str() {
+      "-g" | "--gui" => parsed.gui = true,
+      "-h" | "--help" => parsed.help = true,
+      "-v" | "--version" => parsed.version = true,
+      "-c" | "--config" => {
+        if let Some(path) = iter.next() {
+          parsed.config = Some(path.clone());
+        } else {
+          eprintln!(
+            "{} Missing argument for flag {}",
+            "[stderr/nyra]:".color(Color::Red).bold(),
+            "--config".color(Color::Yellow)
+          );
+          std::process::exit(1);
+        }
+      }
+
+      unknown if unknown.starts_with('-') => {
+        eprintln!(
+          "{} Unknown argument: {}",
+          "[stderr/nyra]:".color(Color::Red).bold(),
+          unknown.color(Color::Yellow)
+        );
+        eprintln!(
+          "Try running {} for a list of valid options.",
+          "--help".color(Color::Cyan)
+        );
+        std::process::exit(1);
+      }
+
+      _ => {}
+    }
+  }
+
+  parsed
 }
 
 pub fn print_help() {
@@ -46,18 +86,15 @@ Upstream Git repo: https://gitlab.com/invra/nyra
   .replace("{•}", &"•".color(Color::Cyan).bold())
   .replace("{→}", &"→".color(Color::Blue).bold());
 
-  print!("{}", help_msg);
+  println!("{}", help_msg);
 }
 
 pub fn print_version() {
-  let version_msg = "{version_line}".replace(
-    "{version_line}",
-    &format!(
-      "{} Version v{}",
-      "[stdout/nyra]:".color(Color::Magenta).bold(),
-      env!("CARGO_PKG_VERSION")
-    ),
+  let version_msg = format!(
+    "{} Version v{}",
+    "[stdout/nyra]:".color(Color::Magenta).bold(),
+    env!("CARGO_PKG_VERSION")
   );
 
-  print!("{}", version_msg);
+  println!("{}", version_msg);
 }
