@@ -1,11 +1,19 @@
 /*
   SPDX-License-Identifier: Unlicense
   Project: Nyra
-  File: commands/information/ping.rs
+  File: commands/information/host/mod.rs
   Authors: Invra, Hiten-Tandon
+  Notes: The api calls for the host command
 */
 
 mod host_helper;
+mod tests;
+
+mod linux;
+mod macos;
+mod unknown;
+mod windows;
+
 use {
   crate::commands::helper::{
     Context,
