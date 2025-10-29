@@ -14,10 +14,6 @@ name = "nyra"
 version = "1.0.0"
 edition = "2024"
 
-[target.'cfg(target_os = "linux")'.dependencies]
-libc = "0.2.177"
-sysctl = "0.7.1"
-
 [target.'cfg(target_os = "macos")'.dependencies]
 gpui = {version = "0.2.0", features = ["runtime_shaders"]}
 plist = "1.8.0"
