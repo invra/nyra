@@ -11,14 +11,11 @@ mod config;
 mod utils;
 mod window_platform;
 
-use crate::{
-  bot_launcher::BotLauncher,
-  utils::clap::get_args,
-};
+use crate::utils::arg_parser::get_args;
 
 #[tokio::main]
 async fn main() {
-  if !utils::clap::handle_common_args(&get_args()) {
-    BotLauncher::init(&get_args()).await;
+  if !utils::arg_parser::handle_common_args(&get_args()) {
+    bot_launcher::BotLauncher::init(&get_args()).await;
   }
 }
