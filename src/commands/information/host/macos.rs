@@ -72,19 +72,23 @@ pub fn get_mem() -> (f64, f64) {
 
 #[cfg(target_os = "macos")]
 pub fn get_os_name() -> Box<str> {
-  use serde::Deserialize;
+  use std::fs;
 
-  #[derive(Deserialize)]
-  #[serde(rename_all = "PascalCase")]
-  struct SystemVersion {
-    product_version: String,
+  let plist = fs::read_to_string("/System/Library/CoreServices/SystemVersion.plist")
+    .expect("Failed to read SystemVersion.plist");
+
+  if let Some(pos) = plist.find("<key>ProductVersion</key>") {
+    let after_key = &plist[pos..];
+
+    if let Some(start) = after_key.find("<string>") {
+      if let Some(end) = after_key.find("</string>") {
+        let version = &after_key[start + 8..end];
+        return get_pretty_macos(version);
+      }
+    }
   }
 
-  let file_buf: SystemVersion =
-    plist::from_file("/System/Library/CoreServices/SystemVersion.plist")
-      .expect("Cannot read from PLIST!");
-
-  get_pretty_macos(&file_buf.product_version)
+  get_pretty_macos("0.0.0") // Should return macOS Unknown 
 }
 
 #[allow(dead_code)]
