@@ -62,6 +62,7 @@
           [
             bacon
             rust-bin.nightly.latest.default
+            cargo-udeps
             clippy
             pkg-config
             rust-analyzer
