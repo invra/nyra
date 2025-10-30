@@ -72,10 +72,8 @@ pub fn get_mem() -> (f64, f64) {
     }
   }
 
-  let used_bytes = (active_pages + wired_pages + compressed_pages) * page_size;
-
   (
-    used_bytes as f64 / 1024.0f64.powi(3),
+    ((active_pages + wired_pages + compressed_pages) * page_size) as f64 / 1024.0f64.powi(3),
     total_bytes as f64 / 1024.0f64.powi(3),
   )
 }
