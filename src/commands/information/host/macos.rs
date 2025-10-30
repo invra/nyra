@@ -7,6 +7,20 @@
 */
 
 #[cfg(target_os = "macos")]
+pub fn get_cpu_count() -> usize {
+  use std::process::Command;
+
+  Command::new("sysctl")
+    .arg("-n")
+    .arg("hw.physicalcpu")
+    .output()
+    .ok()
+    .and_then(|out| String::from_utf8(out.stdout).ok())
+    .and_then(|s| s.trim().parse().ok())
+    .unwrap_or_default()
+}
+
+#[cfg(target_os = "macos")]
 pub fn get_cpu_model() -> Box<str> {
   use std::process::Command;
   let output = Command::new("sysctl")
@@ -28,20 +42,6 @@ pub fn get_cpu_model() -> Box<str> {
 }
 
 #[cfg(target_os = "macos")]
-pub fn get_cpu_count() -> usize {
-  use std::process::Command;
-
-  Command::new("sysctl")
-    .arg("-n")
-    .arg("hw.physicalcpu")
-    .output()
-    .ok()
-    .and_then(|out| String::from_utf8(out.stdout).ok())
-    .and_then(|s| s.trim().parse().ok())
-    .unwrap_or(0)
-}
-
-#[cfg(target_os = "macos")]
 pub fn get_mem() -> (f64, f64) {
   use std::process::Command;
 
@@ -52,7 +52,7 @@ pub fn get_mem() -> (f64, f64) {
     .ok()
     .and_then(|out| String::from_utf8(out.stdout).ok())
     .and_then(|s| s.trim().parse::<u64>().ok())
-    .unwrap_or(0);
+    .unwrap_or_default();
 
   let mut page_size = 4096u64;
   let mut active_pages = 0u64;
@@ -115,7 +115,7 @@ pub fn get_os_name() -> Box<str> {
 #[allow(dead_code)]
 pub fn get_pretty_macos(ver: &str) -> Box<str> {
   let (major, minor): (u8, u8) = ver.split_once('.').map_or((0, 0), |(x, y)| {
-    (x.parse().unwrap_or(0), y.parse().unwrap_or(0))
+    (x.parse().unwrap_or_default(), y.parse().unwrap_or(0))
   });
 
   format!(
