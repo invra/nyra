@@ -20,3 +20,7 @@ pub fn get_mem() -> (f64, f64) {
 pub fn get_os_name() -> Box<str> {
   "Unknown OS".into()
 }
+
+pub fn get_cpu_count() -> usize {
+  0x0
+}

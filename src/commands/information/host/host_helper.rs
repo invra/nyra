@@ -15,6 +15,3 @@ pub use crate::commands::information::host::unknown::*;
 #[cfg(target_os = "windows")]
 pub use crate::commands::information::host::windows::*;
 
-pub fn get_cpu_count() -> usize {
-  num_cpus::get()
-}
