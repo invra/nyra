@@ -27,6 +27,19 @@ pub fn get_cpu_model() -> Box<str> {
   }
 }
 
+pub fn get_cpu_count() -> usize {
+  use std::process::Command;
+
+  Command::new("sysctl")
+    .arg("-n")
+    .arg("hw.physicalcpu")
+    .output()
+    .ok()
+    .and_then(|out| String::from_utf8(out.stdout).ok())
+    .and_then(|s| s.trim().parse().ok())
+    .unwrap_or(0)
+}
+
 #[cfg(target_os = "macos")]
 pub fn get_mem() -> (f64, f64) {
   use std::process::Command;
