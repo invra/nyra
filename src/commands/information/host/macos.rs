@@ -27,6 +27,7 @@ pub fn get_cpu_model() -> Box<str> {
   }
 }
 
+#[cfg(target_os = "macos")]
 pub fn get_cpu_count() -> usize {
   use std::process::Command;
 
