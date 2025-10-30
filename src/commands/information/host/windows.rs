@@ -7,16 +7,13 @@
 */
 
 #[cfg(target_os = "windows")]
-use {
-  serde::Deserialize,
-  wmi::{
+pub fn get_cpu_count() -> usize {
+  use serde::Deserialize;
+  use wmi::{
     COMLibrary,
     WMIConnection,
-  },
-};
+  };
 
-#[cfg(target_os = "windows")]
-pub fn get_cpu_count() -> usize {
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
   struct Win32Processor {
@@ -36,11 +33,22 @@ pub fn get_cpu_count() -> usize {
     )
   })();
 
-  result.parse::<usize>().unwrap_or_default()
+  result
+    .ok()
+    .and_then(|s| s.parse::<usize>().ok())
+    .unwrap_or_default()
 }
 
 #[cfg(target_os = "windows")]
 pub fn get_cpu_model() -> Box<str> {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
   struct Win32Processor {
@@ -64,6 +72,14 @@ pub fn get_cpu_model() -> Box<str> {
 
 #[cfg(target_os = "windows")]
 pub fn get_mem() -> (f64, f64) {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
   struct Win32ComputerSystem {
@@ -106,6 +122,14 @@ pub fn get_mem() -> (f64, f64) {
 
 #[cfg(target_os = "windows")]
 pub fn get_os_name() -> Box<str> {
+  use {
+    serde::Deserialize,
+    wmi::{
+      COMLibrary,
+      WMIConnection,
+    },
+  };
+
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
   struct Win32OperatingSystem {
