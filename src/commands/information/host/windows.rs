@@ -31,12 +31,12 @@ pub fn get_cpu_count() -> usize {
     Ok(
       results
         .first()
-        .and_then(|c| c.name.clone())
-        .unwrap_or(0x0.into()),
+        .and_then(|c| c.number_of_cores.clone())
+        .unwrap_or("0".into()),
     )
   })();
 
-  result.unwrap_or_else(|_| 0x0).into()
+  result.parse::<usize>().unwrap_or_default()
 }
 
 #[cfg(target_os = "windows")]
