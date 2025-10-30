@@ -3597,7 +3597,6 @@ dependencies = [
  "chrono",
  "gpui",
  "inventory",
- "num_cpus",
  "poise",
  "serde",
  "tokio",
