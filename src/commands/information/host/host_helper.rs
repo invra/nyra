@@ -14,4 +14,3 @@ pub use crate::commands::information::host::macos::*;
 pub use crate::commands::information::host::unknown::*;
 #[cfg(target_os = "windows")]
 pub use crate::commands::information::host::windows::*;
-
