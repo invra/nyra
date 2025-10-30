@@ -17,26 +17,24 @@ pub fn get_cpu_count() -> usize {
   #[derive(Deserialize)]
   #[serde(rename_all = "PascalCase")]
   struct Win32Processor {
-    number_of_cores: Option<String>,
+    number_of_cores: Option<u32>,
   }
 
-  let result = (|| -> Result<String, Box<dyn std::error::Error>> {
+  (|| -> Result<usize, Box<dyn std::error::Error>> {
     let com_con = COMLibrary::new()?;
     let wmi_con = WMIConnection::new(com_con.into())?;
     let results: Vec<Win32Processor> =
       wmi_con.raw_query("SELECT NumberOfCores FROM Win32_Processor")?;
+
     Ok(
       results
-        .first()
-        .and_then(|c| c.number_of_cores.clone())
-        .unwrap_or("0".into()),
+        .into_iter()
+        .filter_map(|p| p.number_of_cores)
+        .map(|n| n as usize)
+        .sum(),
     )
-  })();
-
-  result
-    .ok()
-    .and_then(|s| s.parse::<usize>().ok())
-    .unwrap_or_default()
+  })()
+  .unwrap_or_default()
 }
 
 #[cfg(target_os = "windows")]
