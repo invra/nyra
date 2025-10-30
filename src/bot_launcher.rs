@@ -33,14 +33,20 @@ impl BotLauncher {
   pub async fn init(args: &Args) {
     BotLauncher::init_instance(args.config.clone());
 
-    #[cfg(feature = "gui")]
-    if args.gui.then(|| true).is_some() {
+    #[cfg(feature = "only-gui")]
+    {
       crate::window_platform::init_gui();
-    } else {
-      BotLauncher::start().await;
+      return;
     }
 
-    #[cfg(not(feature = "gui"))]
+    #[cfg(all(feature = "gui", not(feature = "only-gui")))]
+    {
+      if args.gui {
+        crate::window_platform::init_gui();
+        return;
+      }
+    }
+
     BotLauncher::start().await;
   }
 

@@ -19,7 +19,9 @@ edition = "2024"
 [features]
 default = ["gui"]
 gui = ["gpui"]
-no-gui = []
+cli = []
+only-gui = ["gui"]
+only-cli = ["cli"]
 
 [target.'cfg(target_os = "windows")'.dependencies]
 wmi = "0.17.3"
