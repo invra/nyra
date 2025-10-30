@@ -21,6 +21,7 @@ pub fn get_os_name() -> Box<str> {
   "Unknown OS".into()
 }
 
+#[cfg(not(any(target_os = "linux", target_os = "macos", target_os = "windows")))]
 pub fn get_cpu_count() -> usize {
   0x0
 }
