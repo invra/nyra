@@ -33,11 +33,15 @@ impl BotLauncher {
   pub async fn init(args: &Args) {
     BotLauncher::init_instance(args.config.clone());
 
+    #[cfg(feature = "gui")]
     if args.gui.then(|| true).is_some() {
       crate::window_platform::init_gui();
     } else {
       BotLauncher::start().await;
     }
+
+    #[cfg(not(feature = "gui"))]
+    BotLauncher::start().await;
   }
 
   fn init_instance(config_arg: Option<String>) {
@@ -72,6 +76,7 @@ impl BotLauncher {
     this.start_bot().await;
   }
 
+  #[allow(dead_code)]
   pub async fn stop() {
     let this = Self::instance();
     this.stop_bot().await;
@@ -138,6 +143,7 @@ impl BotLauncher {
     }
   }
 
+  #[allow(dead_code)]
   async fn stop_bot(&self) {
     let lock = self.shard_manager.read().await;
     if let Some(manager) = &*lock {

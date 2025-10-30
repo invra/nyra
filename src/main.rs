@@ -9,6 +9,7 @@ mod bot_launcher;
 mod commands;
 mod config;
 mod utils;
+#[cfg(feature = "gui")]
 mod window_platform;
 
 use crate::utils::arg_parser::get_args;

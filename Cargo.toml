@@ -1,6 +1,6 @@
 [dependencies]
 chrono = "0.4.42"
-gpui = {version = "0.2.2", features = ["runtime_shaders"]}
+gpui = {version = "0.2.2", optional = true, features = ["runtime_shaders"]}
 inventory = "0.3.21"
 poise = {path = "./poise"}
 serde = "1.0.228"
@@ -15,6 +15,11 @@ license = "Unlicense"
 readme = "README.adoc"
 keywords = ["discord", "discord-bot", "utility"]
 edition = "2024"
+
+[features]
+default = ["gui"]
+gui = ["gpui"]
+no-gui = []
 
 [target.'cfg(target_os = "windows")'.dependencies]
 wmi = "0.17.3"
