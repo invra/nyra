@@ -7,10 +7,8 @@
 */
 
 #[cfg(target_os = "macos")]
-use sysctl::Sysctl;
-
-#[cfg(target_os = "macos")]
 pub fn get_cpu_model() -> Box<str> {
+  use sysctl::Sysctl;
   match sysctl::Ctl::new("machdep.cpu.brand_string") {
     Ok(ctl) => match ctl.value_string() {
       Ok(s) if !s.is_empty() => s.into_boxed_str(),
@@ -32,6 +30,7 @@ pub fn get_mem() -> (f64, f64) {
       vm_statistics64_data_t,
     },
     mach2::mach_init::mach_host_self,
+    sysctl::Sysctl,
   };
 
   unsafe {
