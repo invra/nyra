@@ -40,11 +40,9 @@ impl BotLauncher {
     }
 
     #[cfg(all(feature = "gui", not(feature = "only-gui")))]
-    {
-      if args.gui {
-        crate::window_platform::init_gui();
-        return;
-      }
+    if args.gui {
+      crate::window_platform::init_gui();
+      return;
     }
 
     #[allow(unreachable_code)]
