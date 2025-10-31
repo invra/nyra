@@ -47,6 +47,7 @@ impl BotLauncher {
       }
     }
 
+    #[allow(unreachable_code)]
     BotLauncher::start().await;
   }
 

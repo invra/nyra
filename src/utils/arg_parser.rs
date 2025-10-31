@@ -5,7 +5,7 @@ use crate::utils::colorize::{
 
 #[derive(Debug, Default)]
 pub struct Args {
-  #[cfg(feature = "gui")]
+  #[cfg(not(any(feature = "only-gui", feature = "only-cli")))]
   pub gui: bool,
   pub help: bool,
   pub version: bool,
@@ -33,7 +33,7 @@ fn parse_args(raw_args: &Vec<String>) -> Args {
 
   while let Some(arg) = iter.next() {
     match arg.as_str() {
-      #[cfg(feature = "gui")]
+      #[cfg(not(any(feature = "only-gui", feature = "only-cli")))]
       "--gui" => parsed.gui = true,
       "--help" => parsed.help = true,
       "--version" => parsed.version = true,
@@ -51,7 +51,7 @@ fn parse_args(raw_args: &Vec<String>) -> Args {
       }
       x if x.starts_with('-') && !x.starts_with("--") => x.chars().skip(1).for_each(|c| match c {
         'h' => parsed.help = true,
-        #[cfg(feature = "gui")]
+        #[cfg(not(any(feature = "only-gui", feature = "only-cli")))]
         'g' => parsed.gui = true,
         'v' => parsed.version = true,
         'c' => {
