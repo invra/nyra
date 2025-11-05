@@ -1,5 +1,5 @@
 [dependencies]
-tokio = {version = "1.25.1", default-features = false} # for async in general
+tokio.workspace = true
 futures-util = {version = "0.3.13", default-features = false} # for async in general
 poise_macros = {path = "macros", version = "0.6.1"} # remember to update the version on changes!
 async-trait = {version = "0.1.48", default-features = false} # various traits
