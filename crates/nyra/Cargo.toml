@@ -1,14 +1,18 @@
+[[bin]]
+name = "nyra"
+path = "src/main.rs"
+
 [dependencies]
 chrono.workspace = true
+
+[dependencies.gpui]
+workspace = true
+optional = true
 inventory.workspace = true
 poise.workspace = true
 serde.workspace = true
 tokio.workspace = true
 toml.workspace = true
-
-[dependencies.gpui]
-workspace = true
-optional = true
 
 [features]
 default = ["gui"]
@@ -25,10 +29,6 @@ license = "Unlicense"
 readme = "README.adoc"
 keywords = ["discord", "discord-bot", "utility"]
 edition = "2024"
-
-[[bin]]
-name = "nyra"
-path = "src/main.rs"
 
 [target.'cfg(target_os = "windows")'.dependencies]
 wmi.workspace = true
