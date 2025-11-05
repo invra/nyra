@@ -41,11 +41,13 @@ handle_panics = []
 unexpected_cfgs = {level = "warn", check-cfg = ["cfg(doc_nightly)"]}
 
 [package]
-authors = ["kangalio <jannik.a.schaper@web.de>"]
-edition = "2021"
+authors = [
+  "kangalio <jannik.a.schaper@web.de>",
+  "invra <pacstrap@mx.idalon.org>"
+]
+edition = "2024"
 name = "poise"
-version = "0.6.1"
-rust-version = "1.74.0"
+version = "0.6.2"
 description = "A Discord bot framework for serenity"
 license = "MIT"
 repository = "https://github.com/serenity-rs/poise/"
