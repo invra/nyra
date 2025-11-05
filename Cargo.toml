@@ -1,27 +1,25 @@
-[dependencies]
-chrono = "0.4.42"
-gpui = {version = "0.2.2", optional = true, features = ["runtime_shaders"]}
-inventory = "0.3.21"
-poise = {path = "./poise"}
-serde = "1.0.228"
-tokio = {version = "1.48.0", features = ["rt", "macros", "rt-multi-thread", "sync"]}
-toml = "0.9.8"
+[workspace]
+resolver = "2"
+members = [
+  "crates/poise",
+  "crates/nyra"
+]
+default-members = ["crates/nyra"]
 
-[features]
-default = ["gui"]
-gui = ["gpui"]
-cli = []
-only-gui = ["gui"]
-only-cli = ["cli"]
-
-[package]
-name = "nyra"
-version = "1.0.0"
-description = "A discord bot"
-license = "Unlicense"
-readme = "README.adoc"
-keywords = ["discord", "discord-bot", "utility"]
+[workspace.package]
+publish = false
 edition = "2024"
 
-[target.'cfg(target_os = "windows")'.dependencies]
+[workspace.dependencies]
+inventory = "0.3.21"
+serde = "1.0.228"
+chrono = "0.4.42"
+toml = "0.9.8"
 wmi = "0.17.3"
+
+[workspace.dependencies.poise]
+path = "crates/poise"
+
+[workspace.dependencies.tokio]
+version = "1.48.0"
+features = ["rt", "macros", "rt-multi-thread", "sync"]

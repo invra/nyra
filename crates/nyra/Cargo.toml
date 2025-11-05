@@ -1,0 +1,31 @@
+[dependencies]
+chrono.workspace = true
+inventory.workspace = true
+poise.workspace = true
+serde.workspace = true
+tokio.workspace = true
+toml.workspace = true
+gpui = { version = "0.2.2", optional = true, features = ["runtime_shaders"] }
+
+[features]
+default = ["gui"]
+gui = ["gpui"]
+cli = []
+only-gui = ["gui"]
+only-cli = ["cli"]
+
+[package]
+name = "nyra"
+version = "1.2.0"
+description = "A discord bot"
+license = "Unlicense"
+readme = "README.adoc"
+keywords = ["discord", "discord-bot", "utility"]
+edition = "2024"
+
+[[bin]]
+name = "nyra"
+path = "src/main.rs"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+wmi.workspace = true
