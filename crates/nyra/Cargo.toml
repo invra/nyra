@@ -5,7 +5,10 @@ poise.workspace = true
 serde.workspace = true
 tokio.workspace = true
 toml.workspace = true
-gpui = { version = "0.2.2", optional = true, features = ["runtime_shaders"] }
+
+[dependencies.gpui]
+workspace = true
+optional = true
 
 [features]
 default = ["gui"]
