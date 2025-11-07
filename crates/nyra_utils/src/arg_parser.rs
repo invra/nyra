@@ -1,4 +1,4 @@
-use crate::utils::colorize::{
+use crate::colorize::{
   Color,
   ColorExt,
 };

@@ -10,7 +10,7 @@
 */
 
 use {
-  crate::utils::log,
+  nyra_utils::log,
   serde::Deserialize,
   std::{
     fs,

@@ -52,6 +52,12 @@ path = "crates/poise"
 path = "crates/poise_macros"
 version = "0.6.1"
 
+[workspace.dependencies.nyra-gui]
+path = "crates/nyra_gui"
+
+[workspace.dependencies.nyra-utils]
+path = "crates/nyra_utils"
+
 [workspace.dependencies.regex]
 version = "1.6.0"
 default-features = false

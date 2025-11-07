@@ -1,0 +1,11 @@
+= nyra-gui
+
+This crate is for the GUI feature of nyra
+
+---
+
+== License
+
+This crate is licensed under link:./LICENSE.txt[The Unlicense].
+
+Essentially, you're free to use, modify, and distribute the code as you see fit. See link:https://unlicense.org[<unlicense.org>] for more details.

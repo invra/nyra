@@ -1,4 +1,4 @@
-use crate::utils::colorize::{
+use crate::colorize::{
   Color,
   ColorExt,
 };
@@ -38,7 +38,7 @@ impl LogLevel {
   }
 }
 
-pub(crate) fn log_internal(level: LogLevel, args: fmt::Arguments<'_>) {
+pub fn log_internal(level: LogLevel, args: fmt::Arguments<'_>) {
   let (stream, color) = match level {
     LogLevel::Error => ("STDERR", level.get_color()),
     _ => ("STDOUT", level.get_color()),
@@ -56,53 +56,53 @@ pub(crate) fn log_internal(level: LogLevel, args: fmt::Arguments<'_>) {
 #[macro_export]
 macro_rules! info {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Info, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Info, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use info;
+pub use info;
 
 #[macro_export]
 macro_rules! success {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Success, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Success, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use success;
+pub use success;
 
 #[macro_export]
 macro_rules! warning {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Warning, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Warning, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use warning;
+pub use warning;
 
 #[macro_export]
 macro_rules! error {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Error, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Error, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use error;
+pub use error;
 
 #[macro_export]
 macro_rules! bot {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Bot, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Bot, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use bot;
+pub use bot;
 
 #[macro_export]
 macro_rules! debug {
     ($($arg:tt)*) => {
-        $crate::utils::log::log_internal($crate::utils::log::LogLevel::Debug, format_args!($($arg)*));
+        nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Debug, format_args!($($arg)*));
     };
 }
 #[allow(unused_imports)]
-pub(crate) use debug;
+pub use debug;

@@ -1,9 +1,4 @@
-[[bin]]
-name = "nyra"
-path = "src/main.rs"
-
 [dependencies]
-nyra-utils.workspace = true
 inventory.workspace = true
 chrono.workspace = true
 poise.workspace = true
@@ -11,21 +6,21 @@ serde.workspace = true
 tokio.workspace = true
 toml.workspace = true
 
-[dependencies.nyra-gui]
+[dependencies.gpui]
 workspace = true
 optional = true
 
 [features]
 default = ["gui"]
-gui = ["nyra-gui"]
+gui = ["gpui"]
 cli = []
 only-gui = ["gui"]
 only-cli = ["cli"]
 
 [package]
-name = "nyra"
+name = "nyra-utils"
 version = "1.2.0"
-description = "A discord bot"
+description = "Nyra's simple utility functions"
 license = "Unlicense"
 readme = "README.adoc"
 keywords = ["discord", "discord-bot", "utility"]

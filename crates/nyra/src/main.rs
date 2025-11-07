@@ -8,15 +8,12 @@
 mod bot_launcher;
 mod commands;
 mod config;
-mod utils;
-#[cfg(feature = "gui")]
-mod window_platform;
 
-use crate::utils::arg_parser::get_args;
+use nyra_utils::arg_parser::get_args;
 
 #[tokio::main]
 async fn main() {
-  if !utils::arg_parser::handle_common_args(&get_args()) {
+  if !nyra_utils::arg_parser::handle_common_args(&get_args()) {
     bot_launcher::BotLauncher::init(&get_args()).await;
   }
 }

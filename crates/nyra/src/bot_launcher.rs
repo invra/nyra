@@ -9,10 +9,10 @@ use {
   crate::{
     commands,
     config::Config,
-    utils::{
-      arg_parser::Args,
-      log,
-    },
+  },
+  nyra_utils::{
+    arg_parser::Args,
+    log,
   },
   std::sync::{
     Arc,
@@ -20,6 +20,9 @@ use {
   },
   tokio::sync::RwLock,
 };
+
+#[cfg(feature = "gui")]
+use nyra_gui;
 
 #[derive(Debug)]
 pub struct BotLauncher {
@@ -35,13 +38,13 @@ impl BotLauncher {
 
     #[cfg(feature = "only-gui")]
     {
-      crate::window_platform::init_gui();
+      nyra_gui::init_gui(|| Box::pin(Self::start()), || Box::pin(Self::stop()));
       return;
     }
 
     #[cfg(all(feature = "gui", not(feature = "only-gui")))]
     if args.gui {
-      crate::window_platform::init_gui();
+      nyra_gui::init_gui(|| Box::pin(Self::start()), || Box::pin(Self::stop()));
       return;
     }
 
