@@ -3681,15 +3681,10 @@ dependencies = [
 name = "nyra-gui"
 version = "1.2.0"
 dependencies = [
- "chrono",
  "gpui",
- "inventory",
  "nyra-utils",
- "poise",
  "serde",
  "tokio",
- "toml 0.9.8",
- "wmi",
 ]
 
 [[package]]
