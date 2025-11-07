@@ -1,18 +1,6 @@
-[dependencies]
-inventory.workspace = true
-chrono.workspace = true
-poise.workspace = true
-serde.workspace = true
-tokio.workspace = true
-toml.workspace = true
-
-[dependencies.gpui]
-workspace = true
-optional = true
-
 [features]
 default = ["gui"]
-gui = ["gpui"]
+gui = []
 cli = []
 only-gui = ["gui"]
 only-cli = ["cli"]
