@@ -10,8 +10,8 @@ pub use slash::*;
 
 use crate::serenity_prelude as serenity;
 
-// TODO: integrate serenity::Context in here? Every place where FrameworkContext is passed is also
-// passed serenity::Context
+// TODO: integrate serenity::Context in here? Every place where FrameworkContext
+// is passed is also passed serenity::Context
 /// A view into data stored by [`crate::Framework`]
 pub struct FrameworkContext<'a, U, E> {
   /// User ID of this bot
@@ -34,24 +34,24 @@ impl<U, E> Clone for FrameworkContext<'_, U, E> {
 impl<'a, U, E> FrameworkContext<'a, U, E> {
   /// Returns the stored framework options, including commands.
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On this type, you can
-  /// also just access the public `options` field.
+  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// this type, you can also just access the public `options` field.
   pub fn options(&self) -> &'a crate::FrameworkOptions<U, E> {
     self.options
   }
 
   /// Returns the serenity's client shard manager.
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On this type, you can
-  /// also just access the public `shard_manager` field.
+  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// this type, you can also just access the public `shard_manager` field.
   pub fn shard_manager(&self) -> std::sync::Arc<serenity::ShardManager> {
     self.shard_manager.clone()
   }
 
   /// Retrieves user data
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On this type, you can
-  /// also just access the public `user_data` field.
+  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// this type, you can also just access the public `user_data` field.
   #[allow(clippy::unused_async)] // for API compatibility with Framework
   pub async fn user_data(&self) -> &'a U {
     self.user_data
@@ -122,10 +122,10 @@ pub async fn dispatch_event<U: Send + Sync, E>(
           .write()
           .unwrap()
           .process_message_delete(*deleted_message_id);
-        if let Some(bot_response) = bot_response {
-          if let Err(e) = bot_response.delete(ctx).await {
-            tracing::warn!("failed to delete bot response: {}", e);
-          }
+        if let Some(bot_response) = bot_response
+          && let Err(e) = bot_response.delete(ctx).await
+        {
+          tracing::warn!("failed to delete bot response: {}", e);
         }
       }
     }

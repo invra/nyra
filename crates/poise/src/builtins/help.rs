@@ -8,16 +8,18 @@ use std::fmt::Write as _;
 
 /// Optional configuration for how the help message from [`help()`] looks
 pub struct HelpConfiguration<'a> {
-  /// Extra text displayed at the bottom of your message. Can be used for help and tips specific
-  /// to your bot
+  /// Extra text displayed at the bottom of your message. Can be used for help
+  /// and tips specific to your bot
   pub extra_text_at_bottom: &'a str,
-  /// Whether to make the response ephemeral if possible. Can be nice to reduce clutter
+  /// Whether to make the response ephemeral if possible. Can be nice to reduce
+  /// clutter
   pub ephemeral: bool,
   /// Whether to list context menu commands as well
   pub show_context_menu_commands: bool,
   /// Whether to list context menu commands as well
   pub show_subcommands: bool,
-  /// Whether to include [`crate::Command::description`] (above [`crate::Command::help_text`]).
+  /// Whether to include [`crate::Command::description`] (above
+  /// [`crate::Command::help_text`]).
   pub include_description: bool,
   #[doc(hidden)]
   pub __non_exhaustive: (),
@@ -131,18 +133,18 @@ async fn help_single_command<U, E>(
   let commands = &ctx.framework().options().commands;
   // Try interpret the command name as a context menu command first
   let mut command = commands.iter().find(|command| {
-    if let Some(context_menu_name) = &command.context_menu_name {
-      if context_menu_name.eq_ignore_ascii_case(command_name) {
-        return true;
-      }
+    if let Some(context_menu_name) = &command.context_menu_name
+      && context_menu_name.eq_ignore_ascii_case(command_name)
+    {
+      return true;
     }
     false
   });
   // Then interpret command name as a normal command (possibly nested subcommand)
-  if command.is_none() {
-    if let Some((c, ..)) = crate::find_command(commands, command_name, true, &mut vec![]) {
-      command = Some(c);
-    }
+  if command.is_none()
+    && let Some((c, ..)) = crate::find_command(commands, command_name, true, &mut vec![])
+  {
+    command = Some(c);
   }
 
   let reply = if let Some(command) = command {
@@ -261,7 +263,8 @@ fn preformat_subcommands<U, E>(
   }
 }
 
-/// Preformat lines (except for padding,) like `("  /ping", "Emits a ping message")`
+/// Preformat lines (except for padding,) like `("  /ping", "Emits a ping
+/// message")`
 fn preformat_command<U, E>(
   commands: &mut TwoColumnList,
   config: &HelpConfiguration<'_>,
@@ -274,8 +277,8 @@ fn preformat_command<U, E>(
   } else if command.prefix_action.is_some() {
     options_prefix.map(String::from).unwrap_or_default()
   } else {
-    // This is not a prefix or slash command, i.e. probably a context menu only command
-    // This should have been filtered out in `generate_all_commands`
+    // This is not a prefix or slash command, i.e. probably a context menu only
+    // command This should have been filtered out in `generate_all_commands`
     unreachable!();
   };
 
@@ -365,19 +368,20 @@ async fn help_all_commands<U, E>(
   Ok(())
 }
 
-/// A help command that outputs text in a code block, groups commands by categories, and annotates
-/// commands with a slash if they exist as slash commands.
+/// A help command that outputs text in a code block, groups commands by
+/// categories, and annotates commands with a slash if they exist as slash
+/// commands.
 ///
-/// Example usage from Ferris, the Discord bot running in the Rust community server:
-/// ```rust
+/// Example usage from Ferris, the Discord bot running in the Rust community
+/// server: ```rust
 /// # type Error = Box<dyn std::error::Error>;
 /// # type Context<'a> = poise::Context<'a, (), Error>;
 /// /// Show this menu
 /// #[poise::command(prefix_command, track_edits, slash_command)]
 /// pub async fn help(
 ///     ctx: Context<'_>,
-///     #[description = "Specific command to show help about"] command: Option<String>,
-/// ) -> Result<(), Error> {
+///     #[description = "Specific command to show help about"] command:
+/// Option<String>, ) -> Result<(), Error> {
 ///     let config = poise::builtins::HelpConfiguration {
 ///         extra_text_at_bottom: "\
 /// Type ?help command for more info on a command.

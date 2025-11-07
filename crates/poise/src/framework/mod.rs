@@ -14,16 +14,19 @@ use crate::{
 
 mod builder;
 
-/// The main framework struct which stores all data and handles message and interaction dispatch.
+/// The main framework struct which stores all data and handles message and
+/// interaction dispatch.
 ///
-/// Technically, this is just an optional abstraction over [`crate::dispatch_event`] with some
-/// additional conveniences built-in:
-/// - fills in correct values for [`crate::Command::qualified_name`]: [`set_qualified_names`]
+/// Technically, this is just an optional abstraction over
+/// [`crate::dispatch_event`] with some additional conveniences built-in:
+/// - fills in correct values for [`crate::Command::qualified_name`]:
+///   [`set_qualified_names`]
 /// - spawns a background task to periodically clear edit tracker cache
 /// - sets up user data on the first Ready event
 /// - keeps track of shard manager and bot ID automatically
 ///
-/// You can build a bot without [`Framework`]: see the `manual_dispatch` example in the repository
+/// You can build a bot without [`Framework`]: see the `manual_dispatch` example
+/// in the repository
 pub struct Framework<U, E> {
   /// Stores user data. Is initialized on first Ready event
   user_data: std::sync::OnceLock<U>,
@@ -32,9 +35,11 @@ pub struct Framework<U, E> {
   /// Stores the framework options
   options: crate::FrameworkOptions<U, E>,
 
-  /// Initialized to Some during construction; so shouldn't be None at any observable point
+  /// Initialized to Some during construction; so shouldn't be None at any
+  /// observable point
   shard_manager: Option<Arc<serenity::ShardManager>>,
-  /// Filled with Some on construction. Taken out and executed on first Ready gateway event
+  /// Filled with Some on construction. Taken out and executed on first Ready
+  /// gateway event
   setup: std::sync::Mutex<
     Option<
       Box<
@@ -69,12 +74,14 @@ impl<U, E> Framework<U, E> {
     FrameworkBuilder::default()
   }
 
-  /// Setup a new [`Framework`]. For more ergonomic setup, please see [`FrameworkBuilder`]
+  /// Setup a new [`Framework`]. For more ergonomic setup, please see
+  /// [`FrameworkBuilder`]
   ///
-  /// The user data callback is invoked as soon as the bot is logged in. That way, bot data like
-  /// user ID or connected guilds can be made available to the user data setup function. The user
-  /// data setup is not allowed to return Result because there would be no reasonable
-  /// course of action on error.
+  /// The user data callback is invoked as soon as the bot is logged in. That
+  /// way, bot data like user ID or connected guilds can be made available to
+  /// the user data setup function. The user data setup is not allowed to
+  /// return Result because there would be no reasonable course of action on
+  /// error.
   pub fn new<F>(options: crate::FrameworkOptions<U, E>, setup: F) -> Self
   where
     F: Send
@@ -112,8 +119,8 @@ impl<U, E> Framework<U, E> {
       .expect("framework should have started")
   }
 
-  /// Retrieves user data, or blocks until it has been initialized (once the Ready event has been
-  /// received).
+  /// Retrieves user data, or blocks until it has been initialized (once the
+  /// Ready event has been received).
   pub async fn user_data(&self) -> &U {
     loop {
       match self.user_data.get() {
@@ -144,16 +151,15 @@ impl<U: Send + Sync, E: Send + Sync> serenity::Framework for Framework<U, E> {
 
     self.shard_manager = Some(client.shard_manager.clone());
 
-    if self.options.initialize_owners {
-      if let Err(e) = insert_owners_from_http(
+    if self.options.initialize_owners
+      && let Err(e) = insert_owners_from_http(
         &client.http,
         &mut self.options.owners,
         &self.options.initialized_team_roles,
       )
       .await
-      {
-        tracing::warn!("Failed to insert owners from HTTP: {e}");
-      }
+    {
+      tracing::warn!("Failed to insert owners from HTTP: {e}");
     }
 
     if let Some(edit_tracker) = &self.options.prefix_options.edit_tracker {
@@ -166,8 +172,8 @@ impl<U: Send + Sync, E: Send + Sync> serenity::Framework for Framework<U, E> {
   }
 }
 
-/// If the incoming event is Ready, this method executes the user data setup logic
-/// Otherwise, it forwards the event to [`crate::dispatch_event`]
+/// If the incoming event is Ready, this method executes the user data setup
+/// logic Otherwise, it forwards the event to [`crate::dispatch_event`]
 async fn raw_dispatch_event<U, E>(
   framework: &Framework<U, E>,
   ctx: serenity::Context,
@@ -213,9 +219,11 @@ async fn raw_dispatch_event<U, E>(
   crate::dispatch_event(framework, &ctx, event).await;
 }
 
-/// Traverses commands recursively and sets [`crate::Command::qualified_name`] to its actual value
+/// Traverses commands recursively and sets [`crate::Command::qualified_name`]
+/// to its actual value
 pub fn set_qualified_names<U, E>(commands: &mut [crate::Command<U, E>]) {
-  /// Fills in `qualified_name` fields by appending command name to the parent command name
+  /// Fills in `qualified_name` fields by appending command name to the parent
+  /// command name
   fn set_subcommand_qualified_names<U, E>(parents: &str, commands: &mut [crate::Command<U, E>]) {
     for cmd in commands {
       cmd.qualified_name = format!("{} {}", parents, cmd.name);
@@ -227,7 +235,8 @@ pub fn set_qualified_names<U, E>(commands: &mut [crate::Command<U, E>]) {
   }
 }
 
-/// Prints a warning on stderr if a prefix is configured but `MESSAGE_CONTENT` is not set
+/// Prints a warning on stderr if a prefix is configured but `MESSAGE_CONTENT`
+/// is not set
 fn message_content_intent_sanity_check<U, E>(
   prefix_options: &crate::PrefixFrameworkOptions<U, E>,
   intents: serenity::GatewayIntents,
@@ -241,8 +250,8 @@ fn message_content_intent_sanity_check<U, E>(
   }
 }
 
-/// Runs [`serenity::Http::get_current_application_info`] and inserts owner data into
-/// [`crate::FrameworkOptions::owners`]
+/// Runs [`serenity::Http::get_current_application_info`] and inserts owner data
+/// into [`crate::FrameworkOptions::owners`]
 pub async fn insert_owners_from_http(
   http: &serenity::Http,
   owners: &mut std::collections::HashSet<serenity::UserId>,
@@ -279,13 +288,14 @@ pub async fn insert_owners_from_http(
   Ok(())
 }
 
-/// Spawns a background task that periodically purges outdated entries from the edit tracker cache
+/// Spawns a background task that periodically purges outdated entries from the
+/// edit tracker cache
 ///
 /// Important to avoid the edit tracker gobbling up unlimited memory
 ///
-/// NOT PUB because it's not useful to outside users because it requires a full blown Framework
-/// Because e.g. taking a `PrefixFrameworkOptions` reference won't work because tokio tasks need to be
-/// 'static
+/// NOT PUB because it's not useful to outside users because it requires a full
+/// blown Framework Because e.g. taking a `PrefixFrameworkOptions` reference
+/// won't work because tokio tasks need to be 'static
 fn spawn_edit_tracker_purge_task(
   edit_tracker: Arc<std::sync::RwLock<crate::EditTracker>>,
 ) -> tokio::task::JoinHandle<()> {

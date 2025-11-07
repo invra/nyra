@@ -21,9 +21,6 @@ use {
   tokio::sync::RwLock,
 };
 
-#[cfg(feature = "gui")]
-use nyra_gui;
-
 #[derive(Debug)]
 pub struct BotLauncher {
   config: crate::config::Config,

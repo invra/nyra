@@ -379,6 +379,7 @@ fn test_calc() {
     assert_eq!(calc_inner("4 / 5"), Some(0.2));
     assert_eq!(calc_inner("4 ^ 5"), None);
 }
+
 ```
 
 # About the weird name
@@ -432,8 +433,8 @@ pub use {
   futures_util,
 };
 
-/// This module re-exports a bunch of items from all over serenity. Useful if you can't
-/// remember the full paths of serenity items.
+/// This module re-exports a bunch of items from all over serenity. Useful if
+/// you can't remember the full paths of serenity items.
 ///
 /// One way to use this prelude module in your project is
 /// ```rust
@@ -444,12 +445,14 @@ pub mod serenity_prelude {
 }
 use serenity_prelude as serenity; // private alias for crate root docs intradoc-links
 
-/// Shorthand for a wrapped async future with a lifetime, used by many parts of this framework.
+/// Shorthand for a wrapped async future with a lifetime, used by many parts of
+/// this framework.
 ///
 /// An owned future has the `'static` lifetime.
 pub type BoxFuture<'a, T> = std::pin::Pin<Box<dyn std::future::Future<Output = T> + Send + 'a>>;
 
-/// Internal wrapper function for catch_unwind that respects the `handle_panics` feature flag
+/// Internal wrapper function for catch_unwind that respects the `handle_panics`
+/// feature flag
 async fn catch_unwind_maybe<T>(
   fut: impl std::future::Future<Output = T>,
 ) -> Result<T, Option<String>> {

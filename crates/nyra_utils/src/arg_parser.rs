@@ -27,7 +27,7 @@ pub fn handle_common_args(args: &Args) -> bool {
 
 /// Internal: parse Vec<String> into an Args struct.
 /// Exits if any invalid or unknown arguments are passed.
-fn parse_args(raw_args: &Vec<String>) -> Args {
+fn parse_args(raw_args: &[String]) -> Args {
   let mut parsed = Args::default();
   let mut iter = raw_args.iter().skip(1);
 

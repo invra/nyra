@@ -11,8 +11,9 @@ use syn::spanned::Spanned as _;
 pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStream>, syn::Error> {
   let mut parameter_structs = Vec::new();
   for param in &inv.parameters {
-    // no #[description] check here even if slash_command set, so users can programatically
-    // supply descriptions later (e.g. via translation framework like fluent)
+    // no #[description] check here even if slash_command set, so users can
+    // programatically supply descriptions later (e.g. via translation framework
+    // like fluent)
     let description = wrap_option_to_string(param.args.description.as_ref());
 
     let (mut required, type_) = match extract_type_parameter("Option", &param.type_)
@@ -22,7 +23,8 @@ pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStr
       None => (true, &param.type_),
     };
 
-    // Don't require user to input a value for flags - use false as default value (see below)
+    // Don't require user to input a value for flags - use false as default value
+    // (see below)
     if param.args.flag {
       required = false;
     }
@@ -91,8 +93,9 @@ pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStr
       }
       false => quote::quote! { None },
     };
-    // TODO: theoretically a problem that we don't store choices for non slash commands
-    // TODO: move this to poise::CommandParameter::choices (is there a reason not to?)
+    // TODO: theoretically a problem that we don't store choices for non slash
+    // commands TODO: move this to poise::CommandParameter::choices (is there a
+    // reason not to?)
     let choices = match inv.args.slash_command {
       true => {
         if let Some(choices) = &param.args.choices {
@@ -134,7 +137,8 @@ pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStr
       required,
     ));
   }
-  // Sort the parameters so that optional parameters come last - Discord requires this order
+  // Sort the parameters so that optional parameters come last - Discord requires
+  // this order
   parameter_structs.sort_by_key(|(_, required)| !required);
   Ok(
     parameter_structs
@@ -145,16 +149,16 @@ pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStr
 }
 
 pub fn generate_slash_action(inv: &Invocation) -> Result<proc_macro2::TokenStream, syn::Error> {
-  if let Some(desc) = &inv.description {
-    if desc.len() > 100 {
-      return Err(syn::Error::new(
-        inv.function.span(),
-        format!(
-          "slash command description too long ({} chars, must be max 100)",
-          desc.len()
-        ),
-      ));
-    }
+  if let Some(desc) = &inv.description
+    && desc.len() > 100
+  {
+    return Err(syn::Error::new(
+      inv.function.span(),
+      format!(
+        "slash command description too long ({} chars, must be max 100)",
+        desc.len()
+      ),
+    ));
   }
 
   let param_identifiers = (0..inv.parameters.len())

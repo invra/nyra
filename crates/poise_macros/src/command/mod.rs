@@ -88,7 +88,8 @@ struct ParamArgs {
   rest: bool,
 }
 
-/// Part of the Invocation struct. Represents a single parameter of a Discord command.
+/// Part of the Invocation struct. Represents a single parameter of a Discord
+/// command.
 struct CommandParameter {
   name: String,
   type_: syn::Type,
@@ -96,7 +97,8 @@ struct CommandParameter {
   span: proc_macro2::Span,
 }
 
-/// Passed to prefix and slash command spec generators; contains info to be included in command spec
+/// Passed to prefix and slash command spec generators; contains info to be
+/// included in command spec
 pub struct Invocation {
   parameters: Vec<CommandParameter>,
   description: Option<String>,
@@ -113,15 +115,13 @@ pub struct Invocation {
 fn extract_help_from_doc_comments(attrs: &[syn::Attribute]) -> (Option<String>, Option<String>) {
   let mut doc_lines = String::new();
   for attr in attrs {
-    if let syn::Meta::NameValue(doc_attr) = &attr.meta {
-      if doc_attr.path == quote::format_ident!("doc").into() {
-        if let syn::Expr::Lit(lit_expr) = &doc_attr.value {
-          if let syn::Lit::Str(literal) = &lit_expr.lit {
-            doc_lines += literal.value().trim(); // Trim lines like rustdoc does
-            doc_lines += "\n";
-          }
-        }
-      }
+    if let syn::Meta::NameValue(doc_attr) = &attr.meta
+      && doc_attr.path == quote::format_ident!("doc").into()
+      && let syn::Expr::Lit(lit_expr) = &doc_attr.value
+      && let syn::Lit::Str(literal) = &lit_expr.lit
+    {
+      doc_lines += literal.value().trim(); // Trim lines like rustdoc does
+      doc_lines += "\n";
     }
   }
 
@@ -130,7 +130,8 @@ fn extract_help_from_doc_comments(attrs: &[syn::Attribute]) -> (Option<String>, 
 
   let mut paragraphs = doc_lines.splitn(2, "\n\n").filter(|x| !x.is_empty()); // "".split => [""]
 
-  // Pop first paragraph as description if needed (but no newlines bc description is single line)
+  // Pop first paragraph as description if needed (but no newlines bc description
+  // is single line)
   let description = paragraphs.next().map(|x| x.replace("\n", " "));
   // Use rest of doc comments as help text
   let help_text = paragraphs.next().map(|x| x.to_owned());
@@ -142,7 +143,8 @@ pub fn command(
   args: CommandArgs,
   mut function: syn::ItemFn,
 ) -> Result<TokenStream, darling::Error> {
-  // Verify some things about the function. Not strictly needed, but avoids confusion
+  // Verify some things about the function. Not strictly needed, but avoids
+  // confusion
   if function.sig.asyncness.is_none() {
     return Err(syn::Error::new(function.sig.span(), "command function must be async").into());
   }
@@ -163,13 +165,15 @@ pub fn command(
     return Err(syn::Error::new(proc_macro2::Span::call_site(), err_msg).into());
   }
 
-  // If subcommand_required is set to true, then the command cannot have any arguments
+  // If subcommand_required is set to true, then the command cannot have any
+  // arguments
   if args.subcommand_required && function.sig.inputs.len() > 1 {
     let err_msg = "subcommand_required is set to true, but the command has arguments";
     return Err(syn::Error::new(proc_macro2::Span::call_site(), err_msg).into());
   }
 
-  // If subcommand_required is set to true, then the command must have at least one subcommand
+  // If subcommand_required is set to true, then the command must have at least
+  // one subcommand
   if args.subcommand_required && args.subcommands.0.is_empty() {
     let err_msg = "subcommand_required is set to true, but the command has no subcommands";
     return Err(syn::Error::new(proc_macro2::Span::call_site(), err_msg).into());
@@ -265,7 +269,8 @@ fn generate_command(mut inv: Invocation) -> Result<proc_macro2::TokenStream, dar
       return Err(syn::Error::new(inv.function.sig.span(), "expected a Context parameter").into());
     }
   };
-  // Needed because we're not allowed to have lifetimes in the hacky use case below
+  // Needed because we're not allowed to have lifetimes in the hacky use case
+  // below
   let ctx_type_with_static =
     syn::fold::fold_type(&mut crate::util::AllLifetimesToStatic, ctx_type.clone());
 

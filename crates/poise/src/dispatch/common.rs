@@ -1,9 +1,10 @@
-//! Prefix and slash agnostic utilities for dispatching incoming events onto framework commands
+//! Prefix and slash agnostic utilities for dispatching incoming events onto
+//! framework commands
 
 use crate::serenity_prelude as serenity;
 
-/// Retrieves user permissions in the given channel. If unknown, returns None. If in DMs, returns
-/// `Permissions::all()`.
+/// Retrieves user permissions in the given channel. If unknown, returns None.
+/// If in DMs, returns `Permissions::all()`.
 async fn user_permissions(
   ctx: &serenity::Context,
   guild_id: Option<serenity::GuildId>,
@@ -17,7 +18,8 @@ async fn user_permissions(
 
   let guild = guild_id.to_partial_guild(ctx).await.ok()?;
 
-  // Use to_channel so that it can fallback on HTTP for threads (which aren't in cache usually)
+  // Use to_channel so that it can fallback on HTTP for threads (which aren't in
+  // cache usually)
   let channel = match channel_id.to_channel(ctx).await {
     Ok(serenity::Channel::Guild(channel)) => channel,
     Ok(_other_channel) => {
@@ -34,7 +36,8 @@ async fn user_permissions(
   Some(guild.user_permissions_in(&channel, &member))
 }
 
-/// Retrieves the set of permissions that are lacking, relative to the given required permission set
+/// Retrieves the set of permissions that are lacking, relative to the given
+/// required permission set
 ///
 /// Returns None if permissions couldn't be retrieved
 async fn missing_permissions<U, E>(
@@ -56,13 +59,15 @@ async fn missing_permissions<U, E>(
   Some(required_permissions - permissions?)
 }
 
-/// See [`check_permissions_and_cooldown`]. Runs the check only for a single command. The caller
-/// should call this multiple time for each parent command to achieve the check inheritance logic.
+/// See [`check_permissions_and_cooldown`]. Runs the check only for a single
+/// command. The caller should call this multiple time for each parent command
+/// to achieve the check inheritance logic.
 async fn check_permissions_and_cooldown_single<'a, U, E>(
   ctx: crate::Context<'a, U, E>,
   cmd: &'a crate::Command<U, E>,
 ) -> Result<(), crate::FrameworkError<'a, U, E>> {
-  // Skip command checks if `FrameworkOptions::skip_checks_for_owners` is set to true
+  // Skip command checks if `FrameworkOptions::skip_checks_for_owners` is set to
+  // true
   if ctx.framework().options.skip_checks_for_owners
     && ctx.framework().options().owners.contains(&ctx.author().id)
   {
@@ -103,10 +108,10 @@ async fn check_permissions_and_cooldown_single<'a, U, E>(
       }
     };
 
-    if let serenity::Channel::Guild(guild_channel) = channel {
-      if !guild_channel.nsfw {
-        return Err(crate::FrameworkError::NsfwOnly { ctx });
-      }
+    if let serenity::Channel::Guild(guild_channel) = channel
+      && !guild_channel.nsfw
+    {
+      return Err(crate::FrameworkError::NsfwOnly { ctx });
     }
   }
 
@@ -128,7 +133,8 @@ async fn check_permissions_and_cooldown_single<'a, U, E>(
     }
   }
 
-  // Before running any pre-command checks, make sure the bot has the permissions it needs
+  // Before running any pre-command checks, make sure the bot has the permissions
+  // it needs
   match missing_permissions(ctx, ctx.framework().bot_id, cmd.required_bot_permissions).await {
     Some(missing_permissions) if missing_permissions.is_empty() => {}
     Some(missing_permissions) => {
@@ -172,11 +178,13 @@ async fn check_permissions_and_cooldown_single<'a, U, E>(
   Ok(())
 }
 
-/// Checks if the invoker is allowed to execute this command at this point in time
+/// Checks if the invoker is allowed to execute this command at this point in
+/// time
 ///
-/// Doesn't actually start the cooldown timer! This should be done by the caller later, after
-/// argument parsing.
-/// (A command that didn't even get past argument parsing shouldn't trigger cooldowns)
+/// Doesn't actually start the cooldown timer! This should be done by the caller
+/// later, after argument parsing.
+/// (A command that didn't even get past argument parsing shouldn't trigger
+/// cooldowns)
 #[allow(clippy::needless_lifetimes)] // false positive (clippy issue 7271)
 pub async fn check_permissions_and_cooldown<'a, U, E>(
   ctx: crate::Context<'a, U, E>,

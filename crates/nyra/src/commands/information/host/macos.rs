@@ -63,24 +63,23 @@ pub fn get_mem() -> (f64, f64) {
     let text = String::from_utf8_lossy(&out.stdout);
     for line in text.lines() {
       if line.contains("page size of") {
-        if let Some(size_str) = line.split("page size of ").nth(1) {
-          if let Some(size_str) = size_str.split(' ').next() {
-            page_size = size_str.parse().unwrap_or(page_size);
-          }
+        if let Some(size_str) = line.split("page size of ").nth(1)
+          && let Some(size_str) = size_str.split(' ').next()
+        {
+          page_size = size_str.parse().unwrap_or(page_size);
         }
-      } else if let Some((key, val_str)) = line.split_once(':') {
-        if let Ok(val) = val_str
+      } else if let Some((key, val_str)) = line.split_once(':')
+        && let Ok(val) = val_str
           .trim()
           .trim_end_matches('.')
           .replace('.', "")
           .parse::<u64>()
-        {
-          match key.trim() {
-            "Pages active" => active_pages = val,
-            "Pages wired down" => wired_pages = val,
-            "Pages occupied by compressor" => compressed_pages = val,
-            _ => {}
-          }
+      {
+        match key.trim() {
+          "Pages active" => active_pages = val,
+          "Pages wired down" => wired_pages = val,
+          "Pages occupied by compressor" => compressed_pages = val,
+          _ => {}
         }
       }
     }
@@ -101,11 +100,11 @@ pub fn get_os_name() -> Box<str> {
 
   if let Some(pos) = plist.find("<key>ProductVersion</key>") {
     let after_key = &plist[pos..];
-    if let Some(start) = after_key.find("<string>") {
-      if let Some(end) = after_key.find("</string>") {
-        let version = &after_key[start + 8..end];
-        return get_pretty_macos(version);
-      }
+    if let Some(start) = after_key.find("<string>")
+      && let Some(end) = after_key.find("</string>")
+    {
+      let version = &after_key[start + 8..end];
+      return get_pretty_macos(version);
     }
   }
 

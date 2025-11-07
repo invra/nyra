@@ -1,18 +1,16 @@
 // ngl this is ugly
 // transforms a type of form `OuterType<T>` into `T`
 pub fn extract_type_parameter<'a>(outer_type: &str, t: &'a syn::Type) -> Option<&'a syn::Type> {
-  if let syn::Type::Path(path) = t {
-    if path.path.segments.len() == 1 {
-      let path = &path.path.segments[0];
-      if path.ident == outer_type {
-        if let syn::PathArguments::AngleBracketed(generics) = &path.arguments {
-          if generics.args.len() == 1 {
-            if let syn::GenericArgument::Type(t) = &generics.args[0] {
-              return Some(t);
-            }
-          }
-        }
-      }
+  if let syn::Type::Path(path) = t
+    && path.path.segments.len() == 1
+  {
+    let path = &path.path.segments[0];
+    if path.ident == outer_type
+      && let syn::PathArguments::AngleBracketed(generics) = &path.arguments
+      && generics.args.len() == 1
+      && let syn::GenericArgument::Type(t) = &generics.args[0]
+    {
+      return Some(t);
     }
   }
   None
@@ -42,8 +40,8 @@ pub fn wrap_option_to_string<T: quote::ToTokens>(literal: Option<T>) -> syn::Exp
   wrap_option_and_map(literal, to_string_path)
 }
 
-/// Syn Fold to make all lifetimes 'static. Used to access trait items of a type without having its
-/// concrete lifetime available
+/// Syn Fold to make all lifetimes 'static. Used to access trait items of a type
+/// without having its concrete lifetime available
 pub struct AllLifetimesToStatic;
 impl syn::fold::Fold for AllLifetimesToStatic {
   fn fold_lifetime(&mut self, _: syn::Lifetime) -> syn::Lifetime {
@@ -51,7 +49,8 @@ impl syn::fold::Fold for AllLifetimesToStatic {
   }
 }
 
-/// Darling utility type that accepts a list of things, e.g. `#[attr(thing1, thing2...)]`
+/// Darling utility type that accepts a list of things, e.g. `#[attr(thing1,
+/// thing2...)]`
 #[derive(Debug)]
 pub struct List<T>(pub Vec<T>);
 impl<T: darling::FromMeta> darling::FromMeta for List<T> {
@@ -69,7 +68,8 @@ impl<T> Default for List<T> {
   }
 }
 
-/// Darling utility type that accepts a 2-tuple list of things, e.g. `#[attr(thing1, thing2)]`
+/// Darling utility type that accepts a 2-tuple list of things, e.g.
+/// `#[attr(thing1, thing2)]`
 #[derive(Debug)]
 pub struct Tuple2<T>(pub T, pub T);
 impl<T: darling::FromMeta> darling::FromMeta for Tuple2<T> {
@@ -89,13 +89,13 @@ impl<T: darling::FromMeta> darling::FromMeta for Tuple2<T> {
   }
 }
 
-pub fn tuple_2_iter_deref<'a, I: 'a, T: 'a, D: ?Sized + 'a>(
+pub fn tuple_2_iter_deref<'a, I, T, D: ?Sized + 'a>(
   iter: I,
 ) -> impl ExactSizeIterator<Item = Tuple2<&'a D>>
 where
   I: IntoIterator<Item = &'a Tuple2<T>>,
   I::IntoIter: ExactSizeIterator,
-  T: std::ops::Deref<Target = D>,
+  T: std::ops::Deref<Target = D> + 'a,
 {
   iter
     .into_iter()

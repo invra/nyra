@@ -4,7 +4,8 @@ use crate::serenity_prelude as serenity;
 
 /// Checks if this message is a bot invocation by attempting to strip the prefix
 ///
-/// Returns tuple of stripped prefix and rest of the message, if any prefix matches
+/// Returns tuple of stripped prefix and rest of the message, if any prefix
+/// matches
 async fn strip_prefix<'a, U, E>(
   framework: crate::FrameworkContext<'a, U, E>,
   ctx: &'a serenity::Context,
@@ -23,10 +24,10 @@ async fn strip_prefix<'a, U, E>(
   if let Some(dynamic_prefix) = framework.options.prefix_options.dynamic_prefix {
     match dynamic_prefix(partial_ctx).await {
       Ok(prefix) => {
-        if let Some(prefix) = prefix {
-          if msg.content.starts_with(&prefix) {
-            return Some(msg.content.split_at(prefix.len()));
-          }
+        if let Some(prefix) = prefix
+          && msg.content.starts_with(&prefix)
+        {
+          return Some(msg.content.split_at(prefix.len()));
         }
       }
       Err(error) => {
@@ -40,10 +41,10 @@ async fn strip_prefix<'a, U, E>(
     }
   }
 
-  if let Some(prefix) = &framework.options.prefix_options.prefix {
-    if let Some(content) = msg.content.strip_prefix(prefix) {
-      return Some((prefix, content));
-    }
+  if let Some(prefix) = &framework.options.prefix_options.prefix
+    && let Some(content) = msg.content.strip_prefix(prefix)
+  {
+    return Some((prefix, content));
   }
 
   if let Some((prefix, content)) = framework
@@ -103,12 +104,12 @@ async fn strip_prefix<'a, U, E>(
   None
 }
 
-/// Find a command or subcommand within `&[Command]`, given a command invocation without a prefix.
-/// Returns the verbatim command name string as well as the command arguments (i.e. the remaining
-/// string).
+/// Find a command or subcommand within `&[Command]`, given a command invocation
+/// without a prefix. Returns the verbatim command name string as well as the
+/// command arguments (i.e. the remaining string).
 ///
-/// The API must be like this (as opposed to just taking the command name upfront) because of
-/// subcommands.
+/// The API must be like this (as opposed to just taking the command name
+/// upfront) because of subcommands.
 ///
 /// ```rust
 /// #[poise::command(prefix_command)]
@@ -222,12 +223,13 @@ pub async fn dispatch_message<'a, U: Send + Sync, E>(
   Ok(())
 }
 
-/// Given a Message and some context data, parses prefix, command etc. out of the message and
-/// returns the resulting [`crate::PrefixContext`]. To run the command, see [`run_invocation`].
+/// Given a Message and some context data, parses prefix, command etc. out of
+/// the message and returns the resulting [`crate::PrefixContext`]. To run the
+/// command, see [`run_invocation`].
 ///
 /// Returns `Ok(None)` if the message does not look like a command invocation.
-/// Returns `Err(...)` if the message _does_ look like a command invocation, but cannot be
-/// fully parsed.
+/// Returns `Err(...)` if the message _does_ look like a command invocation, but
+/// cannot be fully parsed.
 pub async fn parse_invocation<'a, U: Send + Sync, E>(
   framework: crate::FrameworkContext<'a, U, E>,
   ctx: &'a serenity::Context,
@@ -253,7 +255,8 @@ pub async fn parse_invocation<'a, U: Send + Sync, E>(
     return Ok(None);
   }
 
-  // Strip prefix, trim whitespace between prefix and rest, split rest into command name and args
+  // Strip prefix, trim whitespace between prefix and rest, split rest into
+  // command name and args
   let (prefix, msg_content) = match strip_prefix(framework, ctx, msg).await {
     Some(x) => x,
     None => return Ok(None),
@@ -299,8 +302,9 @@ pub async fn parse_invocation<'a, U: Send + Sync, E>(
   }))
 }
 
-/// Given an existing parsed command invocation from [`parse_invocation`], run it, including all the
-/// before and after code like checks and built in filters from edit tracking
+/// Given an existing parsed command invocation from [`parse_invocation`], run
+/// it, including all the before and after code like checks and built in filters
+/// from edit tracking
 pub async fn run_invocation<U, E>(
   ctx: crate::PrefixContext<'_, U, E>,
 ) -> Result<(), crate::FrameworkError<'_, U, E>> {
@@ -315,8 +319,8 @@ pub async fn run_invocation<U, E>(
   }
 
   if ctx.command.subcommand_required {
-    // None of this command's subcommands were invoked, or else we'd have the subcommand in
-    // ctx.command and not the parent command
+    // None of this command's subcommands were invoked, or else we'd have the
+    // subcommand in ctx.command and not the parent command
     return Err(crate::FrameworkError::SubcommandRequired {
       ctx: crate::Context::Prefix(ctx),
     });
@@ -333,10 +337,10 @@ pub async fn run_invocation<U, E>(
 
   (ctx.framework.options.pre_command)(crate::Context::Prefix(ctx)).await;
 
-  // Store that this command is currently running; so that if the invocation message is being
-  // edited before a response message is registered, we don't accidentally treat it as an
-  // execute_untracked_edits situation and start an infinite loop
-  // Reported by vicky5124 https://discord.com/channels/381880193251409931/381912587505500160/897981367604903966
+  // Store that this command is currently running; so that if the invocation
+  // message is being edited before a response message is registered, we don't
+  // accidentally treat it as an execute_untracked_edits situation and start an
+  // infinite loop Reported by vicky5124 https://discord.com/channels/381880193251409931/381912587505500160/897981367604903966
   if let Some(edit_tracker) = &ctx.framework.options.prefix_options.edit_tracker {
     edit_tracker
       .write()
