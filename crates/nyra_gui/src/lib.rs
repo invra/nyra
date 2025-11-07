@@ -21,6 +21,7 @@ use {
     px,
     size,
   },
+  nyra_utils::log,
   std::{
     pin::Pin,
     sync::{
@@ -101,16 +102,16 @@ impl gpui::Render for NyraView {
                   let fut = async {
                     if running {
                       stop_fn().await;
-                      nyra_utils::info!("Bot has stopped!");
+                      log::info!("Bot has stopped!");
                     } else {
                       start_fn().await;
-                      nyra_utils::info!("Bot has started!");
+                      log::info!("Bot has started!");
                     }
                   };
                   if let Ok(rt) = tokio::runtime::Runtime::new() {
                     rt.block_on(fut);
                   } else {
-                    nyra_utils::error!("Failed to create runtime");
+                    log::error!("Failed to create runtime");
                   }
                   is_running_clone.store(false, Ordering::Relaxed);
                 });
