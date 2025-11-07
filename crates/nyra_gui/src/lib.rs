@@ -127,7 +127,7 @@ pub fn init_gui(
   start_fn: impl Fn() -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
   stop_fn: impl Fn() -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
 ) {
-  let theme_colors = Colors::from_theme(&Theme::RosePine);
+  let colors = Colors::from_theme(&Theme::RosePine);
   let is_running = Arc::new(AtomicBool::new(false));
 
   let start_fn: Arc<AsyncFn> = Arc::new(start_fn);
@@ -156,7 +156,7 @@ pub fn init_gui(
           let stop_fn = stop_fn.clone();
           let is_running = is_running.clone();
           move |_| NyraView {
-            colors: theme_colors,
+            colors,
             is_running,
             start_fn,
             stop_fn,
