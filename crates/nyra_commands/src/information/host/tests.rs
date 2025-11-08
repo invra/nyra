@@ -8,7 +8,7 @@
 
 #[cfg(test)]
 mod tests {
-  use crate::commands::information::host::{
+  use crate::information::host::{
     macos::get_pretty_macos,
     windows::normalize_windows_name,
   };

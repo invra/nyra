@@ -6,7 +6,7 @@
 */
 
 use {
-  crate::commands::helper::{
+  crate::helper::{
     Context,
     Error,
     MyCommand,
@@ -26,14 +26,14 @@ use {
   },
 };
 
-/// Kick command
+/// Ban command
 #[command(
   prefix_command,
   slash_command,
   category = "Moderation",
-  required_permissions = "KICK_MEMBERS"
+  required_permissions = "BAN_MEMBERS"
 )]
-pub async fn kick(
+pub async fn ban(
   ctx: Context<'_>,
   #[description = "User to check"] user: User,
   #[description = "Reason"] reason: Option<String>,
@@ -47,9 +47,9 @@ pub async fn kick(
 
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
-      .title("Kick Command")
+      .title("Ban Command")
       .description(format!(
-        "Kicked <@{}> for {}.",
+        "Banned <@{}> for {}.",
         u.get(),
         r.as_deref().unwrap_or("No reason provided")
       ))
@@ -58,11 +58,11 @@ pub async fn kick(
   );
 
   if ctx.author().id == user.id {
-    return Err("You cannot kick yourself.".into());
+    return Err("You cannot ban yourself.".into());
   }
 
-  if let Err(err) = ctx.http().kick_member(guild, user.id, r.as_deref()).await {
-    return Err(format!("Failed to kick user: {err:?}").into());
+  if let Err(err) = ctx.http().ban_user(guild, user.id, 1, r.as_deref()).await {
+    return Err(format!("Failed to ban user: {err:?}").into());
   }
 
   ctx.send(reply).await?;
@@ -70,4 +70,4 @@ pub async fn kick(
   Ok(())
 }
 
-inventory::submit! { MyCommand(kick) }
+inventory::submit! { MyCommand(ban) }

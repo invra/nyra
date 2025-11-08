@@ -6,7 +6,7 @@
 */
 
 use {
-  crate::commands::helper::{
+  crate::helper::{
     Context,
     Error,
     MyCommand,

@@ -6,7 +6,7 @@
 */
 
 use {
-  crate::commands::helper::{
+  crate::helper::{
     Context,
     Error,
     MyCommand,
@@ -26,14 +26,14 @@ use {
   },
 };
 
-/// Unban command
+/// Kick command
 #[command(
   prefix_command,
   slash_command,
   category = "Moderation",
-  required_permissions = "BAN_MEMBERS"
+  required_permissions = "KICK_MEMBERS"
 )]
-pub async fn unban(
+pub async fn kick(
   ctx: Context<'_>,
   #[description = "User to check"] user: User,
   #[description = "Reason"] reason: Option<String>,
@@ -47,9 +47,9 @@ pub async fn unban(
 
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
-      .title("Unban Command")
+      .title("Kick Command")
       .description(format!(
-        "Unbanned <@{}> for {}.",
+        "Kicked <@{}> for {}.",
         u.get(),
         r.as_deref().unwrap_or("No reason provided")
       ))
@@ -57,8 +57,12 @@ pub async fn unban(
       .color(Colour::DARK_GREEN),
   );
 
-  if let Err(err) = ctx.http().remove_ban(guild, user.id, r.as_deref()).await {
-    return Err(format!("Failed to unban user: {err:?}").into());
+  if ctx.author().id == user.id {
+    return Err("You cannot kick yourself.".into());
+  }
+
+  if let Err(err) = ctx.http().kick_member(guild, user.id, r.as_deref()).await {
+    return Err(format!("Failed to kick user: {err:?}").into());
   }
 
   ctx.send(reply).await?;
@@ -66,4 +70,4 @@ pub async fn unban(
   Ok(())
 }
 
-inventory::submit! { MyCommand(unban) }
+inventory::submit! { MyCommand(kick) }

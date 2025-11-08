@@ -5,15 +5,12 @@
     Notes: Main launching logic for the Discord bot
 */
 
+mod config;
+
 use {
-  crate::{
-    commands,
-    config::Config,
-  },
-  nyra_utils::{
-    arg_parser::Args,
-    log,
-  },
+  crate::config::Config,
+  nyra_commands as commands,
+  nyra_utils::log,
   std::sync::{
     Arc,
     OnceLock,
@@ -30,26 +27,7 @@ pub struct BotLauncher {
 static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
 
 impl BotLauncher {
-  pub async fn init(args: &Args) {
-    BotLauncher::init_instance(args.config.clone());
-
-    #[cfg(feature = "only-gui")]
-    {
-      nyra_gui::init_gui(|| Box::pin(Self::start()), || Box::pin(Self::stop()));
-      return;
-    }
-
-    #[cfg(all(feature = "gui", not(feature = "only-gui")))]
-    if args.gui {
-      nyra_gui::init_gui(|| Box::pin(Self::start()), || Box::pin(Self::stop()));
-      return;
-    }
-
-    #[allow(unreachable_code)]
-    BotLauncher::start().await;
-  }
-
-  fn init_instance(config_arg: Option<String>) {
+  pub fn init_instance(config_arg: Option<String>) {
     let config = match Config::load(config_arg) {
       Ok(cfg) => {
         log::success!("Config loaded successfully");

@@ -3668,7 +3668,37 @@ version = "1.2.0"
 dependencies = [
  "chrono",
  "inventory",
+ "nyra-core",
  "nyra-gui",
+ "nyra-utils",
+ "poise",
+ "serde",
+ "tokio",
+ "toml 0.9.8",
+ "wmi",
+]
+
+[[package]]
+name = "nyra-commands"
+version = "1.2.0"
+dependencies = [
+ "chrono",
+ "inventory",
+ "nyra-utils",
+ "poise",
+ "serde",
+ "tokio",
+ "toml 0.9.8",
+ "wmi",
+]
+
+[[package]]
+name = "nyra-core"
+version = "1.2.0"
+dependencies = [
+ "chrono",
+ "inventory",
+ "nyra-commands",
  "nyra-utils",
  "poise",
  "serde",
@@ -3682,6 +3712,7 @@ name = "nyra-gui"
 version = "1.2.0"
 dependencies = [
  "gpui",
+ "nyra-core",
  "nyra-utils",
  "serde",
  "tokio",

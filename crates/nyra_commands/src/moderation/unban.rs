@@ -6,7 +6,7 @@
 */
 
 use {
-  crate::commands::helper::{
+  crate::helper::{
     Context,
     Error,
     MyCommand,
@@ -26,14 +26,14 @@ use {
   },
 };
 
-/// Ban command
+/// Unban command
 #[command(
   prefix_command,
   slash_command,
   category = "Moderation",
   required_permissions = "BAN_MEMBERS"
 )]
-pub async fn ban(
+pub async fn unban(
   ctx: Context<'_>,
   #[description = "User to check"] user: User,
   #[description = "Reason"] reason: Option<String>,
@@ -47,9 +47,9 @@ pub async fn ban(
 
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
-      .title("Ban Command")
+      .title("Unban Command")
       .description(format!(
-        "Banned <@{}> for {}.",
+        "Unbanned <@{}> for {}.",
         u.get(),
         r.as_deref().unwrap_or("No reason provided")
       ))
@@ -57,12 +57,8 @@ pub async fn ban(
       .color(Colour::DARK_GREEN),
   );
 
-  if ctx.author().id == user.id {
-    return Err("You cannot ban yourself.".into());
-  }
-
-  if let Err(err) = ctx.http().ban_user(guild, user.id, 1, r.as_deref()).await {
-    return Err(format!("Failed to ban user: {err:?}").into());
+  if let Err(err) = ctx.http().remove_ban(guild, user.id, r.as_deref()).await {
+    return Err(format!("Failed to unban user: {err:?}").into());
   }
 
   ctx.send(reply).await?;
@@ -70,4 +66,4 @@ pub async fn ban(
   Ok(())
 }
 
-inventory::submit! { MyCommand(ban) }
+inventory::submit! { MyCommand(unban) }

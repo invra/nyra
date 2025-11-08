@@ -6,13 +6,10 @@
 */
 
 use {
-  crate::commands::{
-    self,
-    helper::{
-      Context,
-      Error,
-      MyCommand,
-    },
+  crate::helper::{
+    Context,
+    Error,
+    MyCommand,
   },
   poise::{
     CreateReply,
@@ -84,7 +81,7 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
     if let serenity_prelude::ComponentInteractionDataKind::StringSelect { values } = &ci.data.kind {
       let selected = values.first().cloned().unwrap_or_default();
 
-      let cmds = commands::all()
+      let cmds = crate::all()
         .into_iter()
         .filter(|x| x.category.as_ref() == Some(&selected))
         .collect::<Vec<_>>();

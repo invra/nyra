@@ -11,7 +11,7 @@ pub mod moderation;
 pub mod utilities;
 
 use {
-  crate::commands::helper::{
+  crate::helper::{
     Data,
     Error,
     MyCommand,

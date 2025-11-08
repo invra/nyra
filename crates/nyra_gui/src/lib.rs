@@ -9,9 +9,7 @@ mod theme;
 use {
   gpui::{
     App,
-    Bounds,
     KeyBinding,
-    Size,
     WindowBounds,
     WindowOptions,
     actions,
@@ -21,16 +19,12 @@ use {
     px,
     size,
   },
+  nyra_core::BotLauncher,
   nyra_utils::log,
-  std::{
-    pin::Pin,
-    sync::{
-      Arc,
-      atomic::{
-        AtomicBool,
-        Ordering,
-      },
-    },
+  std::sync::Arc,
+  std::sync::atomic::{
+    AtomicBool,
+    Ordering,
   },
   theme::{
     Colors,
@@ -38,13 +32,9 @@ use {
   },
 };
 
-type AsyncFn = dyn Fn() -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync;
-
 struct NyraView {
   colors: Colors,
   is_running: Arc<AtomicBool>,
-  start_fn: Arc<AsyncFn>,
-  stop_fn: Arc<AsyncFn>,
 }
 
 impl gpui::Render for NyraView {
@@ -89,23 +79,16 @@ impl gpui::Render for NyraView {
             .hover(|style| style.bg(self.colors.overlay))
             .on_click({
               let is_running = self.is_running.clone();
-              let start_fn = self.start_fn.clone();
-              let stop_fn = self.stop_fn.clone();
-
               move |_event, _cx, _| {
                 let is_running_clone = is_running.clone();
-                let start_fn = start_fn.clone();
-                let stop_fn = stop_fn.clone();
-
                 std::thread::spawn(move || {
                   let running = is_running_clone.swap(true, Ordering::Relaxed);
                   let fut = async {
                     if running {
-                      stop_fn().await;
-                      log::info!("Bot has stopped!");
+                      BotLauncher::stop().await;
                     } else {
-                      start_fn().await;
-                      log::info!("Bot has started!");
+                      BotLauncher::start().await;
+                      log::info!("Bot has stopped");
                     }
                   };
                   if let Ok(rt) = tokio::runtime::Runtime::new() {
@@ -124,18 +107,12 @@ impl gpui::Render for NyraView {
 
 actions!(window, [Quit]);
 
-pub fn init_gui(
-  start_fn: impl Fn() -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
-  stop_fn: impl Fn() -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
-) {
-  let colors = Colors::from_theme(&Theme::RosePine);
+pub fn init_gui() {
+  let theme_colors = Colors::from_theme(&Theme::RosePine);
   let is_running = Arc::new(AtomicBool::new(false));
 
-  let start_fn: Arc<AsyncFn> = Arc::new(start_fn);
-  let stop_fn: Arc<AsyncFn> = Arc::new(stop_fn);
-
   gpui::Application::new().run(move |cx: &mut App| {
-    let bounds = WindowBounds::Windowed(Bounds::centered(None, size(px(400.), px(200.)), cx));
+    let bounds = WindowBounds::Windowed(gpui::Bounds::centered(None, size(px(400.), px(200.)), cx));
 
     cx.open_window(
       WindowOptions {
@@ -145,23 +122,16 @@ pub fn init_gui(
           appears_transparent: true,
           traffic_light_position: Some(point(px(12.0), px(9.0))),
         }),
-        window_min_size: Some(Size {
+        window_min_size: Some(gpui::Size {
           width: px(360.0),
           height: px(240.0),
         }),
         ..Default::default()
       },
       move |_window, cx| {
-        cx.new({
-          let start_fn = start_fn.clone();
-          let stop_fn = stop_fn.clone();
-          let is_running = is_running.clone();
-          move |_| NyraView {
-            colors,
-            is_running,
-            start_fn,
-            stop_fn,
-          }
+        cx.new(move |_| NyraView {
+          colors: theme_colors,
+          is_running,
         })
       },
     )

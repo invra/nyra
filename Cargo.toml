@@ -25,6 +25,18 @@ rand = "0.8.5"
 toml = "0.9.8"
 wmi = "0.17.3"
 
+[workspace.dependencies.nyra-commands]
+path = "crates/nyra_commands"
+
+[workspace.dependencies.nyra-gui]
+path = "crates/nyra_gui"
+
+[workspace.dependencies.nyra-core]
+path = "crates/nyra_core"
+
+[workspace.dependencies.nyra-utils]
+path = "crates/nyra_utils"
+
 [workspace.dependencies.async-trait]
 version = "0.1.48"
 default-features = false
@@ -51,12 +63,6 @@ path = "crates/poise"
 [workspace.dependencies.poise_macros]
 path = "crates/poise_macros"
 version = "0.6.1"
-
-[workspace.dependencies.nyra-gui]
-path = "crates/nyra_gui"
-
-[workspace.dependencies.nyra-utils]
-path = "crates/nyra_utils"
 
 [workspace.dependencies.regex]
 version = "1.6.0"

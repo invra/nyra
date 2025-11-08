@@ -1,5 +1,6 @@
 [dependencies]
 nyra-utils.workspace = true
+nyra-core.workspace = true
 serde.workspace = true
 tokio.workspace = true
 gpui.workspace = true
