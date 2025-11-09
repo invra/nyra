@@ -14,6 +14,22 @@ use std::{
 };
 
 #[cfg(target_os = "linux")]
+pub fn get_cpu_count() -> usize {
+  let mut buf = String::new();
+  if File::open("/proc/cpuinfo")
+    .and_then(|mut f| f.read_to_string(&mut buf))
+    .is_err()
+  {
+    return 0;
+  }
+
+  buf
+    .lines()
+    .filter(|line| line.starts_with("processor"))
+    .count()
+}
+
+#[cfg(target_os = "linux")]
 pub fn get_cpu_model() -> Box<str> {
   let mut buf = String::new();
   if File::open("/proc/cpuinfo")
