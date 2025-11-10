@@ -1,4 +1,4 @@
-use crate::colorize::{
+use nyra_utils::colorize::{
   Color,
   ColorExt,
 };

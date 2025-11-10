@@ -5,7 +5,9 @@
     Notes: Main entry point for Nyra
 */
 
+mod arg_parser;
 use {
+  arg_parser::get_args,
   crossterm::{
     event::{
       self,
@@ -15,10 +17,7 @@ use {
     },
     terminal,
   },
-  nyra_utils::{
-    arg_parser::get_args,
-    log,
-  },
+  nyra_utils::log,
   std::time::Duration,
   tokio::task,
 };
@@ -27,7 +26,7 @@ use {
 async fn main() {
   let args = get_args();
 
-  if !nyra_utils::arg_parser::handle_common_args(&get_args()) {
+  if !arg_parser::handle_common_args(&get_args()) {
     nyra_core::BotLauncher::init_instance(args.config.clone());
 
     #[cfg(feature = "only-gui")]

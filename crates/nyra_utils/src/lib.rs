@@ -5,6 +5,5 @@
     Notes: Utility functions for Nyra
 */
 
-pub mod arg_parser;
 pub mod colorize;
 pub mod log;
