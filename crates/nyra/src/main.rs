@@ -5,17 +5,22 @@
     Notes: Main entry point for Nyra
 */
 
-use crossterm::{
-  event::{
-    self,
-    Event,
-    KeyCode,
+use {
+  crossterm::{
+    event::{
+      self,
+      Event,
+      KeyCode,
+    },
+    terminal,
   },
-  terminal,
+  nyra_utils::{
+    arg_parser::get_args,
+    log,
+  },
+  std::time::Duration,
+  tokio::task,
 };
-use nyra_utils::arg_parser::get_args;
-use std::time::Duration;
-use tokio::task;
 
 #[tokio::main]
 async fn main() {
@@ -44,7 +49,8 @@ async fn main() {
           if let Ok(Event::Key(key_event)) = event::read() {
             if key_event.code == KeyCode::Char('q') {
               terminal::disable_raw_mode().ok();
-              println!("\r\nGracefully exiting...");
+              log::info!("Gracefully exiting…");
+              terminal::disable_raw_mode().ok();
               std::process::exit(0);
             }
           }
