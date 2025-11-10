@@ -1,3 +1,6 @@
+[dependencies]
+crossterm.workspace = true
+
 [features]
 default = ["gui"]
 gui = []
@@ -13,6 +16,3 @@ license = "Unlicense"
 readme = "README.adoc"
 keywords = ["discord", "discord-bot", "utility"]
 edition = "2024"
-
-[target.'cfg(target_os = "windows")'.dependencies]
-wmi.workspace = true

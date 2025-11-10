@@ -6,6 +6,7 @@ path = "src/main.rs"
 nyra-utils.workspace = true
 nyra-core.workspace = true
 inventory.workspace = true
+crossterm.workspace = true
 chrono.workspace = true
 poise.workspace = true
 serde.workspace = true

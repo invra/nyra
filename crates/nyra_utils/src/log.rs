@@ -39,6 +39,7 @@ impl LogLevel {
 }
 
 pub fn log_internal(level: LogLevel, args: fmt::Arguments<'_>) {
+  terminal::disable_raw_mode().ok();
   let (stream, color) = match level {
     LogLevel::Error => ("STDERR", level.get_color()),
     _ => ("STDOUT", level.get_color()),
@@ -51,6 +52,7 @@ pub fn log_internal(level: LogLevel, args: fmt::Arguments<'_>) {
       .bold(),
     args
   );
+  terminal::enable_raw_mode().expect("failed to enable raw mode");
 }
 
 #[macro_export]
@@ -59,6 +61,7 @@ macro_rules! info {
         nyra_utils::log::log_internal(nyra_utils::log::LogLevel::Info, format_args!($($arg)*));
     };
 }
+use crossterm::terminal;
 #[allow(unused_imports)]
 pub use info;
 
