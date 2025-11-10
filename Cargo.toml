@@ -26,18 +26,6 @@ rand = "0.8.5"
 toml = "0.9.8"
 wmi = "0.17.3"
 
-[workspace.dependencies.nyra-commands]
-path = "crates/nyra_commands"
-
-[workspace.dependencies.nyra-gui]
-path = "crates/nyra_gui"
-
-[workspace.dependencies.nyra-core]
-path = "crates/nyra_core"
-
-[workspace.dependencies.nyra-utils]
-path = "crates/nyra_utils"
-
 [workspace.dependencies.async-trait]
 version = "0.1.48"
 default-features = false
@@ -57,6 +45,18 @@ default-features = false
 [workspace.dependencies.gpui]
 version = "0.2.2"
 features = ["runtime_shaders"]
+
+[workspace.dependencies.nyra-commands]
+path = "crates/nyra_commands"
+
+[workspace.dependencies.nyra-core]
+path = "crates/nyra_core"
+
+[workspace.dependencies.nyra-gui]
+path = "crates/nyra_gui"
+
+[workspace.dependencies.nyra-utils]
+path = "crates/nyra_utils"
 
 [workspace.dependencies.poise]
 path = "crates/poise"

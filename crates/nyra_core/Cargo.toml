@@ -1,8 +1,8 @@
 [dependencies]
+chrono.workspace = true
+inventory.workspace = true
 nyra-commands.workspace = true
 nyra-utils.workspace = true
-inventory.workspace = true
-chrono.workspace = true
 poise.workspace = true
 serde.workspace = true
 tokio.workspace = true
