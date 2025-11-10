@@ -18,39 +18,59 @@ use {
     terminal,
   },
   nyra_utils::log,
-  std::time::Duration,
+  std::{
+    sync::{
+      Arc,
+      atomic::{
+        AtomicBool,
+        Ordering,
+      },
+    },
+    time::Duration,
+  },
   tokio::task,
 };
 
+struct RawModeGuard;
+
+impl RawModeGuard {
+  fn new() -> Self {
+    terminal::enable_raw_mode().expect("failed to enable raw mode");
+    Self
+  }
+}
+
+impl Drop for RawModeGuard {
+  fn drop(&mut self) {
+    let _ = terminal::disable_raw_mode();
+  }
+}
+
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), ()> {
   let args = get_args();
 
-  if !arg_parser::handle_common_args(&get_args()) {
+  if !arg_parser::handle_common_args(&args) {
     nyra_core::BotLauncher::init_instance(args.config.clone());
-    terminal::enable_raw_mode().expect("failed to enable raw mode");
 
-    let quit_task = task::spawn_blocking(|| {
-      loop {
-        if event::poll(Duration::from_millis(100)).unwrap_or_default()
-          && let Ok(Event::Key(key_event)) = event::read()
-        {
-          match key_event.code {
-            KeyCode::Char('q') => {
-              terminal::disable_raw_mode().ok();
+    let _raw_guard = RawModeGuard::new();
+    let running = Arc::new(AtomicBool::new(true));
+    let r = running.clone();
+
+    let quit_task = task::spawn_blocking(move || {
+      while r.load(Ordering::Relaxed) {
+        if event::poll(Duration::from_millis(100)).unwrap_or(false) {
+          if let Ok(Event::Key(key_event)) = event::read() {
+            let quit = match key_event.code {
+              KeyCode::Char('q') => true,
+              KeyCode::Char('c') if key_event.modifiers.contains(KeyModifiers::CONTROL) => true,
+              _ => false,
+            };
+            if quit {
               log::info!("Gracefully exiting…");
-              terminal::disable_raw_mode().ok();
-              std::process::exit(0);
+              r.store(false, Ordering::Relaxed);
+              break;
             }
-            KeyCode::Char('c') => {
-              if key_event.modifiers.contains(KeyModifiers::CONTROL) {
-                terminal::disable_raw_mode().ok();
-                log::info!("Gracefully exiting…");
-                terminal::disable_raw_mode().ok();
-                std::process::exit(0);
-              }
-            }
-            _ => return,
           }
         }
       }
@@ -59,17 +79,29 @@ async fn main() {
     #[cfg(feature = "only-gui")]
     {
       nyra_gui::init_gui();
-      return;
+      quit_task.await.ok();
+      return Ok(());
     }
 
     #[cfg(all(feature = "gui", not(feature = "only-gui")))]
     if args.gui {
       nyra_gui::init_gui();
-      return;
+      quit_task.await.ok();
+      return Ok(());
     }
 
-    nyra_core::BotLauncher::start().await;
-    let _ = quit_task.await;
-    terminal::disable_raw_mode().ok();
+    tokio::select! {
+      _ = nyra_core::BotLauncher::start() => {},
+      _ = async {
+        while running.load(Ordering::Relaxed) {
+          tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+      } => {}
+    }
+
+    quit_task.await.ok();
+    log::info!("Clean exit complete");
   }
+
+  Ok(())
 }
