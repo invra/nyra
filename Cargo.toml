@@ -81,7 +81,7 @@ features = ["fold"]
 
 [workspace.dependencies.tokio]
 version = "1.48.0"
-features = ["rt", "macros", "rt-multi-thread", "sync"]
+features = ["rt", "macros", "rt-multi-thread", "sync", "signal"]
 
 [workspace.dependencies.tracing]
 version = "0.1.40"

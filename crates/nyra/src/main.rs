@@ -11,6 +11,7 @@ use {
       self,
       Event,
       KeyCode,
+      KeyModifiers,
     },
     terminal,
   },
@@ -47,11 +48,22 @@ async fn main() {
       loop {
         if event::poll(Duration::from_millis(100)).unwrap_or(false) {
           if let Ok(Event::Key(key_event)) = event::read() {
-            if key_event.code == KeyCode::Char('q') {
-              terminal::disable_raw_mode().ok();
-              log::info!("Gracefully exiting…");
-              terminal::disable_raw_mode().ok();
-              std::process::exit(0);
+            match key_event.code {
+              KeyCode::Char('q') => {
+                terminal::disable_raw_mode().ok();
+                log::info!("Gracefully exiting…");
+                terminal::disable_raw_mode().ok();
+                std::process::exit(0);
+              }
+              KeyCode::Char('c') => {
+                if key_event.modifiers.contains(KeyModifiers::CONTROL) {
+                  terminal::disable_raw_mode().ok();
+                  log::info!("Gracefully exiting…");
+                  terminal::disable_raw_mode().ok();
+                  std::process::exit(0);
+                }
+              }
+              _ => return,
             }
           }
         }
