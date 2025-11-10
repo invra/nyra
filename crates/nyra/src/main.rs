@@ -32,7 +32,7 @@ async fn main() {
 
     let quit_task = task::spawn_blocking(|| {
       loop {
-        if event::poll(Duration::from_millis(100)).unwrap_or(false)
+        if event::poll(Duration::from_millis(100)).unwrap_or_default()
           && let Ok(Event::Key(key_event)) = event::read()
         {
           match key_event.code {
