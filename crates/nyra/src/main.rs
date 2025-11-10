@@ -28,19 +28,6 @@ async fn main() {
 
   if !arg_parser::handle_common_args(&get_args()) {
     nyra_core::BotLauncher::init_instance(args.config.clone());
-
-    #[cfg(feature = "only-gui")]
-    {
-      nyra_gui::init_gui();
-      return;
-    }
-
-    #[cfg(all(feature = "gui", not(feature = "only-gui")))]
-    if args.gui {
-      nyra_gui::init_gui();
-      return;
-    }
-
     terminal::enable_raw_mode().expect("failed to enable raw mode");
 
     let quit_task = task::spawn_blocking(|| {
@@ -68,6 +55,18 @@ async fn main() {
         }
       }
     });
+
+    #[cfg(feature = "only-gui")]
+    {
+      nyra_gui::init_gui();
+      return;
+    }
+
+    #[cfg(all(feature = "gui", not(feature = "only-gui")))]
+    if args.gui {
+      nyra_gui::init_gui();
+      return;
+    }
 
     nyra_core::BotLauncher::start().await;
     let _ = quit_task.await;
