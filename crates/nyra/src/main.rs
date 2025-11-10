@@ -46,25 +46,25 @@ async fn main() {
 
     let quit_task = task::spawn_blocking(|| {
       loop {
-        if event::poll(Duration::from_millis(100)).unwrap_or(false) {
-          if let Ok(Event::Key(key_event)) = event::read() {
-            match key_event.code {
-              KeyCode::Char('q') => {
+        if event::poll(Duration::from_millis(100)).unwrap_or(false)
+          && let Ok(Event::Key(key_event)) = event::read()
+        {
+          match key_event.code {
+            KeyCode::Char('q') => {
+              terminal::disable_raw_mode().ok();
+              log::info!("Gracefully exiting…");
+              terminal::disable_raw_mode().ok();
+              std::process::exit(0);
+            }
+            KeyCode::Char('c') => {
+              if key_event.modifiers.contains(KeyModifiers::CONTROL) {
                 terminal::disable_raw_mode().ok();
                 log::info!("Gracefully exiting…");
                 terminal::disable_raw_mode().ok();
                 std::process::exit(0);
               }
-              KeyCode::Char('c') => {
-                if key_event.modifiers.contains(KeyModifiers::CONTROL) {
-                  terminal::disable_raw_mode().ok();
-                  log::info!("Gracefully exiting…");
-                  terminal::disable_raw_mode().ok();
-                  std::process::exit(0);
-                }
-              }
-              _ => return,
             }
+            _ => return,
           }
         }
       }
