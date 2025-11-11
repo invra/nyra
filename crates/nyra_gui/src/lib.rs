@@ -12,7 +12,6 @@ use {
     Element,
     Length,
     Subscription,
-    Theme,
     keyboard,
     widget::{
       button,
