@@ -59,18 +59,18 @@ async fn main() -> Result<(), ()> {
 
     let quit_task = task::spawn_blocking(move || {
       while r.load(Ordering::Relaxed) {
-        if event::poll(Duration::from_millis(100)).unwrap_or(false) {
-          if let Ok(Event::Key(key_event)) = event::read() {
-            let quit = match key_event.code {
-              KeyCode::Char('q') => true,
-              KeyCode::Char('c') if key_event.modifiers.contains(KeyModifiers::CONTROL) => true,
-              _ => false,
-            };
-            if quit {
-              log::info!("Gracefully exiting…");
-              r.store(false, Ordering::Relaxed);
-              break;
-            }
+        if event::poll(Duration::from_millis(100)).unwrap_or(false)
+          && let Ok(Event::Key(key_event)) = event::read()
+        {
+          let quit = match key_event.code {
+            KeyCode::Char('q') => true,
+            KeyCode::Char('c') if key_event.modifiers.contains(KeyModifiers::CONTROL) => true,
+            _ => false,
+          };
+          if quit {
+            log::info!("Gracefully exiting…");
+            r.store(false, Ordering::Relaxed);
+            break;
           }
         }
       }
@@ -78,14 +78,14 @@ async fn main() -> Result<(), ()> {
 
     #[cfg(feature = "only-gui")]
     {
-      nyra_gui::init_gui();
+      let _ = nyra_gui::init_gui();
       quit_task.await.ok();
       return Ok(());
     }
 
     #[cfg(all(feature = "gui", not(feature = "only-gui")))]
     if args.gui {
-      nyra_gui::init_gui();
+      let _ = nyra_gui::init_gui();
       quit_task.await.ok();
       return Ok(());
     }
