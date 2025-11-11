@@ -40,30 +40,21 @@ struct Nyra {
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 enum Message {
-  ToggleBot,
-  BotStopped,
-  BotStarted,
+  StartBot,
+  StopBot,
 }
 
 impl Nyra {
   fn update(&mut self, message: Message) {
     match message {
-      Message::ToggleBot => {
-        let is_running_clone = self.is_running.clone();
-        let currently_running = is_running_clone.load(Ordering::Relaxed);
-
-        let new_state = !currently_running;
-        is_running_clone.store(new_state, Ordering::Relaxed);
+      Message::StopBot => {
+        let new_state = !self.is_running.clone().load(Ordering::Relaxed);
+        self.is_running.clone().store(new_state, Ordering::Relaxed);
 
         std::thread::spawn(move || {
           let fut = async move {
-            if new_state {
-              BotLauncher::start().await;
-              log::bot!("Instance has started");
-            } else {
-              BotLauncher::stop().await;
-              log::bot!("Instance has stopped");
-            }
+            BotLauncher::stop().await;
+            log::bot!("Instance has stopped");
           };
 
           if let Ok(rt) = tokio::runtime::Runtime::new() {
@@ -74,14 +65,22 @@ impl Nyra {
         });
       }
 
-      Message::BotStarted => {
-        self.is_running.store(true, Ordering::Relaxed);
-        log::info!("Bot has started (GUI event)");
-      }
+      Message::StartBot => {
+        let new_state = !self.is_running.clone().load(Ordering::Relaxed);
+        self.is_running.clone().store(new_state, Ordering::Relaxed);
 
-      Message::BotStopped => {
-        self.is_running.store(false, Ordering::Relaxed);
-        log::info!("Bot has stopped (GUI event)");
+        std::thread::spawn(move || {
+          let fut = async move {
+            BotLauncher::start().await;
+            log::bot!("Instance has started");
+          };
+
+          if let Ok(rt) = tokio::runtime::Runtime::new() {
+            rt.block_on(fut);
+          } else {
+            log::error!("Failed to create runtime");
+          }
+        });
       }
     }
   }
@@ -90,7 +89,11 @@ impl Nyra {
     let is_running = self.is_running.load(Ordering::Relaxed);
 
     column![
-      button(if is_running { "Stop Bot" } else { "Start Bot" }).on_press(Message::ToggleBot),
+      button(if is_running { "Stop Bot" } else { "Start Bot" }).on_press(if is_running {
+        Message::StopBot
+      } else {
+        Message::StartBot
+      }),
       text(if is_running { "Running" } else { "Not Running" }).size(50),
     ]
     .padding(20)
