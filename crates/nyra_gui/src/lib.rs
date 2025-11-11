@@ -11,8 +11,10 @@ use {
     Center,
     Element,
     Length,
+    Subscription,
+    Theme,
+    keyboard,
     widget::{
-      Column,
       button,
       column,
       text,
@@ -30,7 +32,9 @@ use {
 };
 
 pub fn init_gui() -> iced::Result {
-  iced::run("Nyra", Nyra::update, Nyra::view)
+  iced::application("Nyra", Nyra::update, Nyra::view)
+    .subscription(Nyra::subscription)
+    .run()
 }
 
 #[derive(Default)]
@@ -46,6 +50,13 @@ enum Message {
 }
 
 impl Nyra {
+  fn subscription(&self) -> Subscription<Message> {
+    keyboard::on_key_press(|key, _modifiers| match key {
+      keyboard::Key::Named(keyboard::key::Named::F2) => Some(Message::StartBot),
+      _ => None,
+    })
+  }
+
   fn update(&mut self, message: Message) {
     match message {
       Message::StopBot => {
@@ -91,7 +102,11 @@ impl Nyra {
 
     column![
       text("Nyra").size(30),
-      button(if is_running { "Stop Bot" } else { "Start Bot" }).on_press(if is_running {
+      button(text(format!(
+        "{} (F2)",
+        if is_running { "Stop Bot" } else { "Start Bot" }
+      )))
+      .on_press(if is_running {
         Message::StopBot
       } else {
         Message::StartBot
