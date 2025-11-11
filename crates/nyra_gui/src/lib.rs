@@ -27,9 +27,8 @@ use {
   },
 };
 
-pub fn init_gui() -> Result<(), ()> {
-  _ = iced::run("Nyra", Nyra::update, Nyra::view);
-  Ok(())
+pub fn init_gui() -> iced::Result {
+  iced::run("Nyra", Nyra::update, Nyra::view)
 }
 
 #[derive(Default)]
