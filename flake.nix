@@ -61,6 +61,7 @@
           with pkgs;
           [
             bacon
+            typos
             rust-bin.nightly.latest.default
             cargo-udeps
             clippy

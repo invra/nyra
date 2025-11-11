@@ -12,7 +12,7 @@ pub fn generate_parameters(inv: &Invocation) -> Result<Vec<proc_macro2::TokenStr
   let mut parameter_structs = Vec::new();
   for param in &inv.parameters {
     // no #[description] check here even if slash_command set, so users can
-    // programatically supply descriptions later (e.g. via translation framework
+    // programmatically supply descriptions later (e.g. via translation framework
     // like fluent)
     let description = wrap_option_to_string(param.args.description.as_ref());
 

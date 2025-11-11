@@ -34,7 +34,7 @@ impl<U, E> Clone for FrameworkContext<'_, U, E> {
 impl<'a, U, E> FrameworkContext<'a, U, E> {
   /// Returns the stored framework options, including commands.
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// This function exists for API compatibility with [`crate::Framework`]. On
   /// this type, you can also just access the public `options` field.
   pub fn options(&self) -> &'a crate::FrameworkOptions<U, E> {
     self.options
@@ -42,7 +42,7 @@ impl<'a, U, E> FrameworkContext<'a, U, E> {
 
   /// Returns the serenity's client shard manager.
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// This function exists for API compatibility with [`crate::Framework`]. On
   /// this type, you can also just access the public `shard_manager` field.
   pub fn shard_manager(&self) -> std::sync::Arc<serenity::ShardManager> {
     self.shard_manager.clone()
@@ -50,7 +50,7 @@ impl<'a, U, E> FrameworkContext<'a, U, E> {
 
   /// Retrieves user data
   ///
-  /// This function exists for API compatiblity with [`crate::Framework`]. On
+  /// This function exists for API compatibility with [`crate::Framework`]. On
   /// this type, you can also just access the public `user_data` field.
   #[allow(clippy::unused_async)] // for API compatibility with Framework
   pub async fn user_data(&self) -> &'a U {

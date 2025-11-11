@@ -5,7 +5,7 @@ use crate::{
   serenity_prelude as serenity,
 };
 
-/// Specifies if the current invokation is from a Command or Autocomplete.
+/// Specifies if the current invocation is from a Command or Autocomplete.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum CommandInteractionType {
   /// Invoked from an application command

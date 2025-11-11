@@ -48,7 +48,7 @@ impl TwoColumnList {
   }
 
   /// Add a line that needs the padding between the columns
-  fn push_two_colums(&mut self, command: String, description: String) {
+  fn push_two_columns(&mut self, command: String, description: String) {
     self.0.push((command, Some(description)));
   }
 
@@ -206,7 +206,7 @@ async fn help_single_command<U, E>(
           },
           description,
         );
-        parameterlist.push_two_colums(name, description);
+        parameterlist.push_two_columns(name, description);
       }
       text += &parameterlist.into_string();
       text += "```";
@@ -256,7 +256,7 @@ fn preformat_subcommands<U, E>(
       format!("{} {}", prefix, subcommand.name)
     };
     let description = subcommand.description.as_deref().unwrap_or("").to_string();
-    commands.push_two_colums(command, description);
+    commands.push_two_columns(command, description);
     // We could recurse here, but things can get cluttered quickly.
     // Instead, we show (using this function) subsubcommands when
     // the user asks for help on the subcommand.
@@ -283,7 +283,7 @@ fn preformat_command<U, E>(
   };
 
   let prefix = format!("{}{}{}", indent, prefix, command.name);
-  commands.push_two_colums(
+  commands.push_two_columns(
     prefix.clone(),
     command.description.as_deref().unwrap_or("").to_string(),
   );

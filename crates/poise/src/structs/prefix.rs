@@ -168,11 +168,11 @@ pub struct PrefixFrameworkOptions<U, E> {
   /// Whether to invoke help command when someone sends a message with just a bot mention
   pub help_when_mentioned: bool,
   /// The bot's general help command. Currently used for [`Self::help_when_mentioned`].
-  pub help_commmand: Option<Command<U, E>>,
-  // /// The bot's help command for individial commands. Currently used when a command group without
+  pub help_command: Option<Command<U, E>>,
+  // /// The bot's help command for individual commands. Currently used when a command group without
   // /// any specific subcommand is invoked. This command is expected to take the command name as a
   // /// single parameter
-  // pub command_specific_help_commmand: Option<Command<U, E>>, */
+  // pub command_specific_help_command: Option<Command<U, E>>, */
   // #[non_exhaustive] forbids struct update syntax for ?? reason
   #[doc(hidden)]
   pub __non_exhaustive: (),
@@ -195,8 +195,8 @@ impl<U, E> Default for PrefixFrameworkOptions<U, E> {
       case_insensitive_commands: true,
       non_command_message: None,
       // help_when_mentioned: true,
-      // help_commmand: None,
-      // command_specific_help_commmand: None,
+      // help_command: None,
+      // command_specific_help_command: None,
       __non_exhaustive: (),
     }
   }

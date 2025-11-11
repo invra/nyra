@@ -53,7 +53,7 @@ pub async fn on_error<U, E: std::fmt::Display + std::fmt::Debug>(
     ),
     crate::FrameworkError::Command { ctx, error } => {
       let error = error.to_string();
-      eprintln!("An error occured in a command: {}", error);
+      eprintln!("An error occurred in a command: {}", error);
 
       let mentions = CreateAllowedMentions::new()
         .everyone(false)

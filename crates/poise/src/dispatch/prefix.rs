@@ -136,8 +136,8 @@ async fn strip_prefix<'a, U, E>(
 ///
 /// parent_commands.clear();
 /// assert_eq!(
-///     poise::find_command(&commands, "CoMmAnD2 cOmMaNd99 my arguments", true, &mut parent_commands),
-///     Some((&commands[1], "CoMmAnD2", "cOmMaNd99 my arguments")),
+///     poise::find_command(&commands, "CoMmAnD2 cOmMaAnd99 my arguments", true, &mut parent_commands),
+///     Some((&commands[1], "CoMmAnD2", "cOmMaAnd99 my arguments")),
 /// );
 /// assert!(parent_commands.is_empty());
 pub fn find_command<'a, U, E>(

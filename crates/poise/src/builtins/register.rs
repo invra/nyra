@@ -258,7 +258,7 @@ pub async fn register_application_commands_buttons<U, E>(
     }
   }
 
-  // Calulate time taken and send message
+  // Calculate time taken and send message
   let time_taken = start_time.elapsed();
   ctx
     .say(format!(

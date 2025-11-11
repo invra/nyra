@@ -122,7 +122,7 @@ pub struct Command<U, E> {
   pub invoke_on_edit: bool,
   /// Whether to delete the bot response if an existing invocation message is deleted (prefix-only)
   pub track_deletion: bool,
-  /// Whether to broadcast a typing indicator while executing this commmand (prefix-only)
+  /// Whether to broadcast a typing indicator while executing this command (prefix-only)
   pub broadcast_typing: bool,
 
   // ============= Application-specific data

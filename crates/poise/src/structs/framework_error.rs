@@ -2,10 +2,12 @@
 
 use crate::serenity_prelude as serenity;
 
-/// Any error that can occur while the bot runs. Either thrown by user code (those variants will
-/// have an `error` field with your error type `E` in it), or originating from within the framework.
+/// Any error that can occur while the bot runs. Either thrown by user code
+/// (those variants will have an `error` field with your error type `E` in it),
+/// or originating from within the framework.
 ///
-/// These errors are handled with the [`crate::FrameworkOptions::on_error`] callback
+/// These errors are handled with the [`crate::FrameworkOptions::on_error`]
+/// callback
 #[derive(derivative::Derivative)]
 #[derivative(Debug)]
 pub enum FrameworkError<'a, U, E> {
@@ -44,30 +46,33 @@ pub enum FrameworkError<'a, U, E> {
     /// General context
     ctx: crate::Context<'a, U, E>,
   },
-  /// Command was invoked without specifying a subcommand, but the command has `subcommand_required` set
+  /// Command was invoked without specifying a subcommand, but the command has
+  /// `subcommand_required` set
   SubcommandRequired {
     /// General context
     ctx: crate::Context<'a, U, E>,
   },
-  /// Panic occurred at any phase of command execution after constructing the `crate::Context`.
+  /// Panic occurred at any phase of command execution after constructing the
+  /// `crate::Context`.
   ///
-  /// This feature is intended as a last-resort safeguard to gracefully print an error message to
-  /// the user on a panic. Panics should only be thrown for bugs in the code, don't use this for
-  /// normal errors!
+  /// This feature is intended as a last-resort safeguard to gracefully print an
+  /// error message to the user on a panic. Panics should only be thrown for
+  /// bugs in the code, don't use this for normal errors!
   #[non_exhaustive]
   CommandPanic {
     /// Panic payload which was thrown in the command code
     ///
-    /// If a panic was thrown via [`std::panic::panic_any()`] and the payload was neither &str,
-    /// nor String, the payload is `None`.
+    /// If a panic was thrown via [`std::panic::panic_any()`] and the payload
+    /// was neither &str, nor String, the payload is `None`.
     ///
-    /// The reason the original [`Box<dyn Any + Send>`] payload isn't provided here is that it
-    /// would make [`FrameworkError`] not [`Sync`] anymore.
+    /// The reason the original [`Box<dyn Any + Send>`] payload isn't provided
+    /// here is that it would make [`FrameworkError`] not [`Sync`] anymore.
     payload: Option<String>,
     /// Command context
     ctx: crate::Context<'a, U, E>,
   },
-  /// A command argument failed to parse from the Discord message or interaction content
+  /// A command argument failed to parse from the Discord message or interaction
+  /// content
   #[non_exhaustive]
   ArgumentParse {
     /// Error which was thrown by the parameter type's parsing routine
@@ -77,11 +82,12 @@ pub enum FrameworkError<'a, U, E> {
     /// General context
     ctx: crate::Context<'a, U, E>,
   },
-  /// Expected a certain argument type at a certain position in the unstructured list of
-  /// arguments, but found something else.
+  /// Expected a certain argument type at a certain position in the unstructured
+  /// list of arguments, but found something else.
   ///
-  /// Most often the result of the bot not having registered the command in Discord, so Discord
-  /// stores an outdated version of the command and its parameters.
+  /// Most often the result of the bot not having registered the command in
+  /// Discord, so Discord stores an outdated version of the command and its
+  /// parameters.
   #[non_exhaustive]
   CommandStructureMismatch {
     /// Developer-readable description of the type mismatch
@@ -92,7 +98,8 @@ pub enum FrameworkError<'a, U, E> {
   /// Command was invoked before its cooldown expired
   #[non_exhaustive]
   CooldownHit {
-    /// Time until the command may be invoked for the next time in the given context
+    /// Time until the command may be invoked for the next time in the given
+    /// context
     remaining_cooldown: std::time::Duration,
     /// General context
     ctx: crate::Context<'a, U, E>,
@@ -110,8 +117,8 @@ pub enum FrameworkError<'a, U, E> {
   /// [`crate::Command::required_permissions`]
   #[non_exhaustive]
   MissingUserPermissions {
-    /// List of permissions that the user is lacking. May be None if retrieving the user's
-    /// permissions failed
+    /// List of permissions that the user is lacking. May be None if retrieving
+    /// the user's permissions failed
     missing_permissions: Option<serenity::Permissions>,
     /// General context
     ctx: crate::Context<'a, U, E>,
@@ -140,17 +147,19 @@ pub enum FrameworkError<'a, U, E> {
     /// General context
     ctx: crate::Context<'a, U, E>,
   },
-  /// Provided pre-command check either errored, or returned false, so command execution aborted
+  /// Provided pre-command check either errored, or returned false, so command
+  /// execution aborted
   #[non_exhaustive]
   CommandCheckFailed {
-    /// If execution wasn't aborted because of an error but because it successfully returned
-    /// false, this field is None
+    /// If execution wasn't aborted because of an error but because it
+    /// successfully returned false, this field is None
     error: Option<E>,
     /// General context
     ctx: crate::Context<'a, U, E>,
   },
   /// [`crate::PrefixFrameworkOptions::dynamic_prefix`] or
-  /// [`crate::PrefixFrameworkOptions::stripped_dynamic_prefix`] returned an error
+  /// [`crate::PrefixFrameworkOptions::stripped_dynamic_prefix`] returned an
+  /// error
   #[non_exhaustive]
   DynamicPrefix {
     /// Error which was thrown in the dynamic prefix code
@@ -161,7 +170,8 @@ pub enum FrameworkError<'a, U, E> {
     /// Message which the dynamic prefix callback was evaluated upon
     msg: &'a serenity::Message,
   },
-  /// A message had the correct prefix but the following string was not a recognized command
+  /// A message had the correct prefix but the following string was not a
+  /// recognized command
   #[non_exhaustive]
   UnknownCommand {
     /// Serenity's Context
@@ -171,9 +181,11 @@ pub enum FrameworkError<'a, U, E> {
     msg: &'a serenity::Message,
     /// The prefix that was recognized
     prefix: &'a str,
-    /// The rest of the message (after the prefix) which was not recognized as a command
+    /// The rest of the message (after the prefix) which was not recognized as a
+    /// command
     ///
-    /// This is a single field instead of two fields (command name and args) due to subcommands
+    /// This is a single field instead of two fields (command name and args) due
+    /// to subcommands
     msg_content: &'a str,
     /// Framework context
     #[derivative(Debug = "ignore")]
@@ -196,7 +208,8 @@ pub enum FrameworkError<'a, U, E> {
     /// The interaction in question
     interaction: &'a serenity::CommandInteraction,
   },
-  /// An error occurred in [`crate::PrefixFrameworkOptions::non_command_message`]
+  /// An error occurred in
+  /// [`crate::PrefixFrameworkOptions::non_command_message`]
   #[non_exhaustive]
   NonCommandMessage {
     /// The error thrown by user code
@@ -268,7 +281,8 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
     })
   }
 
-  /// Calls the appropriate `on_error` function (command-specific or global) with this error
+  /// Calls the appropriate `on_error` function (command-specific or global)
+  /// with this error
   pub async fn handle(self, framework_options: &crate::FrameworkOptions<U, E>) {
     let on_error = self
       .ctx()
@@ -278,7 +292,8 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
   }
 }
 
-/// Support functions for the macro, which can't create these #[non_exhaustive] enum variants
+/// Support functions for the macro, which can't create these #[non_exhaustive]
+/// enum variants
 #[doc(hidden)]
 impl<'a, U, E> FrameworkError<'a, U, E> {
   pub fn new_command(ctx: crate::Context<'a, U, E>, error: E) -> Self {
@@ -301,7 +316,8 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
   }
 }
 
-/// Simple macro to deduplicate code. Can't be a function due to lifetime issues with `format_args`
+/// Simple macro to deduplicate code. Can't be a function due to lifetime issues
+/// with `format_args`
 macro_rules! full_command_name {
   ($ctx:expr) => {
     format_args!("{}{}", $ctx.prefix(), $ctx.command().qualified_name)
@@ -365,7 +381,7 @@ impl<U, E: std::fmt::Display> std::fmt::Display for FrameworkError<'_, U, E> {
         ctx,
       } => write!(
         f,
-        "bot is missing permisions ({}) to execute command `{}`",
+        "bot is missing permissions ({}) to execute command `{}`",
         missing_permissions,
         full_command_name!(ctx),
       ),
@@ -374,7 +390,7 @@ impl<U, E: std::fmt::Display> std::fmt::Display for FrameworkError<'_, U, E> {
         ctx,
       } => write!(
         f,
-        "user is or may be missing permisions ({:?}) to execute command `{}`",
+        "user is or may be missing permissions ({:?}) to execute command `{}`",
         missing_permissions,
         full_command_name!(ctx),
       ),
