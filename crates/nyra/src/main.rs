@@ -78,14 +78,18 @@ async fn main() -> Result<(), ()> {
 
     #[cfg(feature = "only-gui")]
     {
-      let _ = nyra_gui::init_gui();
+      _ = nyra_gui::init_gui();
+      running.store(false, Ordering::Relaxed);
+
       quit_task.await.ok();
       return Ok(());
     }
 
     #[cfg(all(feature = "gui", not(feature = "only-gui")))]
     if args.gui {
-      let _ = nyra_gui::init_gui();
+      _ = nyra_gui::init_gui();
+      running.store(false, Ordering::Relaxed);
+
       quit_task.await.ok();
       return Ok(());
     }
