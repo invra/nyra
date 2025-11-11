@@ -65,6 +65,18 @@ impl BotLauncher {
     this.stop_bot().await;
   }
 
+  pub fn is_running() -> bool {
+    if let Some(this) = INSTANCE.get() {
+      if let Ok(lock) = this.shard_manager.try_read() {
+        lock.is_some()
+      } else {
+        true
+      }
+    } else {
+      false
+    }
+  }
+
   async fn start_bot(&self) {
     use poise::serenity_prelude::{
       Client,
