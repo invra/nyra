@@ -58,11 +58,9 @@ impl Nyra {
         std::thread::spawn(move || {
           let fut = async move {
             if new_state {
-              log::info!("Starting bot...");
               BotLauncher::start().await;
               log::bot!("Instance has started");
             } else {
-              log::info!("Stopping bot...");
               BotLauncher::stop().await;
               log::bot!("Instance has stopped");
             }
