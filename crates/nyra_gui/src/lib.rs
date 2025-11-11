@@ -9,6 +9,8 @@
 use {
   iced::{
     Center,
+    Element,
+    Length,
     widget::{
       Column,
       button,
@@ -84,18 +86,20 @@ impl Nyra {
     }
   }
 
-  fn view(&self) -> Column<'_, Message> {
+  fn view(&self) -> Element<'_, Message> {
     let is_running = self.is_running.load(Ordering::Relaxed);
 
     column![
+      text("Nyra").size(30),
       button(if is_running { "Stop Bot" } else { "Start Bot" }).on_press(if is_running {
         Message::StopBot
       } else {
         Message::StartBot
       }),
-      text(if is_running { "Running" } else { "Not Running" }).size(50),
     ]
+    .width(Length::Fill)
     .padding(20)
     .align_x(Center)
+    .into()
   }
 }
