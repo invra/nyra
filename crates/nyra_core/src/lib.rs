@@ -66,7 +66,7 @@ impl BotLauncher {
   }
 
   pub fn is_running() -> bool {
-    INSTANCE.get().map_or(false, |this| {
+    INSTANCE.get().is_some_and(|this| {
       this
         .shard_manager
         .try_read()
