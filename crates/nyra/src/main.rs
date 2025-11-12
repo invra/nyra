@@ -95,8 +95,8 @@ async fn main() -> Result<(), ()> {
     return Ok(());
   }
 
-  #[warn(unreachable_code)]
-  if !args.gui {
+  #[allow(unreachable_code)]
+  {
     tokio::spawn(nyra_core::BotLauncher::start());
     quit_task.await.ok();
     log::info!("Clean exit complete");
