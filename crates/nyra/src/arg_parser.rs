@@ -112,7 +112,7 @@ Upstream Git repo: https://gitlab.com/invra/nyra
   .replace("{•}", &"•".color(Color::Cyan).bold())
   .replace("{→}", &"→".color(Color::Blue).bold());
 
-  println!("{}", help_msg);
+  println!("{help_msg}");
 }
 
 pub fn print_version() {
@@ -122,5 +122,5 @@ pub fn print_version() {
     env!("CARGO_PKG_VERSION")
   );
 
-  println!("{}", version_msg);
+  println!("{version_msg}");
 }
