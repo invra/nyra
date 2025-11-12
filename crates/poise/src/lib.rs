@@ -1,4 +1,5 @@
 #![cfg_attr(doc_nightly, feature(doc_cfg, doc_auto_cfg))]
+#![allow(clippy::test_attr_in_doctest)]
 #![doc(test(attr(deny(deprecated))))]
 // native #[non_exhaustive] is awful because you can't do struct update syntax with it (??)
 #![allow(clippy::manual_non_exhaustive)]
