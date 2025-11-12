@@ -42,7 +42,7 @@
             programs = {
               nixfmt.enable = true;
               nixf-diagnose.enable = true;
-              toml-sort.enable = true;
+              taplo.enable = true;
               rustfmt.enable = true;
             };
             settings.formatter = {
