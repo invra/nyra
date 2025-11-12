@@ -33,12 +33,12 @@ collector = []
 handle_panics = []
 
 [lints.rust]
-unexpected_cfgs = {level = "warn", check-cfg = ["cfg(doc_nightly)"]}
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(doc_nightly)"] }
 
 [package]
 authors = [
   "kangalio <jannik.a.schaper@web.de>",
-  "invra <pacstrap@mx.idalon.org>"
+  "invra <pacstrap@mx.idalon.org>",
 ]
 edition = "2024"
 name = "poise"

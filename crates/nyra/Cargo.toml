@@ -3,11 +3,11 @@ name = "nyra"
 path = "src/main.rs"
 
 [dependencies]
-nyra-utils.workspace = true
+chrono.workspace = true
 crossterm.workspace = true
 inventory.workspace = true
 nyra-core.workspace = true
-chrono.workspace = true
+nyra-utils.workspace = true
 poise.workspace = true
 serde.workspace = true
 tokio.workspace = true
