@@ -103,6 +103,7 @@ async fn main() -> Result<(), ()> {
       } => {}
     }
 
+    #[warn(unreachable_code)]
     quit_task.await.ok();
     log::info!("Clean exit complete");
   }

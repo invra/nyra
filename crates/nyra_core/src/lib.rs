@@ -66,15 +66,12 @@ impl BotLauncher {
   }
 
   pub fn is_running() -> bool {
-    if let Some(this) = INSTANCE.get() {
-      if let Ok(lock) = this.shard_manager.try_read() {
-        lock.is_some()
-      } else {
-        true
-      }
-    } else {
-      false
-    }
+    INSTANCE.get().map_or(false, |this| {
+      this
+        .shard_manager
+        .try_read()
+        .map_or(true, |lock| lock.is_some())
+    })
   }
 
   async fn start_bot(&self) {
