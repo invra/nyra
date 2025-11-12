@@ -1,9 +1,9 @@
 [dependencies]
+iced.workspace = true
 nyra-core.workspace = true
 nyra-utils.workspace = true
 serde.workspace = true
 tokio.workspace = true
-iced.workspace = true
 
 [package]
 name = "nyra-gui"
