@@ -13,20 +13,18 @@ use {
       self,
       Event,
       KeyCode,
+      KeyEvent,
       KeyModifiers,
     },
     terminal,
   },
   nyra_utils::log,
-  std::{
-    sync::{
-      Arc,
-      atomic::{
-        AtomicBool,
-        Ordering,
-      },
+  std::sync::{
+    Arc,
+    atomic::{
+      AtomicBool,
+      Ordering,
     },
-    time::Duration,
   },
   tokio::task,
 };
@@ -42,7 +40,7 @@ impl RawModeGuard {
 
 impl Drop for RawModeGuard {
   fn drop(&mut self) {
-    let _ = terminal::disable_raw_mode();
+    _ = terminal::disable_raw_mode();
   }
 }
 
@@ -50,60 +48,56 @@ impl Drop for RawModeGuard {
 async fn main() -> Result<(), ()> {
   let args = get_args();
 
-  if !arg_parser::handle_common_args(&args) {
-    nyra_core::BotLauncher::init_instance(args.config.clone());
+  if arg_parser::handle_common_args(&args) {
+    return Ok(())
+  }
 
-    let _raw_guard = RawModeGuard::new();
-    let running = Arc::new(AtomicBool::new(true));
-    let r = running.clone();
+  nyra_core::BotLauncher::init_instance(args.config.clone());
 
-    let quit_task = task::spawn_blocking(move || {
-      while r.load(Ordering::Relaxed) {
-        if event::poll(Duration::from_millis(100)).unwrap_or(false)
-          && let Ok(Event::Key(key_event)) = event::read()
-        {
-          let quit = match key_event.code {
-            KeyCode::Char('q') => true,
-            KeyCode::Char('c') if key_event.modifiers.contains(KeyModifiers::CONTROL) => true,
-            _ => false,
-          };
-          if quit {
-            log::info!("Gracefully exiting…");
-            r.store(false, Ordering::Relaxed);
-            break;
+  let _raw_guard = RawModeGuard::new();
+  let running = Arc::new(AtomicBool::new(true));
+  let r = Arc::clone(&running);
+
+  let quit_task = task::spawn_blocking(move || {
+    while r.load(Ordering::Relaxed) {
+      if matches!(
+        event::read(),
+        Ok(Event::Key(
+          KeyEvent {
+            code: KeyCode::Char('q'),
+            modifiers: KeyModifiers::NONE,
+            ..
+          } | KeyEvent {
+            code: KeyCode::Char('c'),
+            modifiers: KeyModifiers::CONTROL,
+            ..
           }
-        }
+        ))
+      ) {
+        log::info!("Gracefully exiting…");
+        r.store(false, Ordering::Relaxed);
+        return
       }
-    });
-
-    #[cfg(feature = "only-gui")]
-    {
-      _ = nyra_gui::init_gui();
-      running.store(false, Ordering::Relaxed);
-
-      quit_task.await.ok();
-      return Ok(());
     }
+  });
 
-    #[cfg(all(feature = "gui", not(feature = "only-gui")))]
-    if args.gui {
-      _ = nyra_gui::init_gui();
-      running.store(false, Ordering::Relaxed);
+  #[cfg(feature = "only-gui")]
+  {
+    nyra_gui::init_gui();
+    quit_task.await;
+    return Ok(());
+  }
 
-      quit_task.await.ok();
-      return Ok(());
-    }
+  #[cfg(all(feature = "gui", not(feature = "only-gui")))]
+  if args.gui {
+    _ = nyra_gui::init_gui();
+    quit_task.await.ok();
+    return Ok(());
+  }
 
-    tokio::select! {
-      _ = nyra_core::BotLauncher::start() => {},
-      _ = async {
-        while running.load(Ordering::Relaxed) {
-          tokio::time::sleep(Duration::from_millis(100)).await;
-        }
-      } => {}
-    }
-
-    #[warn(unreachable_code)]
+  #[warn(unreachable_code)]
+  if !args.gui {
+    tokio::spawn(nyra_core::BotLauncher::start());
     quit_task.await.ok();
     log::info!("Clean exit complete");
   }
