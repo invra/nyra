@@ -110,11 +110,10 @@ impl BotLauncher {
           log::bot!("ID: {}", ready.user.id);
           poise::builtins::register_globally(ctx, &framework.options().commands).await?;
           for command in &framework.options().commands {
-            let category = match &command.category {
-              Some(cat) => format!("from {}", cat.as_str()),
-              None => String::new(),
-            };
-
+            let category = command
+              .category
+              .as_ref()
+              .map_or_else(String::new, |cat| format!("from {}", cat.as_str()));
             log::bot!("Loaded command: {} {}", command.name, category);
           }
 
