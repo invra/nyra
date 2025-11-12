@@ -1,5 +1,5 @@
-//! Tools for implementing automatic edit tracking, i.e. the bot automatically updating its response
-//! when the user edits their command invocation message.
+//! Tools for implementing automatic edit tracking, i.e. the bot automatically
+//! updating its response when the user edits their command invocation message.
 
 use crate::serenity_prelude as serenity;
 
@@ -54,17 +54,19 @@ struct CachedInvocation {
   user_msg: serenity::Message,
   /// Associated bot response of this command invocation
   bot_response: Option<serenity::Message>,
-  /// Whether the bot response should be deleted when the user deletes their message
+  /// Whether the bot response should be deleted when the user deletes their
+  /// message
   track_deletion: bool,
 }
 
-/// Stores messages and the associated bot responses in order to implement poise's edit tracking
-/// feature.
+/// Stores messages and the associated bot responses in order to implement
+/// poise's edit tracking feature.
 #[derive(Debug)]
 pub struct EditTracker {
   /// Duration after which cached messages can be purged
   max_duration: std::time::Duration,
-  /// Cache, which stores invocation messages, and the corresponding bot response message if any
+  /// Cache, which stores invocation messages, and the corresponding bot
+  /// response message if any
   // TODO: change to `OrderedMap<MessageId, (Message, Option<serenity::Message>)>`?
   cache: Vec<CachedInvocation>,
 }
@@ -72,20 +74,23 @@ pub struct EditTracker {
 impl EditTracker {
   /// Create an edit tracker which tracks messages for the specified duration.
   ///
-  /// Note: [`EditTracker`] will only purge messages outside the duration when [`Self::purge`]
-  /// is called. If you supply the created [`EditTracker`] to [`crate::Framework`], the framework
-  /// will take care of that by calling [`Self::purge`] periodically.
-  pub fn for_timespan(duration: std::time::Duration) -> std::sync::RwLock<Self> {
+  /// Note: [`EditTracker`] will only purge messages outside the duration when
+  /// [`Self::purge`] is called. If you supply the created [`EditTracker`] to
+  /// [`crate::Framework`], the framework will take care of that by calling
+  /// [`Self::purge`] periodically.
+  pub const fn for_timespan(duration: std::time::Duration) -> std::sync::RwLock<Self> {
     std::sync::RwLock::new(Self {
       max_duration: duration,
       cache: Vec::new(),
     })
   }
 
-  /// Returns a copy of a newly up-to-date cached message, or a brand new generated message when
-  /// not in cache. Also returns a bool with `true` if this message was previously tracked
+  /// Returns a copy of a newly up-to-date cached message, or a brand new
+  /// generated message when not in cache. Also returns a bool with `true` if
+  /// this message was previously tracked
   ///
-  /// Returns None if the command shouldn't be re-run, e.g. if the message content wasn't edited
+  /// Returns None if the command shouldn't be re-run, e.g. if the message
+  /// content wasn't edited
   pub fn process_message_update(
     &mut self,
     user_msg_update: &serenity::MessageUpdateEvent,
@@ -124,9 +129,9 @@ impl EditTracker {
     }
   }
 
-  /// Removes this command invocation from the cache and returns the associated bot response,
-  /// if the command invocation is cached, and it has an associated bot response, and the command
-  /// is marked track_deletion
+  /// Removes this command invocation from the cache and returns the associated
+  /// bot response, if the command invocation is cached, and it has an
+  /// associated bot response, and the command is marked track_deletion
   pub fn process_message_delete(
     &mut self,
     deleted_message_id: serenity::MessageId,
@@ -157,7 +162,8 @@ impl EditTracker {
     });
   }
 
-  /// Given a message by a user, find the corresponding bot response, if one exists and is cached.
+  /// Given a message by a user, find the corresponding bot response, if one
+  /// exists and is cached.
   pub fn find_bot_response(&self, user_msg_id: serenity::MessageId) -> Option<&serenity::Message> {
     let invocation = self
       .cache
@@ -166,8 +172,9 @@ impl EditTracker {
     invocation.bot_response.as_ref()
   }
 
-  /// Notify the [`EditTracker`] that the given user message should be associated with the given
-  /// bot response. Overwrites any previous associated bot response
+  /// Notify the [`EditTracker`] that the given user message should be
+  /// associated with the given bot response. Overwrites any previous
+  /// associated bot response
   pub fn set_bot_response(
     &mut self,
     user_msg: &serenity::Message,
@@ -189,9 +196,10 @@ impl EditTracker {
     }
   }
 
-  /// Store that this command is currently running; so that if the command is editing its own
-  /// invocation message (e.g. removing embeds), we don't accidentally treat it as an
-  /// `execute_untracked_edits` situation and start an infinite loop
+  /// Store that this command is currently running; so that if the command is
+  /// editing its own invocation message (e.g. removing embeds), we don't
+  /// accidentally treat it as an `execute_untracked_edits` situation and
+  /// start an infinite loop
   pub fn track_command(&mut self, user_msg: &serenity::Message, track_deletion: bool) {
     if !self
       .cache
