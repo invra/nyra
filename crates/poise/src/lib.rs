@@ -461,13 +461,10 @@ async fn catch_unwind_maybe<T>(
   let res = futures_util::FutureExt::catch_unwind(std::panic::AssertUnwindSafe(fut))
     .await
     .map_err(|e| {
-      if let Some(s) = e.downcast_ref::<&str>() {
-        Some(s.to_string())
-      } else if let Ok(s) = e.downcast::<String>() {
-        Some(*s)
-      } else {
-        None
-      }
+      e.downcast_ref::<&str>()
+        .copied()
+        .map(String::from)
+        .or_else(|| e.downcast::<String>().map(|x| *x).ok())
     });
   #[cfg(not(feature = "handle_panics"))]
   let res = Ok(fut.await);
