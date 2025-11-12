@@ -41,7 +41,6 @@ struct Nyra {
   is_running: Arc<AtomicBool>,
 }
 
-#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 enum Message {
   StartBot,
