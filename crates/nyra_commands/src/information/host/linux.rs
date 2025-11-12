@@ -97,8 +97,7 @@ pub fn get_os_name() -> Box<str> {
     .filter_map(|x| x.split_once('='))
     .collect::<HashMap<_, _>>()
     .get("PRETTY_NAME")
-    .map(|s| s.trim_matches('"'))
-    .unwrap_or("Unknown Linux");
+    .map_or("Unknown Linux", |s| s.trim_matches('"'));
 
   pretty.into()
 }

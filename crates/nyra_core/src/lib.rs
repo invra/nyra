@@ -112,7 +112,7 @@ impl BotLauncher {
           for command in &framework.options().commands {
             let category = match &command.category {
               Some(cat) => format!("from {}", cat.as_str()),
-              None => "".into(),
+              None => String::new(),
             };
 
             log::bot!("Loaded command: {} {}", command.name, category);

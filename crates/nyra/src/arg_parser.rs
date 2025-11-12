@@ -99,7 +99,7 @@ fn parse_args(raw_args: &[String]) -> Args {
 }
 
 pub fn print_help() {
-  let help_msg = r#"
+  let help_msg = r"
 Nyra Help
 Nyra is a Discord bot written in Rust!
 Upstream Git repo: https://gitlab.com/invra/nyra
@@ -108,7 +108,7 @@ Upstream Git repo: https://gitlab.com/invra/nyra
   {•} -[-h]elp       {→}  Shows this help message
   {•} -[-v]ersion    {→}  Shows this package's version
   {•} -[-c]onfig     {→}  Change the location to load Nyra's config
-  "#
+  "
   .replace("{•}", &"•".color(Color::Cyan).bold())
   .replace("{→}", &"→".color(Color::Blue).bold());
 
