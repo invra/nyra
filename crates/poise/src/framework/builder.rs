@@ -1,11 +1,13 @@
-//! A builder struct that allows easy and readable creation of a [`crate::Framework`]
+//! A builder struct that allows easy and readable creation of a
+//! [`crate::Framework`]
 
 use crate::BoxFuture;
 use crate::serenity_prelude as serenity;
 
 /// A builder to configure a framework.
 ///
-/// If one of the following required values is missing, the builder will panic on start:
+/// If one of the following required values is missing, the builder will panic
+/// on start:
 /// - [`Self::setup`]
 /// - [`Self::options`]
 pub struct FrameworkBuilder<U, E> {
@@ -69,7 +71,7 @@ impl<U, E> FrameworkBuilder<U, E> {
   /// [`crate::FrameworkOptions::owners`] automatically
   ///
   /// `true` by default
-  pub fn initialize_owners(mut self, initialize_owners: bool) -> Self {
+  pub const fn initialize_owners(mut self, initialize_owners: bool) -> Self {
     self.initialize_owners = initialize_owners;
     self
   }
@@ -87,7 +89,8 @@ impl<U, E> FrameworkBuilder<U, E> {
       .expect("No user data setup function was provided to the framework");
     let mut options = self.options.expect("No framework options provided");
 
-    // Build framework options by concatenating user-set options with commands and owners
+    // Build framework options by concatenating user-set options with commands and
+    // owners
     options.commands.extend(self.commands);
     options.initialize_owners = self.initialize_owners;
 

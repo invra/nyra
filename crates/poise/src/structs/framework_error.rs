@@ -256,7 +256,7 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
   }
 
   /// Returns the [`crate::Context`] of this error, if it has one
-  pub fn ctx(&self) -> Option<crate::Context<'a, U, E>> {
+  pub const fn ctx(&self) -> Option<crate::Context<'a, U, E>> {
     Some(match *self {
       Self::Command { ctx, .. } => ctx,
       Self::SubcommandRequired { ctx } => ctx,
@@ -296,7 +296,7 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
 /// enum variants
 #[doc(hidden)]
 impl<'a, U, E> FrameworkError<'a, U, E> {
-  pub fn new_command(ctx: crate::Context<'a, U, E>, error: E) -> Self {
+  pub const fn new_command(ctx: crate::Context<'a, U, E>, error: E) -> Self {
     Self::Command { error, ctx }
   }
 
@@ -308,7 +308,7 @@ impl<'a, U, E> FrameworkError<'a, U, E> {
     Self::ArgumentParse { error, input, ctx }
   }
 
-  pub fn new_command_structure_mismatch(
+  pub const fn new_command_structure_mismatch(
     ctx: crate::ApplicationContext<'a, U, E>,
     description: &'static str,
   ) -> Self {

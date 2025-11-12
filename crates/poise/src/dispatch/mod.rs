@@ -36,7 +36,7 @@ impl<'a, U, E> FrameworkContext<'a, U, E> {
   ///
   /// This function exists for API compatibility with [`crate::Framework`]. On
   /// this type, you can also just access the public `options` field.
-  pub fn options(&self) -> &'a crate::FrameworkOptions<U, E> {
+  pub const fn options(&self) -> &'a crate::FrameworkOptions<U, E> {
     self.options
   }
 

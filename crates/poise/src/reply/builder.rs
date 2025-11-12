@@ -11,7 +11,8 @@ pub struct CreateReply {
   pub embeds: Vec<serenity::CreateEmbed>,
   /// Message attachments.
   pub attachments: Vec<serenity::CreateAttachment>,
-  /// Whether the message is ephemeral (only has an effect in application commands)
+  /// Whether the message is ephemeral (only has an effect in application
+  /// commands)
   pub ephemeral: Option<bool>,
   /// Message components, that is, buttons and select menus.
   pub components: Option<Vec<serenity::CreateActionRow>>,
@@ -54,10 +55,11 @@ impl CreateReply {
     self
   }
 
-  /// Toggles whether the message is an ephemeral response (only invoking user can see it).
+  /// Toggles whether the message is an ephemeral response (only invoking user
+  /// can see it).
   ///
   /// This only has an effect in slash commands!
-  pub fn ephemeral(mut self, ephemeral: bool) -> Self {
+  pub const fn ephemeral(mut self, ephemeral: bool) -> Self {
     self.ephemeral = Some(ephemeral);
     self
   }
@@ -72,27 +74,30 @@ impl CreateReply {
 
   /// Adds a poll to the message. Only one poll can be added per message.
   ///
-  /// See [`serenity::CreatePoll`] for more information on creating and configuring a poll.
+  /// See [`serenity::CreatePoll`] for more information on creating and
+  /// configuring a poll.
   pub fn poll(mut self, poll: serenity::CreatePoll<serenity::builder::create_poll::Ready>) -> Self {
     self.poll = Some(poll);
     self
   }
 
-  /// Makes this message an inline reply to another message like [`serenity::Message::reply`]
-  /// (prefix-only, because slash commands are always inline replies anyways).
+  /// Makes this message an inline reply to another message like
+  /// [`serenity::Message::reply`] (prefix-only, because slash commands are
+  /// always inline replies anyways).
   ///
   /// To disable the ping, set [`Self::allowed_mentions`] with
   /// [`serenity::CreateAllowedMentions::replied_user`] set to false.
-  pub fn reply(mut self, reply: bool) -> Self {
+  pub const fn reply(mut self, reply: bool) -> Self {
     self.reply = reply;
     self
   }
 }
 
-/// Methods to create a message builder from any type from this [`CreateReply`]. Used by poise
-/// internally to actually send a response to Discord
+/// Methods to create a message builder from any type from this [`CreateReply`].
+/// Used by poise internally to actually send a response to Discord
 impl CreateReply {
-  /// Serialize this response builder to a [`serenity::CreateInteractionResponseMessage`]
+  /// Serialize this response builder to a
+  /// [`serenity::CreateInteractionResponseMessage`]
   pub fn to_slash_initial_response(
     self,
     mut builder: serenity::CreateInteractionResponseMessage,
@@ -128,7 +133,8 @@ impl CreateReply {
     builder.add_files(attachments).embeds(embeds)
   }
 
-  /// Serialize this response builder to a [`serenity::CreateInteractionResponseFollowup`]
+  /// Serialize this response builder to a
+  /// [`serenity::CreateInteractionResponseFollowup`]
   pub fn to_slash_followup_response(
     self,
     mut builder: serenity::CreateInteractionResponseFollowup,

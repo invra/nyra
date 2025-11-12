@@ -8,17 +8,19 @@ use crate::serenity_prelude as serenity;
 /// Possible errors when parsing slash command arguments
 #[derive(Debug)]
 pub enum SlashArgError {
-  /// Expected a certain argument type at a certain position in the unstructured list of
-  /// arguments, but found something else.
+  /// Expected a certain argument type at a certain position in the unstructured
+  /// list of arguments, but found something else.
   ///
-  /// Most often the result of the bot not having registered the command in Discord, so Discord
-  /// stores an outdated version of the command and its parameters.
+  /// Most often the result of the bot not having registered the command in
+  /// Discord, so Discord stores an outdated version of the command and its
+  /// parameters.
   #[non_exhaustive]
   CommandStructureMismatch {
     /// A short string describing what specifically is wrong/unexpected
     description: &'static str,
   },
-  /// A string parameter was found, but it could not be parsed into the target type.
+  /// A string parameter was found, but it could not be parsed into the target
+  /// type.
   #[non_exhaustive]
   Parse {
     /// Error that occurred while parsing the string into the target type
@@ -26,7 +28,8 @@ pub enum SlashArgError {
     /// Original input string
     input: String,
   },
-  /// The argument passed by the user is invalid in this context. E.g. a Member parameter in DMs
+  /// The argument passed by the user is invalid in this context. E.g. a Member
+  /// parameter in DMs
   #[non_exhaustive]
   Invalid(
     /// Human readable description of the error
@@ -38,10 +41,11 @@ pub enum SlashArgError {
   __NonExhaustive,
 }
 
-/// Support functions for macro which can't create #[non_exhaustive] enum variants
+/// Support functions for macro which can't create #[non_exhaustive] enum
+/// variants
 #[doc(hidden)]
 impl SlashArgError {
-  pub fn new_command_structure_mismatch(description: &'static str) -> Self {
+  pub const fn new_command_structure_mismatch(description: &'static str) -> Self {
     Self::CommandStructureMismatch { description }
   }
 

@@ -106,13 +106,13 @@ impl<U, E> Framework<U, E> {
   }
 
   /// Return the stored framework options, including commands.
-  pub fn options(&self) -> &crate::FrameworkOptions<U, E> {
+  pub const fn options(&self) -> &crate::FrameworkOptions<U, E> {
     &self.options
   }
 
   /// Returns the serenity's client shard manager.
   // Returns a reference so you can plug it into [`FrameworkContext`]
-  pub fn shard_manager(&self) -> &Arc<serenity::ShardManager> {
+  pub const fn shard_manager(&self) -> &Arc<serenity::ShardManager> {
     self
       .shard_manager
       .as_ref()

@@ -43,7 +43,7 @@ struct TwoColumnList(Vec<(String, Option<String>)>);
 
 impl TwoColumnList {
   /// Creates a new [`TwoColumnList`]
-  fn new() -> Self {
+  const fn new() -> Self {
     Self(Vec::new())
   }
 
