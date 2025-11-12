@@ -46,7 +46,7 @@ need_stdout = false
 [jobs.doc-open]
 command = ["cargo", "doc", "--no-deps", "--open"]
 need_stdout = false
-on_success = "back" # so that we don't open the browser at each change
+on_success = "back"                               # so that we don't open the browser at each change
 
 # This parameterized job runs the example of your choice, as soon
 # as the code compiles.
@@ -64,7 +64,7 @@ command = [
   "run",
   "--hide-progress-bar",
   "--failure-output",
-  "final"
+  "final",
 ]
 need_stdout = true
 analyzer = "nextest"
@@ -72,10 +72,7 @@ analyzer = "nextest"
 # You can run your application and have the result displayed in bacon,
 # if it makes sense for this crate.
 [jobs.run]
-command = [
-  "cargo",
-  "run"
-]
+command = ["cargo", "run"]
 need_stdout = true
 allow_warnings = true
 background = true
@@ -91,10 +88,7 @@ background = true
 # A custom kill command such as the one suggested below is frequently needed to kill
 # long running programs (uncomment it if you need it)
 [jobs.run-long]
-command = [
-  "cargo",
-  "run"
-]
+command = ["cargo", "run"]
 need_stdout = true
 allow_warnings = true
 background = false

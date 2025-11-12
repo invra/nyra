@@ -5,7 +5,7 @@ extend-ignore-re = [
   '"ba"',
   "doas",
   # macOS version
-  "Big Sur"
+  "Big Sur",
 ]
 check-filename = true
 
@@ -15,5 +15,5 @@ ignore-hidden = false
 extend-exclude = [
   ".git/",
   # Contributor names aren't typos.
-  ".mailmap"
+  ".mailmap",
 ]

@@ -1,9 +1,6 @@
 [workspace]
 resolver = "2"
-members = [
-  "crates/poise",
-  "crates/nyra"
-]
+members = ["crates/poise", "crates/nyra"]
 default-members = ["crates/nyra"]
 
 [workspace.dependencies]
@@ -69,7 +66,15 @@ features = ["std"]
 
 [workspace.dependencies.serenity]
 default-features = false
-features = ["builder", "client", "gateway", "model", "utils", "collector", "framework"]
+features = [
+  "builder",
+  "client",
+  "gateway",
+  "model",
+  "utils",
+  "collector",
+  "framework",
+]
 version = "0.12.4"
 
 [workspace.dependencies.syn]
