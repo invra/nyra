@@ -10,7 +10,7 @@ only-cli = ["cli"]
 
 [package]
 name = "nyra-utils"
-version = "1.2.0"
+version = "1.0.0"
 description = "Nyra's simple utility functions"
 license = "Unlicense"
 readme = "README.adoc"

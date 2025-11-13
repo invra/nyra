@@ -26,7 +26,7 @@ only-cli = ["cli"]
 
 [package]
 name = "nyra"
-version = "1.2.0"
+version = "1.2.4"
 description = "A discord bot"
 license = "Unlicense"
 readme = "README.adoc"

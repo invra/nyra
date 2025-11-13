@@ -17,7 +17,7 @@ only-cli = ["cli"]
 
 [package]
 name = "nyra-core"
-version = "1.2.0"
+version = "1.0.0"
 description = "Core functionalities of Nyra"
 license = "Unlicense"
 readme = "README.adoc"
