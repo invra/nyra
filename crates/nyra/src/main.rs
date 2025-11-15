@@ -1,11 +1,5 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: main.rs
-    Authors: Invra
-    Notes: Main entry point for Nyra
-*/
-
 mod arg_parser;
+
 use {
   arg_parser::get_args,
   crossterm::{
@@ -44,21 +38,9 @@ impl Drop for RawModeGuard {
   }
 }
 
-#[tokio::main]
-async fn main() -> Result<(), ()> {
-  let args = get_args();
-
-  if arg_parser::handle_common_args(&args) {
-    return Ok(())
-  }
-
-  nyra_core::BotLauncher::init_instance(args.config.clone());
-
-  let _raw_guard = RawModeGuard::new();
-  let running = Arc::new(AtomicBool::new(true));
+fn spawn_quit_task(running: Arc<AtomicBool>) -> tokio::task::JoinHandle<()> {
   let r = Arc::clone(&running);
-
-  let quit_task = task::spawn_blocking(move || {
+  task::spawn_blocking(move || {
     while r.load(Ordering::Relaxed) {
       if matches!(
         event::read(),
@@ -76,31 +58,71 @@ async fn main() -> Result<(), ()> {
       ) {
         log::info!("Gracefully exiting…");
         r.store(false, Ordering::Relaxed);
-        return
+        return;
       }
     }
-  });
+  })
+}
 
-  #[cfg(feature = "only-gui")]
-  {
-    nyra_gui::init_gui();
-    quit_task.await;
+#[cfg(feature = "only-gui")]
+#[tokio::main]
+async fn main() -> Result<(), ()> {
+  let args = get_args();
+  if arg_parser::handle_common_args(&args) {
     return Ok(());
   }
 
-  #[cfg(all(feature = "gui", not(feature = "only-gui")))]
+  nyra_core::BotLauncher::init_instance(args.config.clone());
+
+  _ = nyra_gui::init_gui();
+  Ok(())
+}
+
+#[cfg(all(feature = "gui", not(feature = "only-gui")))]
+#[tokio::main]
+async fn main() -> Result<(), ()> {
+  let args = get_args();
+  if arg_parser::handle_common_args(&args) {
+    return Ok(());
+  }
+
+  nyra_core::BotLauncher::init_instance(args.config.clone());
+
+  let _raw_guard = RawModeGuard::new();
+  let running = Arc::new(AtomicBool::new(true));
+  let quit_task = spawn_quit_task(Arc::clone(&running));
+
   if args.gui {
     _ = nyra_gui::init_gui();
+
+    running.store(false, Ordering::Relaxed);
     quit_task.await.ok();
+    log::info!("Clean exit complete");
     return Ok(());
   }
 
-  #[allow(unreachable_code)]
-  {
-    tokio::spawn(nyra_core::BotLauncher::start());
-    quit_task.await.ok();
-    log::info!("Clean exit complete");
+  tokio::spawn(nyra_core::BotLauncher::start());
+  quit_task.await.ok();
+  log::info!("Clean exit complete");
+  Ok(())
+}
+
+#[cfg(not(any(feature = "gui", feature = "only-gui")))]
+#[tokio::main]
+async fn main() -> Result<(), ()> {
+  let args = get_args();
+  if arg_parser::handle_common_args(&args) {
+    return Ok(());
   }
 
+  nyra_core::BotLauncher::init_instance(args.config.clone());
+
+  let _raw_guard = RawModeGuard::new();
+  let running = Arc::new(AtomicBool::new(true));
+  let quit_task = spawn_quit_task(Arc::clone(&running));
+
+  tokio::spawn(nyra_core::BotLauncher::start());
+  quit_task.await.ok();
+  log::info!("Clean exit complete");
   Ok(())
 }
