@@ -43,53 +43,37 @@ struct Nyra {
 
 #[derive(Debug, Clone, Copy)]
 enum Message {
-  StartBot,
-  StopBot,
+  ToggleBot,
 }
 
 impl Nyra {
   fn subscription(&self) -> Subscription<Message> {
-    keyboard::on_key_press(|key, _modifiers| match key {
-      keyboard::Key::Named(keyboard::key::Named::F2) => Some(Message::StartBot),
-      _ => None,
+    keyboard::on_key_press(|key, _| {
+      matches!(key, keyboard::Key::Named(keyboard::key::Named::F2)).then_some(Message::ToggleBot)
     })
   }
 
   fn update(&mut self, message: Message) {
     match message {
-      Message::StopBot => {
-        let new_state = !self.is_running.clone().load(Ordering::Relaxed);
-        self.is_running.clone().store(new_state, Ordering::Relaxed);
+      Message::ToggleBot => {
+        let is_running = self.is_running.clone().load(Ordering::Relaxed);
+        self.is_running.store(!is_running, Ordering::Relaxed);
 
         std::thread::spawn(move || {
-          let fut = async move {
-            BotLauncher::stop().await;
-            log::bot!("Instance has stopped");
+          let Ok(rt) = tokio::runtime::Runtime::new() else {
+            log::error!("Failed to create runtime");
+            return;
           };
 
-          if let Ok(rt) = tokio::runtime::Runtime::new() {
-            rt.block_on(fut);
-          } else {
-            log::error!("Failed to create runtime");
-          }
-        });
-      }
-
-      Message::StartBot => {
-        let new_state = !self.is_running.clone().load(Ordering::Relaxed);
-        self.is_running.clone().store(new_state, Ordering::Relaxed);
-
-        std::thread::spawn(move || {
-          let fut = async move {
-            BotLauncher::start().await;
-            log::bot!("Instance has started");
-          };
-
-          if let Ok(rt) = tokio::runtime::Runtime::new() {
-            rt.block_on(fut);
-          } else {
-            log::error!("Failed to create runtime");
-          }
+          rt.block_on(async move {
+            if is_running {
+              BotLauncher::stop().await;
+              log::bot!("Instance has stopped");
+            } else {
+              BotLauncher::start().await;
+              log::bot!("Instance has started");
+            }
+          });
         });
       }
     }
@@ -104,11 +88,7 @@ impl Nyra {
         "{} (F2)",
         if is_running { "Stop Bot" } else { "Start Bot" }
       )))
-      .on_press(if is_running {
-        Message::StopBot
-      } else {
-        Message::StartBot
-      }),
+      .on_press(Message::ToggleBot),
     ]
     .width(Length::Fill)
     .padding(20)
