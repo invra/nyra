@@ -1,9 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: utils/colorize.rs
-    Authors: Invra
-    Notes: Custom colorizing functionality for Nyra logging
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_utils
+ *  File: colorize.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[allow(dead_code)]
 pub struct ColoredString {

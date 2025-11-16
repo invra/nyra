@@ -1,3 +1,11 @@
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_utils
+ *  File: log.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
+
 use crate::colorize::{
   Color,
   ColorExt,
