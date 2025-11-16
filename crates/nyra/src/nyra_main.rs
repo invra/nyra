@@ -61,7 +61,8 @@ pub(crate) async fn main() -> Result<(), ()> {
   let quit_task = spawn_quit_task(Arc::clone(&running));
 
   if args.gui {
-    _ = nyra_gui::init_gui();
+    let sender = nyra_gui::init_gui().unwrap();
+    _ = sender.send(());
 
     running.store(false, Ordering::Relaxed);
     quit_task.await.ok();

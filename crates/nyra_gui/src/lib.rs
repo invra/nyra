@@ -12,6 +12,7 @@ use {
     Element,
     Length,
     Subscription,
+    Task,
     keyboard,
     widget::{
       button,
@@ -28,12 +29,23 @@ use {
       Ordering,
     },
   },
+  tokio::sync::oneshot,
 };
 
-pub fn init_gui() -> iced::Result {
-  iced::application("Nyra", Nyra::update, Nyra::view)
-    .subscription(Nyra::subscription)
-    .run()
+pub fn init_gui() -> Result<oneshot::Sender<()>, iced::Error> {
+  let (tx, rx) = oneshot::channel();
+  tokio::spawn(async {
+    _ = iced::application("Nyra", Nyra::update, Nyra::view)
+      .subscription(|_| {
+        keyboard::on_key_press(|key, _| {
+          matches!(key, keyboard::Key::Named(keyboard::key::Named::F2))
+            .then_some(Message::ToggleBot)
+        })
+      })
+      .run_with(|| (Nyra::default(), Task::perform(rx, |_| Message::ExitProgram)));
+  });
+
+  Ok(tx)
 }
 
 #[derive(Default)]
@@ -44,17 +56,13 @@ struct Nyra {
 #[derive(Debug, Clone, Copy)]
 enum Message {
   ToggleBot,
+  ExitProgram,
 }
 
 impl Nyra {
-  fn subscription(&self) -> Subscription<Message> {
-    keyboard::on_key_press(|key, _| {
-      matches!(key, keyboard::Key::Named(keyboard::key::Named::F2)).then_some(Message::ToggleBot)
-    })
-  }
-
-  fn update(&mut self, message: Message) {
+  fn update(&mut self, message: Message) -> Task<Message> {
     match message {
+      Message::ExitProgram => iced::exit(),
       Message::ToggleBot => {
         let is_running = self.is_running.clone().load(Ordering::Relaxed);
         self.is_running.store(!is_running, Ordering::Relaxed);
@@ -75,6 +83,7 @@ impl Nyra {
             }
           });
         });
+        Task::none()
       }
     }
   }

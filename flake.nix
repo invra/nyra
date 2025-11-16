@@ -23,6 +23,7 @@
       rust-overlay,
       naersk,
       self,
+      ...
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
