@@ -1,3 +1,11 @@
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: Nyra
+ *  File: arg_parser.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
+
 use nyra_utils::colorize::{
   Color,
   ColorExt,

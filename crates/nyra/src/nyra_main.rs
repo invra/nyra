@@ -1,3 +1,11 @@
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: Nyra
+ *  File: nyra_main.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
+
 #[cfg(any(feature = "gui", feature = "only-gui"))]
 use std::sync::atomic::Ordering;
 use {

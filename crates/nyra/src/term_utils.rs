@@ -1,3 +1,11 @@
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: Nyra
+ *  File: term_utils.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
+
 use {
   crossterm::{
     event::{
