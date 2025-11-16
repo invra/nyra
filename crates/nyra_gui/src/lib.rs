@@ -1,10 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    Crate: nyra_gui
-    File: lib.rs
-    Authors: Invra
-    Notes: Iced-rs implementation
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_gui
+ *  File: lib.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 use {
   iced::{

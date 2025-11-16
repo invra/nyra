@@ -1,9 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: window_platform/theme.rs
-    Authors: Invra
-    Notes: Theme system pretty much I guess
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_gui
+ *  File: theme.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #![allow(dead_code)]
 

@@ -1,9 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: bot_launcher.rs
-    Authors: Invra
-    Notes: Main launching logic for the Discord bot
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_core
+ *  File: lib.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 mod config;
 

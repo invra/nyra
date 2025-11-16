@@ -1,13 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: config.rs
-    Authors: Invra
-    Notes: Configuration handling
-
-    Config file location:
-    - Unix/macOS: ~/.config/nyra/nyra.toml
-    - Windows: %APPDATA%\nyra\nyra.toml
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_core
+ *  File: config.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 use {
   nyra_utils::log,
