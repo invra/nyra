@@ -25,7 +25,10 @@ use {
       Ordering,
     },
   },
-  tokio::task,
+  tokio::{
+    sync::oneshot,
+    task,
+  },
 };
 
 pub struct RawModeGuard;
@@ -43,27 +46,34 @@ impl Drop for RawModeGuard {
   }
 }
 
-pub fn spawn_quit_task(running: Arc<AtomicBool>) -> tokio::task::JoinHandle<()> {
-  task::spawn_blocking(move || {
-    while running.load(Ordering::Relaxed) {
-      if matches!(
-        event::read(),
-        Ok(Event::Key(
-          KeyEvent {
-            code: KeyCode::Char('q'),
-            modifiers: KeyModifiers::NONE,
-            ..
-          } | KeyEvent {
-            code: KeyCode::Char('c'),
-            modifiers: KeyModifiers::CONTROL,
-            ..
-          }
-        ))
-      ) {
-        log::info!("Gracefully exiting…");
-        running.store(false, Ordering::Relaxed);
-        return;
+pub fn spawn_quit_task(
+  running: Arc<AtomicBool>,
+) -> (tokio::task::JoinHandle<()>, oneshot::Receiver<()>) {
+  let (tx, rx) = oneshot::channel();
+  (
+    task::spawn_blocking(move || {
+      while running.load(Ordering::Relaxed) {
+        if matches!(
+          event::read(),
+          Ok(Event::Key(
+            KeyEvent {
+              code: KeyCode::Char('q'),
+              modifiers: KeyModifiers::NONE,
+              ..
+            } | KeyEvent {
+              code: KeyCode::Char('c'),
+              modifiers: KeyModifiers::CONTROL,
+              ..
+            }
+          ))
+        ) {
+          log::info!("Gracefully exiting…");
+          running.store(false, Ordering::Relaxed);
+          tx.send(());
+          return;
+        }
       }
-    }
-  })
+    }),
+    rx,
+  )
 }

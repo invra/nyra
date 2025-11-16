@@ -11,7 +11,6 @@ use {
     Center,
     Element,
     Length,
-    Subscription,
     Task,
     keyboard,
     widget::{
@@ -32,20 +31,14 @@ use {
   tokio::sync::oneshot,
 };
 
-pub fn init_gui() -> Result<oneshot::Sender<()>, iced::Error> {
-  let (tx, rx) = oneshot::channel();
-  tokio::spawn(async {
-    _ = iced::application("Nyra", Nyra::update, Nyra::view)
-      .subscription(|_| {
-        keyboard::on_key_press(|key, _| {
-          matches!(key, keyboard::Key::Named(keyboard::key::Named::F2))
-            .then_some(Message::ToggleBot)
-        })
+pub fn init_gui(rx: oneshot::Receiver<()>) -> iced::Result {
+  iced::application("Nyra", Nyra::update, Nyra::view)
+    .subscription(|_| {
+      keyboard::on_key_press(|key, _| {
+        matches!(key, keyboard::Key::Named(keyboard::key::Named::F2)).then_some(Message::ToggleBot)
       })
-      .run_with(|| (Nyra::default(), Task::perform(rx, |_| Message::ExitProgram)));
-  });
-
-  Ok(tx)
+    })
+    .run_with(|| (Nyra::default(), Task::perform(rx, |_| Message::ExitProgram)))
 }
 
 #[derive(Default)]

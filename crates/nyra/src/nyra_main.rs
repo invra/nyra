@@ -37,9 +37,9 @@ pub(crate) async fn main() -> Result<(), ()> {
 
   let _raw_guard = RawModeGuard::new();
   let running = Arc::new(AtomicBool::new(true));
-  let quit_task = spawn_quit_task(Arc::clone(&running));
+  let (quit_task, rx) = spawn_quit_task(Arc::clone(&running));
 
-  _ = nyra_gui::init_gui();
+  _ = nyra_gui::init_gui(rx);
 
   running.store(false, Ordering::Relaxed);
   quit_task.await.ok();
@@ -58,11 +58,10 @@ pub(crate) async fn main() -> Result<(), ()> {
 
   let _raw_guard = RawModeGuard::new();
   let running = Arc::new(AtomicBool::new(true));
-  let quit_task = spawn_quit_task(Arc::clone(&running));
+  let (quit_task, rx) = spawn_quit_task(Arc::clone(&running));
 
   if args.gui {
-    let sender = nyra_gui::init_gui().unwrap();
-    _ = sender.send(());
+    _ = nyra_gui::init_gui(rx);
 
     running.store(false, Ordering::Relaxed);
     quit_task.await.ok();
