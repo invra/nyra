@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/unknown.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: System info calls for default non-standard systems (to return the types term for nothing)
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/unknown.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(not(any(target_os = "linux", target_os = "macos", target_os = "windows")))]
 pub fn get_cpu_model() -> Box<str> {

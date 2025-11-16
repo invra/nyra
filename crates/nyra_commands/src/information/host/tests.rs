@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/tests.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: Tests for system call name prettier parsers
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/tests.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(test)]
 mod tests {

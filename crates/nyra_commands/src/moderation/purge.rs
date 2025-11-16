@@ -1,3 +1,11 @@
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: moderation/purge.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
+
 use {
   crate::helper::{
     Context,

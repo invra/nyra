@@ -1,9 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: commands/mod.rs
-    Authors: Invra
-    Notes: Crate for the commands!!!!
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: lib.rs
+ *  Authors: Invra
+ */
 
 pub mod helper;
 pub mod information;

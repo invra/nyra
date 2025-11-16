@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/linux.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: System info calls specific to linux
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/linux.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(target_os = "linux")]
 use std::{

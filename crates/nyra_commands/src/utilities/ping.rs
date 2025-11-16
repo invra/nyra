@@ -1,9 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/ping.rs
-  Authors: Invra, Hiten-Tandon
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: utilities/ping.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 use {
   crate::helper::{

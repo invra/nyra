@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/macos.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: System info calls specific to macos, dependency-free version
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/macos.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(target_os = "macos")]
 pub fn get_cpu_count() -> usize {

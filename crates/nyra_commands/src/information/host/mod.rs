@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/mod.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: The api calls for the host command
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/mod.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 mod host_helper;
 mod tests;

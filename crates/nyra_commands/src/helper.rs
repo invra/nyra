@@ -1,7 +1,8 @@
 /*
  *  SPDX-License-Identifier: Unlicense
  *  Project: Nyra
- *  File: commands/helper.rs
+ *  Crate: nyra_commands
+ *  File: helper.rs
  *  Authors: Invra, Hiten-Tandon
  */
 

@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/host_helper.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: System info calls
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/host_helper.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(target_os = "linux")]
 pub use crate::information::host::linux::*;

@@ -1,9 +1,10 @@
-/*  SPDX-License-Identifier: Unlicense
-    Project: Nyra
-    File: commands/information/mod.rs
-    Authors: Invra
-    Notes: Information commands crate
-*/
+/*
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: moderation/mod.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 pub mod ban;
 pub mod kick;

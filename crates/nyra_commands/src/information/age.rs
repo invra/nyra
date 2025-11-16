@@ -1,9 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/age.rs
-  Authors: Invra, Hiten-Tandon
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/age.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 use {
   crate::helper::{

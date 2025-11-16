@@ -1,10 +1,10 @@
 /*
-  SPDX-License-Identifier: Unlicense
-  Project: Nyra
-  File: commands/information/host/windows.rs
-  Authors: Invra, Hiten-Tandon
-  Notes: System info calls for windows
-*/
+ *  SPDX-License-Identifier: Unlicense
+ *  Project: Nyra
+ *  Crate: nyra_commands
+ *  File: information/host/windows.rs
+ *  Authors: Invra, Hiten-Tandon
+ */
 
 #[cfg(target_os = "windows")]
 pub fn get_cpu_count() -> usize {
