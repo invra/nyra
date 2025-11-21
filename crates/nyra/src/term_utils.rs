@@ -69,7 +69,7 @@ pub fn spawn_quit_task(
         ) {
           log::info!("Gracefully exiting…");
           running.store(false, Ordering::Relaxed);
-          tx.send(());
+          _ = tx.send(());
           return;
         }
       }
