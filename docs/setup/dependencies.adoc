@@ -21,16 +21,3 @@ The list of prerequisites is:
 . link:https://rust-lang.org/tools/install/[The Rust Toolchain]
 . link:https://cmake.org/download/[CMake]
 . link:https://releases.llvm.org/download.html[CLang from the LLVM project.]
-
-=== macOS-only dependencies
-
-Since the window framework is the same as Zed-editor (GPUI) you will need Xcode with
-MetalPlatform. The Metal platform is **NOT** preinstalled with Xcode 26. Use the app-store to
-download Xcode then verify and make sure that the developer target is switched to the Xcode
-toolchain by doing:
-
-[source, shell]
-----
-sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-sudo xcodebuild -license accept
-----
