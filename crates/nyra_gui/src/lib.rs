@@ -13,6 +13,7 @@ use {
     Length,
     Task,
     keyboard,
+    theme::Theme,
     widget::{
       button,
       column,
@@ -33,16 +34,14 @@ use {
 
 pub fn init_gui(rx: oneshot::Receiver<()>) -> iced::Result {
   iced::application("Nyra", Nyra::update, Nyra::view)
-    .subscription(|_| {
-      keyboard::on_key_press(|key, _| {
-        matches!(key, keyboard::Key::Named(keyboard::key::Named::F2)).then_some(Message::ToggleBot)
-      })
-    })
-    .run_with(|| (Nyra::default(), Task::perform(rx, |_| Message::ExitProgram)))
+    .theme(Nyra::theme)
+    .subscription(Nyra::subscription)
+    .run_with(|| Nyra::new(rx))
 }
 
 #[derive(Default)]
 struct Nyra {
+  theme: Theme,
   is_running: Arc<AtomicBool>,
 }
 
@@ -53,6 +52,16 @@ enum Message {
 }
 
 impl Nyra {
+  fn theme(&self) -> Theme {
+    self.theme.clone()
+  }
+
+  fn subscription(&self) -> iced::Subscription<Message> {
+    keyboard::on_key_press(|key, _| {
+      matches!(key, keyboard::Key::Named(keyboard::key::Named::F2)).then_some(Message::ToggleBot)
+    })
+  }
+
   fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::ExitProgram => iced::exit(),
@@ -96,5 +105,14 @@ impl Nyra {
     .padding(20)
     .align_x(Center)
     .into()
+  }
+
+  fn new(rx: oneshot::Receiver<()>) -> (Self, Task<Message>) {
+    let instance = Nyra {
+      theme: Theme::TokyoNight,
+      is_running: Arc::new(AtomicBool::new(false)),
+    };
+
+    (instance, Task::perform(rx, |_| Message::ExitProgram))
   }
 }
