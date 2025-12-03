@@ -35,7 +35,7 @@ pub struct RawModeGuard;
 
 impl RawModeGuard {
   pub fn new() -> Self {
-    _ = terminal::enable_raw_mode().expect("failed to enable raw mode");
+    terminal::enable_raw_mode().expect("failed to enable raw mode");
     Self
   }
 }
