@@ -4,7 +4,7 @@
     {
       "label": "Run Nyra (No GUI)",
       "type": "shell",
-      "command": "~/.cargo/bin/cargo",
+      "command": "cargo",
       "args": [
         "run",
       ],
@@ -16,7 +16,7 @@
     {
       "label": "Run Nyra (GUI)",
       "type": "shell",
-      "command": "~/.cargo/bin/cargo",
+      "command": "cargo",
       "args": [
         "run",
         "--",
