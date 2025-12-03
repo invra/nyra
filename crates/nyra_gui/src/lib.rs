@@ -32,7 +32,7 @@ use {
   tokio::sync::oneshot,
 };
 
-pub fn init_gui(rx: oneshot::Receiver<()>) -> iced::Result {
+pub fn init(rx: oneshot::Receiver<()>) -> iced::Result {
   iced::application("Nyra", Nyra::update, Nyra::view)
     .theme(Nyra::theme)
     .subscription(Nyra::subscription)
