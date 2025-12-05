@@ -1,8 +1,1 @@
 * Todo List
-
-** Creating a Rust GUI & getitng ready to merge
-
-*** Finish up the GUI
-    - [ ] Add titlebar controls
-    - [ ] Add some menubar options
-    - [X] Implement the Stop Bot button properly
