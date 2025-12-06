@@ -8,6 +8,7 @@
 
 pub mod helper;
 pub mod information;
+pub mod maths;
 pub mod moderation;
 pub mod utilities;
 
