@@ -53,6 +53,8 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
           CreateSelectMenuOption::new("📌 Moderation", "Moderation")
             .description("Commands related to moderation and management."),
           CreateSelectMenuOption::new("🔨 Utilities", "Utilities").description("Debuggers &c."),
+          CreateSelectMenuOption::new("1️⃣  Mathematics", "Maths")
+            .description("Mathematical checks and expressions"),
         ],
       },
     )
