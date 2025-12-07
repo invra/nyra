@@ -44,6 +44,10 @@ path = "crates/nyra_utils"
 [workspace.dependencies.poise]
 path = "crates/poise"
 
+[workspace.dependencies.uuid]
+version = "1.19.0"
+features = ["v4"]
+
 [workspace.dependencies.async-trait]
 version = "0.1.48"
 default-features = false

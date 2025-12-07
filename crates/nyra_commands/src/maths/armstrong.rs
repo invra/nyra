@@ -2,7 +2,7 @@
  *  SPDX-License-Identifier: Unlicense
  *  Project: Nyra
  *  Crate: nyra_commands
- *  File: utilities/ping.rs
+ *  File: maths/armstrong.rs
  *  Authors: Invra, Hiten-Tandon
  */
 
