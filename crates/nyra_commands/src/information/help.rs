@@ -28,6 +28,7 @@ use {
       EditMessage,
     },
   },
+  std::ops::Not,
 };
 
 /// Shows this menu
@@ -115,13 +116,12 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
                   .to_lowercase()
                   .replace(" ", "_"))
                 .fold(
-                  {
-                    if cmd.parameters.is_empty() {
-                      String::new()
-                    } else {
-                      " -".into()
-                    }
-                  },
+                  cmd
+                    .parameters
+                    .is_empty()
+                    .not()
+                    .then_some(" -".into())
+                    .unwrap_or_default(),
                   |acc, x| format!("{acc} `{x}`")
                 )
             ),
