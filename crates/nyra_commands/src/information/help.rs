@@ -100,9 +100,31 @@ pub async fn help(ctx: Context<'_>) -> Result<(), Error> {
         for cmd in cmds {
           new_embed = new_embed.field(
             cmd.name,
-            cmd
-              .description
-              .unwrap_or_else(|| "No description available.".into()),
+            format!(
+              "{}{}",
+              cmd
+                .description
+                .unwrap_or_else(|| "No description available.".into()),
+              cmd
+                .parameters
+                .iter()
+                .map(|x| x
+                  .description
+                  .clone()
+                  .unwrap_or("No description".into())
+                  .to_lowercase()
+                  .replace(" ", "_"))
+                .fold(
+                  {
+                    if cmd.parameters.is_empty() {
+                      String::new()
+                    } else {
+                      " -".into()
+                    }
+                  },
+                  |acc, x| format!("{acc} `{x}`")
+                )
+            ),
             false,
           );
         }
