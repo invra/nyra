@@ -7,4 +7,5 @@
  */
 
 pub mod armstrong;
-pub mod random;
+pub mod int;
+pub mod uuid;
