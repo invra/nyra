@@ -23,7 +23,7 @@ use {
 #[command(prefix_command, slash_command, category = "Maths")]
 pub async fn int(
   ctx: Context<'_>,
-  #[description = "Range"] num: Option<String>,
+  #[description = "Range max"] num: Option<String>,
 ) -> Result<(), Error> {
   let Ok(max) = BigUint::from_str(num.as_deref().unwrap_or("100")) else {
     ctx
