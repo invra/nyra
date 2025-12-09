@@ -44,7 +44,7 @@ fn is_armstrong(num: BigUint) -> bool {
   sum == num
 }
 
-/// Validates if given BigUnit is an armstrong
+/// Validates if a given BigUnit is an armstrong
 #[command(prefix_command, slash_command, category = "Maths")]
 pub async fn armstrong(
   ctx: Context<'_>,
