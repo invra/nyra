@@ -44,7 +44,12 @@ pub async fn random(
 
     ToRandom::Int => {
       let Ok(max) = BigUint::from_str(num.as_deref().unwrap_or("100")) else {
-        ctx.say("Invalid number provided!").await?;
+        ctx
+          .say(format!(
+            "{:?} is not a valid number!",
+            num.unwrap_or("100".into()),
+          ))
+          .await?;
         return Ok(());
       };
 
