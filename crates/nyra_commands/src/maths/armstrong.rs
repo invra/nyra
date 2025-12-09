@@ -44,11 +44,11 @@ fn is_armstrong(num: BigUint) -> bool {
   sum == num
 }
 
-/// Validates if a given BigUnit is an armstrong
+/// Validates if a given BigUint is an armstrong
 #[command(prefix_command, slash_command, category = "Maths")]
 pub async fn armstrong(
   ctx: Context<'_>,
-  #[description = "User to check"] num: String,
+  #[description = "Int to validate"] num: String,
 ) -> Result<(), Error> {
   let Ok(big) = BigUint::from_str(&num) else {
     ctx
