@@ -52,7 +52,7 @@ pub async fn armstrong(
 ) -> Result<(), Error> {
   let Ok(big) = BigUint::from_str(&num) else {
     ctx
-      .say(format!("{num:?} seem to be an invalid number!"))
+      .say(format!("{num:?} seems to be an invalid number!"))
       .await?;
     return Ok(());
   };
