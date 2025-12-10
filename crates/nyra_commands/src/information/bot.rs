@@ -34,7 +34,16 @@ use {
   },
 };
 
-const COMMAND_CRATE_VER: &str = env!("CARGO_PKG_VERSION");
+const CRATE_VER: &str = env!("CARGO_PKG_VERSION");
+const COMPILER_NAME: &str = compile_time::rustc_version_str!();
+const COMPILE_TIME_ISO: &str = compile_time::datetime_str!();
+
+fn discord_timestamp_from_iso(iso: &str) -> String {
+  let dt: DateTime<Utc> = iso.parse().unwrap_or_default();
+  let epoch = dt.timestamp();
+
+  format!("<t:{}:f>", epoch)
+}
 
 pub async fn get_mongo_ver() -> String {
   let config = nyra_config::Config::global();
@@ -86,9 +95,13 @@ pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
       CreateEmbed::new()
         .title("Bot Info")
         .field("MongoDB", format!("v{}", get_mongo_ver().await), true)
-        .field("Commands Crate", format!("v{COMMAND_CRATE_VER}"), true)
-        .field("Compiled at", compile_time::datetime_str!(), true)
-        .field("Compiler", compile_time::rustc_version_str!(), true)
+        .field("Commands Crate", format!("v{CRATE_VER}"), true)
+        .field(
+          "Compiled on",
+          discord_timestamp_from_iso(COMPILE_TIME_ISO),
+          true,
+        )
+        .field("Compiled by", COMPILER_NAME, true)
         .footer(CreateEmbedFooter::new(format!(
           "Host requested by {}",
           ctx.author().name
