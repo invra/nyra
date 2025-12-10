@@ -48,7 +48,7 @@ pub async fn get_mongo_ver() -> String {
     Ok(c) => c,
     Err(e) => {
       log::error!("MongoDB client error: {e:?}");
-      return "?.?".into()
+      return "?.?".into();
     }
   };
 

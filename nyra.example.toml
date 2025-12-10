@@ -3,7 +3,7 @@ prefix = "?"
 token = "my-totally-real-discord-token"
 
 [db]
-host = "127.0.0.1" # OPTIONAL: Delete if this default value is true
-port = 27017 # OPTIONAL: Delete if this default value is true
+host = "127.0.0.1"   # OPTIONAL: Delete if this default value is true
+port = 27017         # OPTIONAL: Delete if this default value is true
 username = "mongodb" # OPTIONAL: Delete if this default value is true
 password = "mongodb" # OPTIONAL: Delete if this default value is true
