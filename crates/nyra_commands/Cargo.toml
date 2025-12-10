@@ -1,10 +1,12 @@
 [dependencies]
 chrono.workspace = true
 inventory.workspace = true
+nyra-config.workspace = true
 nyra-utils.workspace = true
 num-bigint.workspace = true
 num-traits.workspace = true
 evalexpr.workspace = true
+mongodb.workspace = true
 # meval.workspace = true
 poise.workspace = true
 serde.workspace = true

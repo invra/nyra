@@ -6,11 +6,9 @@
  *  Authors: Invra, Hiten-Tandon
  */
 
-mod config;
-
 use {
-  crate::config::Config,
   nyra_commands as commands,
+  nyra_config::Config,
   nyra_utils::log,
   std::sync::{
     Arc,
@@ -21,7 +19,7 @@ use {
 
 #[derive(Debug)]
 pub struct BotLauncher {
-  config: crate::config::Config,
+  config: Arc<Config>,
   shard_manager: RwLock<Option<Arc<poise::serenity_prelude::ShardManager>>>,
 }
 
@@ -29,16 +27,12 @@ static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
 
 impl BotLauncher {
   pub fn init_instance(config_arg: Option<String>) {
-    let config = match Config::load(config_arg) {
-      Ok(cfg) => {
-        log::success!("Config loaded successfully");
-        cfg
-      }
-      Err(e) => {
-        log::error!("{}", &e.to_string());
-        return;
-      }
-    };
+    if let Err(e) = Config::init_global(config_arg) {
+      log::error!("{}", e);
+      return;
+    }
+
+    let config = Config::global();
 
     INSTANCE
       .set(Arc::new(Self {

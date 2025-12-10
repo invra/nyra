@@ -1,5 +1,9 @@
 = Building Nyra on a Normal System
 
+. Start your MongoDB server (if haven't already):
+
+**i will write docs for this later, please google for now.**
+
 . Enter the Nix development environment:
 +
 [source,shell]

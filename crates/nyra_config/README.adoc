@@ -1,0 +1,32 @@
+= Nyra
+
+An open-source Discord bot built with *Rust* and *poise*.
+
+---
+
+== Why Nyra?
+
+This project exists for two main reasons:
+
+1. So I can learn more stuff about Rust
+2. When the bot was written with both C# and Rust, I used this to learn FFI and general interop
+
+---
+
+== Getting Started
+
+Before building Nyra, ensure you have read the setup:
+
+* link:./docs/setup/dependencies.adoc[Our Dependencies]
+* link:./docs/setup/configuration.adoc[Configuring Nyra]
+
+=== Development
+* link:./docs/development/terminal.adoc[Building from the Terminal]
+
+---
+
+== License
+
+This project is licensed under link:./LICENSE.txt[The Unlicense].
+
+Essentially, you're free to use, modify, and distribute the code as you see fit. See link:https://unlicense.org[<unlicense.org>] for more details.

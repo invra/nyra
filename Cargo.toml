@@ -19,6 +19,7 @@ crossterm = "0.29.0"
 num-bigint = "0.4.6"
 evalexpr = "13.1.0"
 indexmap = "2.2.6"
+mongodb = "3.4.1"
 chrono = "0.4.42"
 serde = "1.0.228"
 fluent = "0.16.0"
@@ -38,6 +39,9 @@ path = "crates/nyra_commands"
 
 [workspace.dependencies.nyra-core]
 path = "crates/nyra_core"
+
+[workspace.dependencies.nyra-config]
+path = "crates/nyra_config"
 
 [workspace.dependencies.nyra-gui]
 path = "crates/nyra_gui"

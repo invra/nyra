@@ -1,8 +1,8 @@
 /*
  *  SPDX-License-Identifier: Unlicense
  *  Project: Nyra
- *  Crate: nyra_core
- *  File: config.rs
+ *  Crate: nyra_config
+ *  File: lib.rs
  *  Authors: Invra, Hiten-Tandon
  */
 
@@ -13,6 +13,10 @@ use {
     fs,
     path::PathBuf,
     str::FromStr,
+    sync::{
+      Arc,
+      OnceLock,
+    },
   },
 };
 
@@ -43,18 +47,46 @@ impl std::fmt::Display for ConfigError {
   }
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Clone, Debug)]
 pub struct Config {
   pub general: General,
+  pub db: DatabaseOpts,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize, Clone, Debug)]
 pub struct General {
   pub token: String,
   pub prefix: String,
 }
 
+#[allow(dead_code)]
+#[derive(Deserialize, Clone, Debug)]
+pub struct DatabaseOpts {
+  pub host: Option<String>,
+  pub port: Option<u16>,
+  pub username: Option<String>,
+  pub password: Option<String>,
+}
+
+static CONFIG_INSTANCE: OnceLock<Arc<Config>> = OnceLock::new();
+
 impl Config {
+  pub fn init_global(config_path: Option<String>) -> Result<(), ConfigError> {
+    let cfg = Self::load(config_path)?;
+    CONFIG_INSTANCE
+      .set(Arc::new(cfg))
+      .map_err(|_| ConfigError::ParseError("Config already initialized".into()))
+  }
+
+  pub fn global() -> Arc<Config> {
+    CONFIG_INSTANCE
+      .get()
+      .expect("Config not initialized — call Config::init_global() first")
+      .clone()
+  }
+
   pub fn load(config: Option<String>) -> Result<Self, ConfigError> {
     let config_path = config.map_or_else(Self::get_config_path, PathBuf::from);
 

@@ -3,6 +3,9 @@
 There is two sections, one for Nix, and one for General systems. If you are able to use Nix, and dont have grudge about it
 I would highly recommend Nix for this project.
 
+== Non-devenv tools needed
+. link:https://www.mongodb.com/[MongoDB]
+
 == Nix Dev Environment
 
 The Nix way is really helpful, as all you have to do is
@@ -12,7 +15,7 @@ The Nix way is really helpful, as all you have to do is
 nix develop
 ----
 
-and then you will have everything.
+and then you will all dev tools.
 
 == Other systems
 
