@@ -7,6 +7,7 @@
  */
 
 pub mod armstrong;
+pub mod hex;
 pub mod int;
 pub mod prime;
 pub mod uuid;
