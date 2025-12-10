@@ -676,6 +676,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "compile-time"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e55ede5279d4d7c528906853743abeb26353ae1e6c440fcd6d18316c2c2dd903"
+dependencies = [
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "rustc_version",
+ "semver",
+ "time",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3006,6 +3020,7 @@ name = "nyra-commands"
 version = "1.1.0"
 dependencies = [
  "chrono",
+ "compile-time",
  "evalexpr",
  "inventory",
  "mongodb",

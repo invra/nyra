@@ -7,5 +7,6 @@
  */
 
 pub mod age;
+pub mod bot;
 pub mod help;
 pub mod host;
