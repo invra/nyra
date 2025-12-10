@@ -97,6 +97,7 @@ pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
     .embed(
       CreateEmbed::new()
         .title("Bot Info")
+        .field("Written with", "Rust", true)
         .field("MongoDB", format!("v{}", get_mongo_ver().await), true)
         .field("Commands Crate", format!("v{CRATE_VER}"), true)
         .field(
