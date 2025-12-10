@@ -46,6 +46,8 @@ use {
   },
 };
 
+const COMMAND_CRATE_VER: &str = env!("CARGO_PKG_VERSION");
+
 pub async fn get_mongo_ver() -> String {
   let config = nyra_config::Config::global();
 
@@ -95,11 +97,12 @@ pub async fn host(ctx: Context<'_>) -> Result<(), Error> {
   let reply = CreateReply::default().embed(
     CreateEmbed::new()
       .title("Host Info")
-      .field("CPU Model", get_cpu_model(), false)
-      .field("Processors", get_cpu_count().to_string(), false)
-      .field("Memory", format!("{used:.2} GB/{total:.2} GB"), false)
-      .field("OS", get_os_name(), false)
-      .field("MongoDB Version", get_mongo_ver().await, false)
+      .field("CPU Model", get_cpu_model(), true)
+      .field("Processors", get_cpu_count().to_string(), true)
+      .field("Memory", format!("{used:.2} GB/{total:.2} GB"), true)
+      .field("OS", get_os_name(), true)
+      .field("MongoDB", format!("v{}", get_mongo_ver().await), true)
+      .field("Commands Crate", format!("v{COMMAND_CRATE_VER}"), true)
       .footer(CreateEmbedFooter::new(format!(
         "Host requested by {}",
         ctx.author().name
