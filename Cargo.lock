@@ -3017,7 +3017,7 @@ dependencies = [
 
 [[package]]
 name = "nyra-commands"
-version = "1.1.0"
+version = "2.0.3"
 dependencies = [
  "chrono",
  "compile-time",

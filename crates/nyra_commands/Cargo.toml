@@ -18,7 +18,8 @@ toml.workspace = true
 
 [package]
 name = "nyra-commands"
-version = "1.1.0"
+repository = "https://gitlab.com/invra/nyra.git"
+version = "2.0.3"
 description = "Bot commands for Nyra"
 license = "Unlicense"
 readme = "README.adoc"

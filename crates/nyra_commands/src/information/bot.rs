@@ -26,6 +26,8 @@ use {
     command,
     serenity_prelude::{
       Colour,
+      CreateActionRow,
+      CreateButton,
       CreateEmbed,
       CreateEmbedFooter,
     },
@@ -79,20 +81,24 @@ pub async fn get_mongo_ver() -> String {
 pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
   let timestamp: DateTime<Utc> = chrono::offset::Utc::now();
 
-  let reply = CreateReply::default().embed(
-    CreateEmbed::new()
-      .title("Bot Info")
-      .field("MongoDB", format!("v{}", get_mongo_ver().await), true)
-      .field("Commands Crate", format!("v{COMMAND_CRATE_VER}"), true)
-      .field("Compiled at", compile_time::datetime_str!(), true)
-      .field("Compiler", compile_time::rustc_version_str!(), true)
-      .footer(CreateEmbedFooter::new(format!(
-        "Host requested by {}",
-        ctx.author().name
-      )))
-      .timestamp(timestamp)
-      .color(Colour::PURPLE),
-  );
+  let reply = CreateReply::default()
+    .embed(
+      CreateEmbed::new()
+        .title("Bot Info")
+        .field("MongoDB", format!("v{}", get_mongo_ver().await), true)
+        .field("Commands Crate", format!("v{COMMAND_CRATE_VER}"), true)
+        .field("Compiled at", compile_time::datetime_str!(), true)
+        .field("Compiler", compile_time::rustc_version_str!(), true)
+        .footer(CreateEmbedFooter::new(format!(
+          "Host requested by {}",
+          ctx.author().name
+        )))
+        .timestamp(timestamp)
+        .color(Colour::PURPLE),
+    )
+    .components(vec![CreateActionRow::Buttons(vec![
+      CreateButton::new_link(env!("CARGO_PKG_REPOSITORY")).label("Git Repo"),
+    ])]);
 
   ctx.send(reply).await?;
 
