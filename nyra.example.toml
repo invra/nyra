@@ -2,7 +2,6 @@
 prefix = "?"
 token = "my-totally-real-discord-token"
 
-# OPTIONAL: Delete whole block if default values are true
 [db]
 host = "127.0.0.1" # OPTIONAL: Delete if this default value is true
 port = 27017 # OPTIONAL: Delete if this default value is true
