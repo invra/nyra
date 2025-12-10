@@ -9,7 +9,11 @@
 use {
   nyra_commands as commands,
   nyra_config::Config,
-  nyra_utils::log,
+  nyra_utils::{
+    clear_runtime_info,
+    log,
+    set_runtime_info,
+  },
   std::sync::{
     Arc,
     OnceLock,
@@ -80,6 +84,8 @@ impl BotLauncher {
       | GatewayIntents::DIRECT_MESSAGES
       | GatewayIntents::MESSAGE_CONTENT;
 
+    set_runtime_info();
+
     log::bot!("Starting bot…");
 
     let framework = poise::Framework::builder()
@@ -135,6 +141,7 @@ impl BotLauncher {
     if let Some(manager) = &*lock {
       log::bot!("Stopping bot gracefully…");
       manager.shutdown_all().await;
+      clear_runtime_info();
       log::success!("Bot has been stopped.");
     } else {
       log::error!("Cannot stop bot — shard manager not initialized.");

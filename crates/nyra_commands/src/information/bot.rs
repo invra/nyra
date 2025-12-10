@@ -20,7 +20,10 @@ use {
     Client,
     bson::doc,
   },
-  nyra_utils::log,
+  nyra_utils::{
+    log,
+    runtime_epoch,
+  },
   poise::{
     CreateReply,
     command,
@@ -102,6 +105,11 @@ pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
           true,
         )
         .field("Compiled by", COMPILER_NAME, true)
+        .field(
+          "Bot Started",
+          format!("<t:{}:R>", runtime_epoch().unwrap_or(0)),
+          true,
+        )
         .footer(CreateEmbedFooter::new(format!(
           "Host requested by {}",
           ctx.author().name
