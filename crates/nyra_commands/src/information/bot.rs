@@ -22,7 +22,7 @@ use {
   },
   nyra_utils::{
     log,
-    runtime_epoch,
+    runtime_duration,
   },
   poise::{
     CreateReply,
@@ -107,8 +107,8 @@ pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
         )
         .field("Compiled by", COMPILER_NAME, true)
         .field(
-          "Bot Started",
-          format!("<t:{}:R>", runtime_epoch().unwrap_or(0)),
+          "Bot Uptime",
+          format!("{:.2?}", runtime_duration().unwrap_or_default()),
           true,
         )
         .footer(CreateEmbedFooter::new(format!(

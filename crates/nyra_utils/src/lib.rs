@@ -13,8 +13,8 @@ pub mod log;
 use std::{
   sync::RwLock,
   time::{
+    Duration,
     SystemTime,
-    UNIX_EPOCH,
   },
 };
 
@@ -30,12 +30,7 @@ pub fn clear_runtime_info() {
   *guard = None;
 }
 
-pub fn runtime_epoch() -> Option<u64> {
+pub fn runtime_duration() -> Option<Duration> {
   let guard = RUNTIME_INFO.read().unwrap();
-  guard.map(|time| {
-    time
-      .duration_since(UNIX_EPOCH)
-      .expect("SystemTime before UNIX_EPOCH")
-      .as_secs()
-  })
+  guard.map(|time| time.elapsed().expect("SystemTime before UNIX_EPOCH"))
 }
