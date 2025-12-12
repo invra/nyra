@@ -108,7 +108,17 @@ pub async fn bot(ctx: Context<'_>) -> Result<(), Error> {
         .field("Compiled by", COMPILER_NAME, true)
         .field(
           "Bot Uptime",
-          format!("{:.2?}", runtime_duration().unwrap_or_default()),
+          format!(
+            "`{}`",
+            pretty_duration::pretty_duration(
+              &runtime_duration().unwrap_or_default(),
+              Some(pretty_duration::PrettyDurationOptions {
+                output_format: Some(pretty_duration::PrettyDurationOutputFormat::Compact),
+                singular_labels: None,
+                plural_labels: None
+              })
+            )
+          ),
           true,
         )
         .footer(CreateEmbedFooter::new(format!(

@@ -5,6 +5,7 @@ default-members = ["crates/nyra"]
 
 [workspace.dependencies]
 tracing-subscriber = "0.3.18"
+pretty-duration = "0.1.1"
 trim-in-place = "0.1.7"
 intl-memoizer = "0.5.1"
 iced_futures = "0.13.2"
