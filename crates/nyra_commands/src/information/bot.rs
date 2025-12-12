@@ -41,14 +41,14 @@ const CRATE_VER: &str = env!("CARGO_PKG_VERSION");
 const COMPILER_NAME: &str = compile_time::rustc_version_str!();
 const COMPILE_TIME_ISO: &str = compile_time::datetime_str!();
 
-fn discord_timestamp_from_iso(iso: &str) -> String {
+fn discord_timestamp_from_iso(iso: &str) -> Box<str> {
   let dt: DateTime<Utc> = iso.parse().unwrap_or_default();
   let epoch = dt.timestamp();
 
-  format!("<t:{}:f>", epoch)
+  format!("<t:{}:f>", epoch).into()
 }
 
-pub async fn get_mongo_ver() -> String {
+pub async fn get_mongo_ver() -> Box<str> {
   let config = nyra_config::Config::global();
 
   let uri = format!(
@@ -76,7 +76,7 @@ pub async fn get_mongo_ver() -> String {
     Ok(doc) => {
       if let Some(fcv) = doc.get_document("featureCompatibilityVersion").ok() {
         if let Some(ver) = fcv.get_str("version").ok() {
-          return ver.to_string();
+          return ver.into();
         }
       }
       "unknown".into()
