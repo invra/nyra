@@ -1,9 +1,9 @@
 [dependencies]
-chrono.workspace = true
 inventory.workspace = true
 nyra-commands.workspace = true
 nyra-config.workspace = true
 nyra-utils.workspace = true
+mongodb.workspace = true
 poise.workspace = true
 tokio.workspace = true
 
@@ -22,6 +22,3 @@ license = "Unlicense"
 readme = "README.adoc"
 keywords = ["discord", "discord-bot", "utility"]
 edition = "2024"
-
-[target.'cfg(target_os = "windows")'.dependencies]
-wmi.workspace = true

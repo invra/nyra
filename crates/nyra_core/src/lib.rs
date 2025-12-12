@@ -7,7 +7,6 @@
  */
 
 use {
-  nyra_commands as commands,
   nyra_config::Config,
   nyra_utils::{
     clear_runtime_info,
@@ -98,7 +97,7 @@ impl BotLauncher {
           case_insensitive_commands: true,
           ..Default::default()
         },
-        commands: commands::all(),
+        commands: nyra_commands::all(),
         ..Default::default()
       })
       .setup(|ctx, ready, framework| {
@@ -115,7 +114,7 @@ impl BotLauncher {
             log::bot!("Loaded command: {} {}", command.name, category);
           }
 
-          Ok(crate::commands::helper::Data {})
+          Ok(nyra_commands::helper::Data {})
         })
       })
       .build();
