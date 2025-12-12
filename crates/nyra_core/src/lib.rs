@@ -52,17 +52,6 @@ impl BotLauncher {
       .clone()
   }
 
-  pub async fn start() {
-    let this = Self::instance();
-    this.start_bot().await;
-  }
-
-  #[allow(dead_code)]
-  pub async fn stop() {
-    let this = Self::instance();
-    this.stop_bot().await;
-  }
-
   pub fn is_running() -> bool {
     INSTANCE.get().is_some_and(|this| {
       this
@@ -72,13 +61,15 @@ impl BotLauncher {
     })
   }
 
-  async fn start_bot(&self) {
+  pub async fn start() {
     use poise::serenity_prelude::{
       Client,
       GatewayIntents,
     };
 
-    let token = self.config.general.token.clone();
+    let bi = Self::instance();
+
+    let token = bi.config.general.token.clone();
     let intents = GatewayIntents::GUILD_MESSAGES
       | GatewayIntents::DIRECT_MESSAGES
       | GatewayIntents::MESSAGE_CONTENT;
@@ -90,7 +81,7 @@ impl BotLauncher {
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
         prefix_options: poise::PrefixFrameworkOptions {
-          prefix: Some(self.config.general.prefix.clone()),
+          prefix: Some(bi.config.general.prefix.clone()),
           edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
             std::time::Duration::from_secs(3600),
           ))),
@@ -125,7 +116,7 @@ impl BotLauncher {
       .expect("Error creating client");
 
     {
-      let mut lock = self.shard_manager.write().await;
+      let mut lock = bi.shard_manager.write().await;
       *lock = Some(client.shard_manager.clone());
     }
 
@@ -135,8 +126,10 @@ impl BotLauncher {
   }
 
   #[allow(dead_code)]
-  async fn stop_bot(&self) {
-    let lock = self.shard_manager.read().await;
+  pub async fn stop() {
+    let bi = Self::instance();
+    let lock = bi.shard_manager.read().await;
+
     if let Some(manager) = &*lock {
       log::bot!("Stopping bot gracefully…");
       manager.shutdown_all().await;
