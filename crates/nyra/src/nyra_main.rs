@@ -39,6 +39,11 @@ pub(crate) async fn main() -> Result<(), ()> {
   let running = Arc::new(AtomicBool::new(true));
   let (quit_task, rx) = spawn_quit_task(Arc::clone(&running));
 
+  if let Err(_) = nyra_core::run_db_check().await {
+    quit_task.await.ok();
+    return Err(());
+  }
+
   _ = nyra_gui::init(rx);
 
   running.store(false, Ordering::Relaxed);
@@ -92,6 +97,11 @@ pub(crate) async fn main() -> Result<(), ()> {
   let _raw_guard = RawModeGuard::new();
   let running = Arc::new(AtomicBool::new(true));
   let quit_task = spawn_quit_task(Arc::clone(&running));
+
+  if let Err(_) = nyra_core::run_db_check().await {
+    quit_task.await.ok();
+    return Err(());
+  }
 
   tokio::spawn(nyra_core::BotLauncher::start());
   quit_task.await.ok();
