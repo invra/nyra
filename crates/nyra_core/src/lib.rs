@@ -7,6 +7,10 @@
  */
 
 use {
+  mongodb::{
+    Client,
+    bson::doc,
+  },
   nyra_config::Config,
   nyra_utils::{
     clear_runtime_info,
@@ -27,6 +31,44 @@ pub struct BotLauncher {
 }
 
 static INSTANCE: OnceLock<Arc<BotLauncher>> = OnceLock::new();
+
+pub async fn run_db_check() -> Result<(), ()> {
+  log::info!("Checking connection to MongoDB server");
+  let config = nyra_config::Config::global();
+
+  let user = config.db.username.clone().unwrap_or("mongodb".into());
+  let host = config.db.host.clone().unwrap_or("127.0.0.1".into());
+  let port = config.db.port.unwrap_or(27017).to_string();
+
+  let uri = format!(
+    "mongodb://{user}:{}@{host}:{port}/?authSource=admin",
+    config.db.password.clone().unwrap_or("mongodb".into()),
+  );
+
+  let client = match mongodb::Client::with_uri_str(&uri).await {
+    Ok(c) => c,
+    Err(e) => {
+      log::error!("Failed to parse MongoDB URI: {e}");
+      return Err(());
+    }
+  };
+
+  let admin_db = client.database("admin");
+  let result = admin_db
+    .run_command(doc! { "getParameter": 1, "featureCompatibilityVersion": 1 })
+    .await;
+
+  match result {
+    Ok(_) => {
+      log::success!("Server connection for {user}@{host}:{port} was successful");
+      Ok(())
+    }
+    Err(e) => {
+      log::error!("Server connection for {user}@{host}:{port} failed: {e}");
+      Err(())
+    }
+  }
+}
 
 impl BotLauncher {
   pub fn init_instance(config_arg: Option<String>) {

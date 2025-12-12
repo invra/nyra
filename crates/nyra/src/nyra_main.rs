@@ -60,6 +60,11 @@ pub(crate) async fn main() -> Result<(), ()> {
   let running = Arc::new(AtomicBool::new(true));
   let (quit_task, rx) = spawn_quit_task(Arc::clone(&running));
 
+  if let Err(_) = nyra_core::run_db_check().await {
+    quit_task.await.ok();
+    return Err(());
+  }
+
   if args.gui {
     _ = nyra_gui::init(rx);
 
