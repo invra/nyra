@@ -27,3 +27,7 @@ target
 *.temp
 .DS_Store
 [Dd]esktop.ini
+
+# Databases
+db
+*.db
