@@ -7,10 +7,7 @@
  */
 
 use {
-  mongodb::{
-    Client,
-    bson::doc,
-  },
+  mongodb::bson::doc,
   nyra_config::Config,
   nyra_utils::{
     clear_runtime_info,
