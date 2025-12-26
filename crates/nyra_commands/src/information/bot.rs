@@ -53,10 +53,31 @@ pub async fn get_mongo_ver() -> Box<str> {
 
   let uri = format!(
     "mongodb://{}:{}@{}:{}/?authSource=admin",
-    config.db.username.clone().unwrap_or("mongodb".into()),
-    config.db.password.clone().unwrap_or("mongodb".into()),
-    config.db.host.clone().unwrap_or("127.0.0.1".into()),
-    config.db.port.clone().unwrap_or(27017).to_string(),
+    config
+      .db
+      .clone()
+      .unwrap_or_default()
+      .username
+      .unwrap_or("mongodb".into()),
+    config
+      .db
+      .clone()
+      .unwrap_or_default()
+      .password
+      .unwrap_or("mongodb".into()),
+    config
+      .db
+      .clone()
+      .unwrap_or_default()
+      .host
+      .unwrap_or("127.0.0.1".into()),
+    config
+      .db
+      .clone()
+      .unwrap_or_default()
+      .port
+      .unwrap_or(27017)
+      .to_string(),
   );
   let client = match Client::with_uri_str(uri).await {
     Ok(c) => c,

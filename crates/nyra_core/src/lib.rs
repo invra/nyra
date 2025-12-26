@@ -33,13 +33,34 @@ pub async fn run_db_check() -> Result<(), ()> {
   log::info!("Checking connection to MongoDB server");
   let config = nyra_config::Config::global();
 
-  let user = config.db.username.clone().unwrap_or("mongodb".into());
-  let host = config.db.host.clone().unwrap_or("127.0.0.1".into());
-  let port = config.db.port.unwrap_or(27017).to_string();
+  let user = config
+    .db
+    .clone()
+    .unwrap_or_default()
+    .username
+    .unwrap_or("mongodb".into());
+  let host = config
+    .db
+    .clone()
+    .unwrap_or_default()
+    .host
+    .unwrap_or("127.0.0.1".into());
+  let port = config
+    .db
+    .clone()
+    .unwrap_or_default()
+    .port
+    .unwrap_or(27017)
+    .to_string();
 
   let uri = format!(
     "mongodb://{user}:{}@{host}:{port}/?authSource=admin",
-    config.db.password.clone().unwrap_or("mongodb".into()),
+    config
+      .db
+      .clone()
+      .unwrap_or_default()
+      .password
+      .unwrap_or("mongodb".into()),
   );
 
   let client = match mongodb::Client::with_uri_str(&uri).await {
