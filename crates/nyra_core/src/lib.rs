@@ -141,7 +141,14 @@ impl BotLauncher {
     let framework = poise::Framework::builder()
       .options(poise::FrameworkOptions {
         prefix_options: poise::PrefixFrameworkOptions {
-          prefix: Some(bi.config.general.prefix.clone()),
+          prefix: Some(
+            bi.config
+              .general
+              .prefix
+              .clone()
+              .unwrap_or_default()
+              .to_string(),
+          ),
           edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
             std::time::Duration::from_secs(3600),
           ))),

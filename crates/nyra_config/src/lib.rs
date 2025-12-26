@@ -58,7 +58,30 @@ pub struct Config {
 #[derive(Deserialize, Clone, Debug)]
 pub struct General {
   pub token: String,
-  pub prefix: String,
+  pub prefix: Option<Prefix>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Prefix(String);
+
+impl std::fmt::Display for Prefix {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    self.0.fmt(f)
+  }
+}
+
+impl std::ops::Deref for Prefix {
+  type Target = str;
+
+  fn deref(&self) -> &Self::Target {
+    &self.0
+  }
+}
+
+impl Default for Prefix {
+  fn default() -> Self {
+    Self("? ".into())
+  }
 }
 
 #[allow(dead_code)]
@@ -171,13 +194,10 @@ impl Config {
 
         if err_str.contains("missing field") {
           if err_str.contains("missing field `token`") {
-            validation_errors.push("Discord bot token is missing".to_string());
-          }
-          if err_str.contains("missing field `prefix`") {
-            validation_errors.push("Command prefix is missing".to_string());
+            validation_errors.push("Bot token is missing".to_string());
           }
           if err_str.contains("missing field `general`") {
-            validation_errors.push("The [general] section is missing".to_string());
+            validation_errors.push("The [general] feild is missing".to_string());
           }
           return Err(ConfigError::ValidationErrors(validation_errors));
         }
@@ -204,11 +224,26 @@ impl Config {
       validation_errors.push("Discord bot token is missing or empty".to_string());
     }
 
-    if config.general.prefix.trim().is_empty() {
+    if config
+      .general
+      .prefix
+      .clone()
+      .unwrap_or_default()
+      .trim()
+      .is_empty()
+    {
       validation_errors.push("Command prefix is missing or empty".to_string());
     }
 
-    if config.general.prefix.chars().count() > 2 {
+    if config
+      .general
+      .prefix
+      .clone()
+      .unwrap_or_default()
+      .chars()
+      .count()
+      > 2
+    {
       log::warning!(
         "The prefix length is over 2 characters, which can cause impaired usage with the bot.",
       );
@@ -223,11 +258,14 @@ impl Config {
 
   pub fn get_config_path() -> PathBuf {
     if cfg!(unix) {
-      std::env::home_dir()
-        .unwrap()
-        .join(".config")
-        .join("nyra")
-        .join("nyra.toml")
+      PathBuf::from(std::env::var_os("XDG_CONFIG_PATH").unwrap_or_else(|| {
+        std::env::home_dir()
+          .unwrap_or_default()
+          .join(".config")
+          .into_os_string()
+      }))
+      .join("nyra")
+      .join("nyra.toml")
     } else {
       PathBuf::from_str(&std::env::var("LOCALAPPDATA").unwrap())
         .unwrap()
