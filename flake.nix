@@ -115,26 +115,6 @@
         devShells.default = pkgs.mkShell {
           meta.license = pkgs.lib.licenses.unlicense;
           inherit nativeBuildInputs buildInputs LD_LIBRARY_PATH;
-
-          shellHook =
-            if !pkgs.stdenv.isDarwin then
-              ''
-                #!/bin/bash
-                COMMAND=$(awk -F: -v user=$USER 'user == $1 {print $NF}' /etc/passwd)
-                if [ "$COMMAND" != *bash* ]; then
-                  $COMMAND
-                  exit
-                fi
-              ''
-            else
-              ''
-                #!/bin/bash
-                COMMAND=$(dscl . -read $HOME 'UserShell' | grep --only-matching '/.*')
-                if [ "$COMMAND" != *bash* ]; then
-                  $COMMAND
-                  exit
-                fi
-              '';
         };
 
         packages.default = naersk'.buildPackage {
