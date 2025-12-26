@@ -28,10 +28,11 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
+        rustoverlay = import rust-overlay;
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            (import rust-overlay)
+            rustoverlay
           ];
         };
 
