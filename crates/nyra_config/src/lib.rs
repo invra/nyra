@@ -51,7 +51,7 @@ impl std::fmt::Display for ConfigError {
 #[derive(Deserialize, Clone, Debug)]
 pub struct Config {
   pub general: General,
-  pub db: DatabaseOpts,
+  pub db: Option<DatabaseOpts>,
 }
 
 #[allow(dead_code)]
@@ -62,7 +62,7 @@ pub struct General {
 }
 
 #[allow(dead_code)]
-#[derive(Deserialize, Clone, Debug)]
+#[derive(Deserialize, Clone, Debug, Default)]
 pub struct DatabaseOpts {
   pub host: Option<String>,
   pub port: Option<u16>,

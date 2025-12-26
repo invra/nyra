@@ -3,7 +3,10 @@ prefix = "?"
 token = "my-totally-real-discord-token"
 
 [db]
-host = "127.0.0.1"   # OPTIONAL: Delete if this default value is true
-port = 27017         # OPTIONAL: Delete if this default value is true
-username = "mongodb" # OPTIONAL: Delete if this default value is true
-password = "mongodb" # OPTIONAL: Delete if this default value is true
+# Any element in this block can be removed if the text here is true
+# as this is what the default config is representing.
+# If all is true you may remeve the whole db block.
+host = "127.0.0.1"
+port = 27017
+username = "mongodb"
+password = "mongodb"
