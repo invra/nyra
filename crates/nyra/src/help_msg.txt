@@ -1,0 +1,8 @@
+Nyra Help
+Nyra is a Discord bot written in Rust!
+Upstream Git repo: https://gitlab.com/invra/nyra.git
+
+  • -[-g]ui      →    Opens Nyra with a GUI
+  • -[-h]elp     →    Shows this help message
+  • -[-v]ersion  →    Shows this package's version
+  • -[-c]onfig   →    Change the location to load Nyra's config
