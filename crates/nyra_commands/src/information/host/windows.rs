@@ -98,7 +98,7 @@ pub fn get_mem() -> (f64, f64) {
       .raw_query::<Win32ComputerSystem>("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem")
       .ok()
       .and_then(|v| v.first().and_then(|x| x.total_physical_memory))
-      .unwrap_or(0);
+      .unwrap_or_default();
 
     let free = wmi_con
       .raw_query::<Win32PerfFormattedDataPerfOSMemory>(
@@ -106,7 +106,7 @@ pub fn get_mem() -> (f64, f64) {
       )
       .ok()
       .and_then(|v| v.first().and_then(|x| x.available_bytes))
-      .unwrap_or(0);
+      .unwrap_or_default();
 
     let used = total.saturating_sub(free);
     return (
