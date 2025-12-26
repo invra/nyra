@@ -3040,7 +3040,7 @@ dependencies = [
 
 [[package]]
 name = "nyra-config"
-version = "1.1.2"
+version = "2.1.0"
 dependencies = [
  "nyra-utils",
  "serde",
