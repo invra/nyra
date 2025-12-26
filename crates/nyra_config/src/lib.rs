@@ -64,10 +64,70 @@ pub struct General {
 #[allow(dead_code)]
 #[derive(Deserialize, Clone, Debug, Default)]
 pub struct DatabaseOpts {
-  pub host: Option<String>,
-  pub port: Option<u16>,
-  pub username: Option<String>,
-  pub password: Option<String>,
+  pub host: Option<Host>,
+  pub port: Option<Port>,
+  pub username: Option<Username>,
+  pub password: Option<Password>,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Password(String);
+
+impl std::fmt::Display for Password {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    self.0.fmt(f)
+  }
+}
+
+impl Default for Password {
+  fn default() -> Self {
+    Self("mongo".into())
+  }
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Username(String);
+
+impl std::fmt::Display for Username {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    self.0.fmt(f)
+  }
+}
+
+impl Default for Username {
+  fn default() -> Self {
+    Self("mongodb".into())
+  }
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Port(u16);
+
+impl std::fmt::Display for Port {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    self.0.fmt(f)
+  }
+}
+
+impl Default for Port {
+  fn default() -> Self {
+    Self(27017)
+  }
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct Host(String);
+
+impl std::fmt::Display for Host {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    self.0.fmt(f)
+  }
+}
+
+impl Default for Host {
+  fn default() -> Self {
+    Self("127.0.0.1".into())
+  }
 }
 
 static CONFIG_INSTANCE: OnceLock<Arc<Config>> = OnceLock::new();

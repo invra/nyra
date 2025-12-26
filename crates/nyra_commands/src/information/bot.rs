@@ -58,25 +58,25 @@ pub async fn get_mongo_ver() -> Box<str> {
       .clone()
       .unwrap_or_default()
       .username
-      .unwrap_or("mongodb".into()),
+      .unwrap_or_default(),
     config
       .db
       .clone()
       .unwrap_or_default()
       .password
-      .unwrap_or("mongodb".into()),
+      .unwrap_or_default(),
     config
       .db
       .clone()
       .unwrap_or_default()
       .host
-      .unwrap_or("127.0.0.1".into()),
+      .unwrap_or_default(),
     config
       .db
       .clone()
       .unwrap_or_default()
       .port
-      .unwrap_or(27017)
+      .unwrap_or_default()
       .to_string(),
   );
   let client = match Client::with_uri_str(uri).await {
